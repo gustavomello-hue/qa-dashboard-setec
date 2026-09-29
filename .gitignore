@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.log
+
+# Copia local do dashboard.json para desenvolver (npm run dados:local).
+# Os dados publicados moram no branch `dados`, nao na main.
+public/dados-local.json
+
+.env.local

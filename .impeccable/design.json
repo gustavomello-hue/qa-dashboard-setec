@@ -1,0 +1,510 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-29T19:32:20.472Z",
+  "title": "Design System: QA·SETEC",
+  "extensions": {
+    "colorMeta": {
+      "azul-arcade": {
+        "role": "primary",
+        "displayName": "Azul Arcade",
+        "canonical": "oklch(52.4% 0.265 268.2)",
+        "purpose": "Moldura externa, linhas do placar, fundo de seleção ativa. Só moldura e navegação.",
+        "tonalRamp": [
+          "#0f0058",
+          "#110086",
+          "#1913b7",
+          "#293bea",
+          "#4265ff",
+          "#648fff",
+          "#8dbaff",
+          "#bde8ff"
+        ]
+      },
+      "violeta": {
+        "role": "primary",
+        "displayName": "Violeta de Moldura",
+        "canonical": "oklch(56.3% 0.254 286.4)",
+        "purpose": "Linha interna da moldura, anel de seleção, hover, varredura de troca de tela. Só moldura e navegação.",
+        "tonalRamp": [
+          "#16004d",
+          "#2a0079",
+          "#4200a8",
+          "#5e2dd9",
+          "#7b52ff",
+          "#997eff",
+          "#bcabff",
+          "#e6dbff"
+        ]
+      },
+      "lilas": {
+        "role": "primary",
+        "displayName": "Lilás de Metadado",
+        "canonical": "oklch(78.0% 0.122 291.3)",
+        "purpose": "Metadados sob o título do card e link externo. Apoio da família violeta, nunca estado.",
+        "tonalRamp": [
+          "#0d0522",
+          "#251c43",
+          "#413767",
+          "#5e538d",
+          "#7e71b6",
+          "#9f91e0",
+          "#c5b6ff",
+          "#efe3ff"
+        ]
+      },
+      "ciano": {
+        "role": "secondary",
+        "displayName": "Ciano de QA",
+        "canonical": "oklch(84.6% 0.134 212.0)",
+        "purpose": "Em QA e entradas em QA. Só esse significado.",
+        "tonalRamp": [
+          "#001019",
+          "#002c38",
+          "#004a59",
+          "#006b7d",
+          "#008da2",
+          "#17b1c9",
+          "#39daf5",
+          "#7effff"
+        ]
+      },
+      "verde": {
+        "role": "secondary",
+        "displayName": "Verde Aprovado",
+        "canonical": "oklch(80.3% 0.192 150.6)",
+        "purpose": "Aprovado (QA para Concluídas). Só esse significado.",
+        "tonalRamp": [
+          "#001400",
+          "#003101",
+          "#005116",
+          "#00732e",
+          "#059647",
+          "#2bbc61",
+          "#4fe580",
+          "#91ffb2"
+        ]
+      },
+      "vermelho": {
+        "role": "secondary",
+        "displayName": "Vermelho Reprovado",
+        "canonical": "oklch(68.2% 0.207 20.1)",
+        "purpose": "Reprovado (QA para Correções) e retornos. Só esse significado.",
+        "tonalRamp": [
+          "#2d0000",
+          "#540003",
+          "#7e0019",
+          "#aa1d32",
+          "#d73b4b",
+          "#ff5b67",
+          "#ff8c91",
+          "#ffc0c1"
+        ]
+      },
+      "dourado": {
+        "role": "secondary",
+        "displayName": "Dourado Novo",
+        "canonical": "oklch(86.7% 0.162 88.3)",
+        "purpose": "Somente novo desde a última coleta.",
+        "tonalRamp": [
+          "#170700",
+          "#342000",
+          "#553b00",
+          "#785800",
+          "#9c7800",
+          "#c2980d",
+          "#eebd2e",
+          "#ffe86a"
+        ]
+      },
+      "fosforo": {
+        "role": "neutral",
+        "displayName": "Preto-Fósforo",
+        "canonical": "oklch(13.3% 0.018 283.6)",
+        "purpose": "Fundo da página e do campo de busca.",
+        "tonalRamp": [
+          "#0a0a13",
+          "#23232c",
+          "#3e3f48",
+          "#5c5d65",
+          "#7c7c84",
+          "#9d9ea5",
+          "#c3c3c9",
+          "#eeeef3"
+        ]
+      },
+      "fundo-2": {
+        "role": "neutral",
+        "displayName": "Fundo de Painel",
+        "canonical": "oklch(17.6% 0.045 276.8)",
+        "purpose": "Preenchimento das molduras, chips, tooltip.",
+        "tonalRamp": [
+          "#07081d",
+          "#1f2238",
+          "#3a3e54",
+          "#585c71",
+          "#787c90",
+          "#9a9daf",
+          "#c0c3d3",
+          "#ebeefa"
+        ]
+      },
+      "fundo-3": {
+        "role": "neutral",
+        "displayName": "Fundo de Linha",
+        "canonical": "oklch(22.5% 0.067 275.9)",
+        "purpose": "Divisórias, bordas em repouso, hover de linha.",
+        "tonalRamp": [
+          "#060625",
+          "#1c2043",
+          "#373d5f",
+          "#555b7c",
+          "#757b9a",
+          "#979db9",
+          "#bdc3db",
+          "#e9edff"
+        ]
+      },
+      "texto": {
+        "role": "neutral",
+        "displayName": "Texto",
+        "canonical": "oklch(96.3% 0.019 289.3)",
+        "purpose": "Texto principal e números neutros.",
+        "tonalRamp": [
+          "#0b0b0e",
+          "#242328",
+          "#3f3f45",
+          "#5d5d64",
+          "#7d7c85",
+          "#9e9da7",
+          "#c3c3ce",
+          "#eeedfb"
+        ]
+      },
+      "texto-2": {
+        "role": "neutral",
+        "displayName": "Texto 2",
+        "canonical": "oklch(78.8% 0.058 281.7)",
+        "purpose": "Nomes, detalhes, controles inativos.",
+        "tonalRamp": [
+          "#090917",
+          "#212234",
+          "#3c3d54",
+          "#595b76",
+          "#787a9a",
+          "#989bc0",
+          "#bdc0e9",
+          "#e8ebff"
+        ]
+      },
+      "texto-3": {
+        "role": "neutral",
+        "displayName": "Texto 3",
+        "canonical": "oklch(65.7% 0.064 281.4)",
+        "purpose": "Cabeçalhos de tabela, sub-rótulos, notas.",
+        "tonalRamp": [
+          "#09091b",
+          "#202139",
+          "#3b3d59",
+          "#585a7c",
+          "#7779a1",
+          "#979ac5",
+          "#bdc1e8",
+          "#e8ebff"
+        ]
+      },
+      "aco": {
+        "role": "neutral",
+        "displayName": "Aço",
+        "canonical": "oklch(57.5% 0.049 280.5)",
+        "purpose": "Borda do que não foi medido.",
+        "tonalRamp": [
+          "#090918",
+          "#212236",
+          "#3b3d55",
+          "#585b77",
+          "#777a9a",
+          "#999cba",
+          "#bfc2de",
+          "#eaecff"
+        ]
+      },
+      "aco-escuro": {
+        "role": "neutral",
+        "displayName": "Aço Escuro",
+        "canonical": "oklch(36.5% 0.043 280.5)",
+        "purpose": "Risco da estática e ícone desabilitado.",
+        "tonalRamp": [
+          "#09091a",
+          "#202237",
+          "#3b3d56",
+          "#595b74",
+          "#797b92",
+          "#9a9db2",
+          "#c0c3d6",
+          "#ebedfe"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Numeral de placar",
+        "purpose": "Numerais do placar; 32–112px por container query em degraus, taxa 24–64px."
+      },
+      "headline": {
+        "displayName": "Título do card",
+        "purpose": "Título do card na tela CARD, Jersey 15 32px."
+      },
+      "title": {
+        "displayName": "Título de painel",
+        "purpose": "Títulos de painel em Silkscreen 700 16px (TV 24px)."
+      },
+      "body-lg": {
+        "displayName": "Título na fila",
+        "purpose": "Título do card na fila, Jersey 15 22px, 2 linhas (3 no celular, 30px na TV)."
+      },
+      "body": {
+        "displayName": "Texto corrido",
+        "purpose": "Nomes, detalhes, select, tooltip. Jersey 15, nunca abaixo de 18px na mesa."
+      },
+      "label": {
+        "displayName": "Rótulo HUD",
+        "purpose": "Rótulos, cabeçalhos, controles. Silkscreen 400, 12px ou mais, nunca negrito abaixo de 16px."
+      },
+      "numeral": {
+        "displayName": "Numeral de tabela",
+        "purpose": "Números tabulares em Silkscreen, com zeros à esquerda nos contadores."
+      }
+    },
+    "shadows": [
+      {
+        "name": "brilho-fosforo",
+        "value": "0 0 6px color-mix(in srgb, currentColor 55%, transparent), 0 0 18px color-mix(in srgb, currentColor 22%, transparent)",
+        "purpose": "text-shadow de numerais do placar e da marca; só com CRT ligado."
+      },
+      {
+        "name": "anel-selecao",
+        "value": "0 0 0 2px var(--fosforo), 0 0 0 4px var(--violeta)",
+        "purpose": "Fase atual, prefixo marcado, botão primário."
+      },
+      {
+        "name": "anel-selecao-crt",
+        "value": "0 0 0 2px var(--fosforo), 0 0 0 4px var(--violeta), 0 0 16px rgb(116 70 255 / 0.55)",
+        "purpose": "Anel de seleção com CRT ligado."
+      },
+      {
+        "name": "varredura",
+        "value": "repeating-linear-gradient(to bottom, rgb(0 0 0 / 0) 0, rgb(0 0 0 / 0) 2px, rgb(0 0 0 / 0.22) 3px, rgb(0 0 0 / 0) 4px)",
+        "purpose": "Camada fixa de linhas de varredura; só com CRT ligado."
+      },
+      {
+        "name": "grade-tiles",
+        "value": "linear-gradient(to bottom, rgb(49 73 255 / 0.07) 1px, transparent 1px), linear-gradient(to right, rgb(49 73 255 / 0.07) 1px, transparent 1px); background-size: 8px 8px",
+        "purpose": "Grade 8×8 dentro das molduras; só com CRT ligado."
+      },
+      {
+        "name": "estatica",
+        "value": "repeating-linear-gradient(135deg, var(--aco-escuro) 0 4px, transparent 4px 8px)",
+        "purpose": "Hachura do que não foi medido."
+      }
+    ],
+    "motion": [
+      {
+        "name": "varre-fase",
+        "value": "420ms steps(10, end)",
+        "purpose": "Faixa de varredura violeta de 48px que desce na troca de tela; o conteúdo nunca começa escondido."
+      },
+      {
+        "name": "contagem-placar",
+        "value": "8 degraus × 45ms",
+        "purpose": "Numeral do placar conta de 0 ao valor na primeira aparição; desligado com movimento reduzido."
+      },
+      {
+        "name": "tempo-quadro",
+        "value": "12s steps(24, end)",
+        "purpose": "Barra de blocos do modo atração; um quadro a cada 12s."
+      },
+      {
+        "name": "movimento-reduzido",
+        "value": "0.01ms",
+        "purpose": "prefers-reduced-motion zera animações e transições."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "coluna-unica",
+        "value": "1100px"
+      },
+      {
+        "name": "estreito",
+        "value": "760px"
+      },
+      {
+        "name": "placar-degraus",
+        "value": "container 128/154/205/256/308/358px"
+      },
+      {
+        "name": "largura-maxima",
+        "value": "1680px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Painel com moldura",
+      "kind": "card",
+      "refersTo": "painel",
+      "description": "Moldura 9-slice de linha dupla, cantos em degrau; contêiner de todo painel.",
+      "html": "<section class=\"ds-painel\"><h2 class=\"ds-painel__titulo\">SINAL · 7 DIAS</h2><p class=\"ds-painel__texto\">8 h de expediente sem coleta</p></section>",
+      "css": ".ds-painel{border:8px solid transparent;border-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' shape-rendering='crispEdges'%3E%3Cpath fill='%233149ff' d='M4 0h16v2H4zM4 22h16v2H4zM0 4h2v16H0zM22 4h2v16h-2zM2 2h2v2H2zM20 2h2v2h-2zM2 20h2v2H2zM20 20h2v2h-2z'/%3E%3Cpath fill='%237446ff' d='M6 4h12v2H6zM6 18h12v2H6zM4 6h2v12H4zM18 6h2v12h-2z'/%3E%3C/svg%3E\") 8 / 8px stretch;background-color:color-mix(in srgb,var(--fundo-2) 88%,transparent);background-clip:padding-box;padding:16px 22px 18px;color:var(--texto);max-width:360px}.ds-painel__titulo{margin:0 0 12px;font-family:var(--face-hud);font-size:16px;font-weight:700;letter-spacing:.04em}.ds-painel__texto{margin:0;font-family:var(--face-texto);font-size:18px;color:var(--texto-2)}"
+    },
+    {
+      "name": "Menu de fases",
+      "kind": "nav",
+      "refersTo": "fase",
+      "description": "HOJE / MENSAL / CARD; a fase atual ganha fundo azul-arcade, anel e cursor bitmap.",
+      "html": "<nav class=\"ds-fases\"><button class=\"ds-fase\" aria-current=\"page\"><span class=\"ds-fase__cursor\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 7 7\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M0 0h1v7H0zM1 1h2v5H1zM3 2h2v3H3zM5 3h2v1H5z\"/></svg></span>HOJE</button><button class=\"ds-fase\"><span class=\"ds-fase__cursor\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 7 7\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M0 0h1v7H0zM1 1h2v5H1zM3 2h2v3H3zM5 3h2v1H5z\"/></svg></span>MENSAL</button><button class=\"ds-fase\"><span class=\"ds-fase__cursor\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 7 7\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M0 0h1v7H0zM1 1h2v5H1zM3 2h2v3H3zM5 3h2v1H5z\"/></svg></span>CARD</button></nav>",
+      "css": ".ds-fases{display:flex;gap:4px;background:var(--fosforo);padding:8px}.ds-fase{display:inline-flex;align-items:center;gap:8px;padding:8px 14px 8px 10px;border:2px solid transparent;background:none;color:var(--texto-2);font-family:var(--face-hud);font-size:16px;cursor:pointer}.ds-fase__cursor{visibility:hidden;display:inline-flex}.ds-fase:hover{color:var(--texto)}.ds-fase[aria-current=page]{color:var(--texto);background:var(--azul-arcade);border-color:var(--azul-arcade);box-shadow:0 0 0 2px var(--fosforo),0 0 0 4px var(--violeta);}.ds-fase[aria-current=page] .ds-fase__cursor{visibility:visible}.ds-fase:focus-visible{outline:2px dashed var(--texto);outline-offset:3px}"
+    },
+    {
+      "name": "Seletor de prefixo",
+      "kind": "chip",
+      "refersTo": "seletor-prefixo",
+      "description": "TODOS, 1P DEV…4P DEMANDAS; radio que recorta o HUD e as telas.",
+      "html": "<div class=\"ds-prefixos\" role=\"radiogroup\"><button class=\"ds-prefixo\" role=\"radio\" aria-checked=\"true\">TODOS</button><button class=\"ds-prefixo\" role=\"radio\" aria-checked=\"false\"><span class=\"ds-prefixo__num\">1P</span>DEV</button><button class=\"ds-prefixo\" role=\"radio\" aria-checked=\"false\"><span class=\"ds-prefixo__num\">2P</span>WEB</button></div>",
+      "css": ".ds-prefixos{display:flex;gap:4px;background:var(--fosforo);padding:8px}.ds-prefixo{display:inline-flex;align-items:baseline;gap:6px;padding:6px 10px;border:2px solid var(--fundo-3);background:var(--fundo-2);color:var(--texto-2);font-family:var(--face-hud);font-size:13px;letter-spacing:.04em;cursor:pointer}.ds-prefixo__num{font-size:12px;color:var(--texto-3)}.ds-prefixo:hover{border-color:var(--violeta);color:var(--texto)}.ds-prefixo[aria-checked=true]{color:var(--texto);background:var(--azul-arcade);border-color:var(--azul-arcade);box-shadow:0 0 0 2px var(--fosforo),0 0 0 4px var(--violeta);}.ds-prefixo[aria-checked=true] .ds-prefixo__num{color:var(--texto)}.ds-prefixo:focus-visible{outline:2px dashed var(--texto);outline-offset:3px}"
+    },
+    {
+      "name": "Botão primário",
+      "kind": "button",
+      "refersTo": "botao",
+      "description": "Ação principal (abrir card); azul-arcade com anel, violeta no hover.",
+      "html": "<button class=\"ds-botao\">ABRIR CARD</button>",
+      "css": ".ds-botao{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:2px solid var(--azul-arcade);background:var(--azul-arcade);color:var(--texto);font-family:var(--face-hud);font-size:14px;cursor:pointer;box-shadow:0 0 0 2px var(--fosforo),0 0 0 4px var(--violeta);}.ds-botao:hover{background:var(--violeta);border-color:var(--violeta)}.ds-botao:focus-visible{outline:2px dashed var(--texto);outline-offset:6px}"
+    },
+    {
+      "name": "Controle",
+      "kind": "button",
+      "refersTo": "controle",
+      "description": "CRT ON/OFF e MODO TV; discreto, borda azul-arcade quando pressionado.",
+      "html": "<button class=\"ds-controle\" aria-pressed=\"true\">CRT ON</button> <button class=\"ds-controle\" aria-pressed=\"false\">MODO TV</button>",
+      "css": ".ds-controle{padding:6px 10px;border:2px solid var(--fundo-3);background:none;color:var(--texto-3);font-family:var(--face-hud);font-size:12px;letter-spacing:.04em;cursor:pointer}.ds-controle:hover,.ds-controle[aria-pressed=true]{color:var(--texto);border-color:var(--azul-arcade)}.ds-controle:focus-visible{outline:2px dashed var(--texto);outline-offset:3px}"
+    },
+    {
+      "name": "Campo de busca de card",
+      "kind": "input",
+      "refersTo": "campo-busca",
+      "description": "Número do card na tela CARD; borda azul-arcade, cursor ciano.",
+      "html": "<label class=\"ds-busca\"><span class=\"ds-busca__rotulo\">CARD #</span><input class=\"ds-busca__campo\" placeholder=\"10588\"></label>",
+      "css": ".ds-busca{display:flex;align-items:center;gap:12px;background:var(--fosforo);padding:8px}.ds-busca__rotulo{font-family:var(--face-hud);font-size:16px;color:var(--ciano)}.ds-busca__campo{width:10ch;padding:8px 10px;border:2px solid var(--azul-arcade);background:var(--fosforo);color:var(--texto);font-family:var(--face-texto);font-size:24px;caret-color:var(--ciano)}.ds-busca__campo::placeholder{color:var(--texto-3)}.ds-busca__campo:focus-visible{outline:2px dashed var(--texto);outline-offset:3px}"
+    },
+    {
+      "name": "Item de placar",
+      "kind": "custom",
+      "refersTo": "display",
+      "description": "Rótulo, numeral com zeros à esquerda na cor de estado e comparação com o último dia útil.",
+      "html": "<dl class=\"ds-placar\"><div class=\"ds-placar__item\"><dt class=\"ds-placar__rotulo\">EM QA</dt><dd class=\"ds-placar__valor\"><span class=\"ds-placar__num\">059</span><span class=\"ds-placar__sub\">AGORA</span></dd></div><div class=\"ds-placar__item ds-placar__item--reprov\"><dt class=\"ds-placar__rotulo\">REPROVADOS</dt><dd class=\"ds-placar__valor\"><span class=\"ds-placar__num\">004</span><span class=\"ds-placar__sub\">SEG 28: 001</span></dd></div></dl>",
+      "css": ".ds-placar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:0;padding:14px 0 16px;border-top:2px solid var(--azul-arcade);border-bottom:2px solid var(--azul-arcade);background:var(--fosforo)}.ds-placar__item{display:grid;gap:6px;padding:0 16px;color:var(--ciano)}.ds-placar__item--reprov{color:var(--vermelho)}.ds-placar__item+.ds-placar__item{border-left:2px dotted var(--fundo-3)}.ds-placar__rotulo{font-family:var(--face-hud);font-size:13px;letter-spacing:.04em}.ds-placar__valor{margin:0;display:grid;gap:4px}.ds-placar__num{font-family:var(--face-hud);font-variant-numeric:tabular-nums;font-size:48px;font-weight:700;line-height:.95;text-shadow:var(--brilho)}.ds-placar__sub{font-family:var(--face-hud);font-size:12px;color:var(--texto-3)}"
+    },
+    {
+      "name": "Barra de blocos",
+      "kind": "custom",
+      "refersTo": "numeral",
+      "description": "Distribuição por papel: blocos de 8px em currentColor; só papéis de estado têm cor.",
+      "html": "<ul class=\"ds-dist\"><li class=\"ds-dist__linha ds-dist__linha--correcao\"><span class=\"ds-dist__nome\">CORREÇÕES</span><span class=\"ds-dist__barra\" style=\"width:70%\"></span><span class=\"ds-dist__valor\">108</span></li><li class=\"ds-dist__linha ds-dist__linha--qa\"><span class=\"ds-dist__nome\">TESTE/QA</span><span class=\"ds-dist__barra\" style=\"width:38%\"></span><span class=\"ds-dist__valor\">059</span></li><li class=\"ds-dist__linha\"><span class=\"ds-dist__nome\">ANDAMENTO</span><span class=\"ds-dist__barra\" style=\"width:10%\"></span><span class=\"ds-dist__valor\">017</span></li></ul>",
+      "css": ".ds-dist{display:grid;gap:10px;margin:0;padding:12px;list-style:none;background:var(--fundo-2);color:var(--texto)}.ds-dist__linha--correcao{color:var(--vermelho)}.ds-dist__linha--qa{color:var(--ciano)}.ds-dist__linha{display:grid;grid-template-columns:112px minmax(0,1fr) auto;align-items:center;gap:10px}.ds-dist__nome{font-family:var(--face-hud);font-size:12px;color:var(--texto-2)}.ds-dist__barra{height:14px;min-width:10px;background:repeating-linear-gradient(90deg,currentColor 0 8px,transparent 8px 11px)}.ds-dist__valor{font-family:var(--face-hud);font-size:16px;min-width:3ch;text-align:right}"
+    },
+    {
+      "name": "Estática (não medido)",
+      "kind": "custom",
+      "refersTo": "selo-medicao",
+      "description": "Hachura aço para lacuna de coleta e medição parcial.",
+      "html": "<div class=\"ds-lacuna\"><span class=\"ds-lacuna__faixa\"></span><span class=\"ds-lacuna__texto\">24/09 12:24 ATÉ 25/09 12:21</span></div><span class=\"ds-medicao\">PARCIAL</span>",
+      "css": ".ds-lacuna{display:grid;grid-template-columns:36px minmax(0,1fr);gap:10px;align-items:center;background:var(--fundo-2);padding:10px}.ds-lacuna__faixa{height:28px;border:2px solid var(--aco);background:repeating-linear-gradient(135deg,var(--aco-escuro) 0 4px,transparent 4px 8px)}.ds-lacuna__texto{font-family:var(--face-hud);font-size:12px;color:var(--texto)}.ds-medicao{display:inline-block;margin-top:8px;padding:3px 8px;border:2px solid var(--aco);background:repeating-linear-gradient(135deg,var(--aco-escuro) 0 4px,transparent 4px 8px);font-family:var(--face-hud);font-size:12px;color:var(--texto)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "O Gabinete de Fliperama dos Dados",
+    "overview": "O painel é uma tela de fliperama CRT: preto-fósforo, um placar fixo no topo, telas inteiras tratadas como fases e um modo atração que roda sozinho na TV da sala. Tudo é desenhado no grão do pixel: fontes bitmap, molduras de linha dupla com cantos em degrau, barras feitas de blocos, ícones desenhados em grade 7×7. Nenhuma curva, nenhum gradiente decorativo, nenhum raio de canto.\n\nA densidade é de HUD: muitos números, pouco texto, e cada cor carrega exatamente um significado. A atmosfera CRT (linhas de varredura, brilho de fósforo, grade de tiles 8×8) é uma camada que se liga e desliga e fica gravada por navegador; o painel continua inteiro e legível sem ela. O que não foi medido nunca some: aparece riscado como estática.\n\nO mundo recusa o admin padrão (barra lateral, cartões brancos de KPI, azul de SaaS) e recusa transformar pessoas em jogadores. O vocabulário de fliperama vale para telas, filtros e dados, nunca para quem trabalha.",
+    "keyCharacteristics": [
+      "Paleta de 15 cores em uso, sob lei: cor de estado = um significado só.",
+      "Duas faces pixeladas escolhidas por teste de leitura em 1:1: Silkscreen para rótulos e números, Jersey 15 para texto corrido.",
+      "Numerais de placar com zeros à esquerda (059, 002) e tamanho por container query.",
+      "Molduras 9-slice de linha dupla (azul-arcade fora, violeta dentro), cantos em degrau, zero raio.",
+      "Movimento em degraus (`steps()`), nunca contínuo; conteúdo nunca começa escondido.",
+      "Camada CRT desligável e persistente."
+    ],
+    "rules": [
+      {
+        "name": "The Color Is Law Rule",
+        "body": "Ciano = em QA/entradas, verde = aprovado, vermelho = reprovado e retornos, dourado = novo desde a última coleta, aço/estática = não medido, lacuna, sem sinal. Nenhuma dessas cores aparece como enfeite. Azul-arcade e violeta são só moldura e navegação.",
+        "section": "colors"
+      },
+      {
+        "name": "The Uncolored Queue Rule",
+        "body": "A coluna \"dias em QA\" da fila é sempre na cor de texto. Nunca colorir por faixa de dias (decisão do usuário).",
+        "section": "colors"
+      },
+      {
+        "name": "The Static Rule",
+        "body": "O que não foi medido fica riscado como estática (hachura 135° em aco-escuro, borda em aço). Nunca esconder uma lacuna nem pintá-la com uma cor de estado.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Legend Rule",
+        "body": "A lei das cores é explicada no próprio painel (painel LEGENDA na coluna direita da mesa; legenda em linha no gráfico mensal). Uma cor nova de estado exige entrada na legenda.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "Silkscreen só para rótulos e números; Jersey 15 para todo texto corrido. Nunca inverter: Silkscreen em frase longa vira ruído, Jersey em rótulo de HUD perde o fliperama.",
+        "section": "typography"
+      },
+      {
+        "name": "The Legibility Floor Rule",
+        "body": "Rótulo em Silkscreen nunca abaixo de 12px e nunca em negrito abaixo de 16px. Texto corrido em Jersey 15 nunca abaixo de 18px na mesa.",
+        "section": "typography"
+      },
+      {
+        "name": "The Bitmap Percent Rule",
+        "body": "O \"%\" nunca é o glifo da fonte (na Silkscreen lê como Z, na Jersey pequena como ×): é o ícone bitmap \"porcento\", a 0.62em do número.",
+        "section": "typography"
+      },
+      {
+        "name": "The Scoreboard Padding Rule",
+        "body": "Contadores do placar e das tabelas saem com zeros à esquerda (059, 002, 013), como placar de fliperama.",
+        "section": "typography"
+      },
+      {
+        "name": "The Scoreboard Step Rule",
+        "body": "Numerais do placar crescem por container query em degraus fixos (32, 40, 48, 64, 80, 96, 112px, com limiares em 128, 154, 205, 256, 308, 358px de largura do item), nunca por `clamp()` contínuo: o pixel da fonte precisa cair em múltiplo inteiro.",
+        "section": "layout"
+      },
+      {
+        "name": "The Switchable Atmosphere Rule",
+        "body": "Varredura, brilho e grade de tiles são uma camada desligável (controle CRT ON/OFF, gravado no navegador). Nenhuma informação pode depender dela.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do usar cada cor de estado só para o seu significado (ciano em QA/entradas, verde aprovado, vermelho reprovado/retornos, dourado novo desde a última coleta, aço/estática não medido).",
+      "Do manter azul-arcade e violeta restritos a moldura, navegação e seleção.",
+      "Do riscar como estática (hachura 135° aco-escuro, borda aço) tudo que não foi medido.",
+      "Do usar Silkscreen 400 a partir de 12px para rótulos e números, e Jersey 15 a partir de 18px para texto corrido.",
+      "Do desenhar o \"%\" com o ícone bitmap \"porcento\" e novos ícones como bitmaps 7×7 com `crispEdges`.",
+      "Do fazer numerais de placar crescerem por container query em degraus fixos.",
+      "Do animar em degraus (`steps()`) e deixar o conteúdo visível desde o primeiro quadro.",
+      "Do manter a camada CRT desligável e o painel inteiro legível com ela desligada.",
+      "Do manter a lei das cores explicada na tela (painel LEGENDA na mesa)."
+    ],
+    "donts": [
+      "Don't colorir \"dias em QA\" por faixa de dias.",
+      "Don't transformar pessoas em jogadores: sem ranking de devs, vidas, GAME OVER ou HI-SCORE de pessoa. O \"1P…4P\" nomeia prefixos, nunca pessoas.",
+      "Don't usar dourado, verde, vermelho ou ciano como enfeite, fundo de seção ou destaque genérico.",
+      "Don't pôr Silkscreen em negrito abaixo de 16px nem abaixo de 12px em qualquer peso.",
+      "Don't usar o glifo \"%\" das fontes nem ícones de glifo unicode ou de biblioteca vetorial.",
+      "Don't arredondar cantos, usar sombra de elevação ou gradiente decorativo.",
+      "Don't começar uma tela escondida à espera de animação, nem usar piscar contínuo ou som.",
+      "Don't voltar ao admin padrão: barra lateral, cartões brancos de KPI, azul de SaaS."
+    ]
+  }
+}

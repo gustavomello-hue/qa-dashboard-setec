@@ -1,0 +1,914 @@
+/* ---- Casca ------------------------------------------------------------- */
+
+.app {
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: clamp(12px, 2vw, 28px) clamp(12px, 2.4vw, 36px) 64px;
+}
+
+.topo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+
+.topo__linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.marca {
+  margin: 0;
+  font-family: var(--face-hud);
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--texto);
+}
+.marca__ponto {
+  color: var(--violeta);
+}
+
+/* Selo da coleta */
+.selo {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--texto-2);
+}
+.selo__estado {
+  color: var(--texto);
+}
+.selo--sem-sinal {
+  padding: 4px 10px;
+  background:
+    repeating-linear-gradient(135deg, var(--aco-escuro) 0 4px, transparent 4px 8px),
+    var(--fundo-2);
+}
+.selo--sem-sinal .selo__estado {
+  color: var(--texto);
+  font-size: 16px;
+}
+.selo__erro {
+  color: var(--texto-2);
+  flex-basis: 100%;
+  text-align: right;
+}
+
+/* ---- Placar (HUD) ------------------------------------------------------ */
+
+.placar {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 0;
+  padding: 14px 0 16px;
+  border-top: 2px solid var(--azul-arcade);
+  border-bottom: 2px solid var(--azul-arcade);
+}
+
+.placar__item {
+  container-type: inline-size;
+  display: grid;
+  gap: 6px;
+  padding: 0 clamp(8px, 1.4vw, 20px);
+}
+.placar__item + .placar__item {
+  border-left: 2px dotted var(--fundo-3);
+}
+
+.placar__rotulo {
+  font-size: 12px;
+}
+
+.placar__valor {
+  margin: 0;
+  display: grid;
+  gap: 4px;
+}
+.placar__valor > .num {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 0.95;
+}
+.placar__valor > .num--taxa {
+  font-size: 24px;
+}
+/* 3 dígitos pedem ~3,2em; a taxa (62,6%) ~5,2em. */
+@container (min-width: 128px) { .placar__valor > .num { font-size: 40px; } .placar__valor > .num--taxa { font-size: 24px; } }
+@container (min-width: 154px) { .placar__valor > .num { font-size: 48px; } .placar__valor > .num--taxa { font-size: 32px; } }
+@container (min-width: 205px) { .placar__valor > .num { font-size: 64px; } .placar__valor > .num--taxa { font-size: 40px; } }
+@container (min-width: 256px) { .placar__valor > .num { font-size: 80px; } .placar__valor > .num--taxa { font-size: 48px; } }
+@container (min-width: 308px) { .placar__valor > .num { font-size: 96px; } .placar__valor > .num--taxa { font-size: 56px; } }
+@container (min-width: 358px) { .placar__valor > .num { font-size: 112px; } .placar__valor > .num--taxa { font-size: 64px; } }
+.placar__pct {
+  margin-left: 0.12em;
+}
+.placar__sub {
+  font-size: 12px;
+  color: var(--texto-3);
+}
+
+/* ---- Fases e seleção de jogador --------------------------------------- */
+
+.fases {
+  display: flex;
+  align-items: center;
+  gap: 16px 28px;
+  flex-wrap: wrap;
+}
+
+.fases__lista {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fase {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px 8px 10px;
+  border: 2px solid transparent;
+  background: none;
+  color: var(--texto-2);
+  font-family: var(--face-hud);
+  font-size: 16px;
+  cursor: pointer;
+}
+.fase__cursor {
+  visibility: hidden;
+  display: inline-flex;
+}
+.fase:hover {
+  color: var(--texto);
+}
+.fase[aria-current="page"],
+.jogador__botao[aria-checked="true"],
+.botao {
+  color: var(--texto);
+  background: var(--azul-arcade);
+  border-color: var(--azul-arcade);
+  box-shadow:
+    0 0 0 2px var(--fosforo),
+    0 0 0 4px var(--violeta);
+}
+.crt .fase[aria-current="page"],
+.crt .jogador__botao[aria-checked="true"],
+.crt .botao {
+  box-shadow:
+    0 0 0 2px var(--fosforo),
+    0 0 0 4px var(--violeta),
+    0 0 16px rgb(116 70 255 / 0.55);
+}
+.fase[aria-current="page"] .fase__cursor {
+  visibility: visible;
+}
+
+.jogador {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.jogador__prefixos {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.jogador__botao {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 2px solid var(--fundo-3);
+  background: var(--fundo-2);
+  color: var(--texto-2);
+  font-size: 12px;
+  cursor: pointer;
+}
+.jogador__num {
+  font-size: 12px;
+  color: var(--texto-3);
+}
+.jogador__botao:hover:not(:disabled) {
+  border-color: var(--violeta);
+  color: var(--texto);
+}
+
+.jogador__botao[aria-checked="true"] .jogador__num {
+  color: var(--texto);
+}
+.jogador__botao:disabled {
+  cursor: default;
+}
+
+.jogador__projeto {
+  width: 280px;
+  min-width: 0;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  padding: 6px 8px;
+  border: 2px solid var(--fundo-3);
+  background: var(--fundo-2);
+  font-family: var(--face-texto);
+  font-size: 18px;
+}
+.jogador__projeto:hover:not(:disabled) {
+  border-color: var(--violeta);
+}
+
+.controles {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+.controle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 2px solid var(--fundo-3);
+  background: none;
+  color: var(--texto-3);
+  font-size: 12px;
+  cursor: pointer;
+}
+.controle:hover,
+.controle[aria-pressed="true"] {
+  color: var(--texto);
+  border-color: var(--azul-arcade);
+}
+
+/* ---- Troca de tela: uma faixa de varredura desce sobre a fase nova -----
+   O conteúdo nunca começa escondido: se a animação não rodar (aba em segundo
+   plano, movimento reduzido), a tela já está inteira. */
+
+.tela {
+  position: relative;
+  margin-top: 22px;
+}
+.tela::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 48px;
+  pointer-events: none;
+  z-index: 5;
+  background: repeating-linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--violeta) 55%, transparent) 0 2px,
+    transparent 2px 4px
+  );
+  opacity: 0;
+  animation: varre-fase 420ms steps(10, end);
+}
+
+@keyframes varre-fase {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(min(70vh, 600px));
+  }
+}
+
+/* ---- Painéis ----------------------------------------------------------- */
+
+.painel {
+  padding: 16px clamp(12px, 1.6vw, 22px) 18px;
+  min-width: 0;
+}
+
+.painel__cabeca {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.painel__titulo {
+  margin: 0;
+  font-family: var(--face-hud);
+  text-transform: none;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--texto);
+  letter-spacing: 0.04em;
+}
+.painel > .painel__titulo {
+  margin-bottom: 12px;
+}
+
+.painel__nota {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--texto-3);
+}
+
+.painel__vazio {
+  margin: 28px 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--texto-2);
+}
+
+/* ---- Hoje --------------------------------------------------------------- */
+
+.hoje {
+  display: grid;
+  grid-template-columns: minmax(0, 2.1fr) minmax(300px, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.hoje__lado {
+  display: grid;
+  gap: 20px;
+}
+
+.paginas {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--texto-2);
+}
+
+.botao-icone {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--fundo-3);
+  background: var(--fundo-2);
+  color: var(--texto);
+  cursor: pointer;
+}
+.botao-icone:hover:not(:disabled) {
+  border-color: var(--violeta);
+}
+.botao-icone:disabled {
+  color: var(--aco-escuro);
+  cursor: default;
+}
+
+/* Tabela da fila e do resumo */
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+}
+.tabela th {
+  padding: 0 8px 8px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--texto-3);
+  text-align: left;
+  white-space: nowrap;
+}
+.tabela td,
+.tabela tbody th {
+  padding: 10px 8px;
+  border-top: 2px solid var(--fundo-3);
+  vertical-align: middle;
+}
+.tabela tbody tr:hover {
+  background: var(--fundo-3);
+}
+.direita {
+  text-align: right !important;
+}
+
+.tabela__card {
+  white-space: nowrap;
+}
+.link-card {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ciano);
+  font-size: 16px;
+  cursor: pointer;
+}
+.link-card:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.novo {
+  margin-left: 6px;
+}
+
+.tabela__titulo {
+  width: 100%;
+}
+.titulo-card {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 22px;
+  line-height: 1.1;
+  text-decoration: none;
+  color: var(--texto);
+}
+.titulo-card:hover {
+  text-decoration: underline;
+}
+.tabela__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--lilas);
+}
+.tabela__retornos {
+  display: none;
+  color: var(--vermelho);
+}
+.tabela__pessoa {
+  font-size: 18px;
+  line-height: 1.1;
+  color: var(--texto-2);
+  min-width: 150px;
+}
+.tabela__dias {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--texto);
+}
+
+/* Distribuição em barras de blocos */
+.dist {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.dist__linha {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+.dist__nome {
+  font-size: 12px;
+  color: var(--texto-2);
+}
+.dist__barra {
+  height: 14px;
+  min-width: 10px;
+  background: repeating-linear-gradient(90deg, currentColor 0 8px, transparent 8px 11px);
+}
+.dist__valor {
+  font-size: 16px;
+  min-width: 3ch;
+  text-align: right;
+}
+.dist__concluidas {
+  margin: 14px 0 0;
+  padding-top: 10px;
+  border-top: 2px dotted var(--fundo-3);
+  font-size: 12px;
+  color: var(--texto-3);
+}
+.dist__concluidas .num {
+  color: var(--texto-2);
+  font-size: 16px;
+  margin-left: 6px;
+}
+
+/* Lacunas: riscadas como estática */
+.lacunas {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lacuna {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+}
+.lacuna__faixa {
+  height: 28px;
+  border: 2px solid var(--aco);
+}
+.lacuna__texto {
+  display: grid;
+  gap: 2px;
+}
+.lacuna__texto .hud {
+  font-size: 12px;
+  color: var(--texto);
+}
+.lacuna__detalhe {
+  font-size: 18px;
+  line-height: 1.15;
+  color: var(--texto-2);
+}
+
+/* ---- Mensal ------------------------------------------------------------ */
+
+.mensal {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+}
+
+/* Tabela larga no celular rola dentro do painel, não a página inteira. */
+.rolavel {
+  overflow-x: auto;
+}
+
+.legenda {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+}
+.legenda li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.legenda__bloco {
+  width: 12px;
+  height: 6px;
+  background: currentColor;
+}
+
+.tabela--mes tbody td {
+  font-size: 16px;
+}
+.tabela--mes tbody th {
+  font-size: 12px;
+  color: var(--texto);
+  text-align: left;
+}
+
+.medicao {
+  display: inline-block;
+  padding: 3px 8px;
+  border: 2px solid var(--fundo-3);
+  font-size: 12px;
+  color: var(--texto-2);
+}
+.medicao--parcial {
+  border-color: var(--aco);
+  background: repeating-linear-gradient(135deg, var(--aco-escuro) 0 4px, transparent 4px 8px);
+  color: var(--texto);
+}
+
+/* ---- Card -------------------------------------------------------------- */
+
+.card-tela {
+  display: grid;
+  gap: 20px;
+}
+
+.busca {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.busca__rotulo {
+  font-family: var(--face-hud);
+  text-transform: none;
+  font-size: 16px;
+  color: var(--ciano);
+}
+.busca__campo {
+  width: 10ch;
+  padding: 8px 10px;
+  border: 2px solid var(--azul-arcade);
+  background: var(--fosforo);
+  color: var(--texto);
+  font-size: 24px;
+  caret-color: var(--ciano);
+}
+.busca__campo::placeholder {
+  color: var(--texto-3);
+}
+.botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 2px solid var(--azul-arcade);
+  font-size: 12px;
+  cursor: pointer;
+}
+.botao:hover {
+  background: var(--violeta);
+  border-color: var(--violeta);
+}
+
+.card-tela__cabeca {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.card-tela__titulo {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.05;
+  max-width: 60ch;
+  text-wrap: balance;
+}
+.link-externo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--lilas);
+}
+
+.ficha {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px 24px;
+  margin: 20px 0;
+  padding: 14px 0;
+  border-top: 2px dotted var(--fundo-3);
+  border-bottom: 2px dotted var(--fundo-3);
+}
+.ficha dt {
+  font-size: 12px;
+  color: var(--texto-3);
+}
+.ficha dd {
+  margin: 4px 0 0;
+  font-size: 20px;
+}
+.ficha dd.num {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.linha-tempo {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+}
+.linha-tempo__item {
+  display: grid;
+  grid-template-columns: 120px 14px minmax(0, 1fr);
+  gap: 14px;
+  padding: 10px 0;
+  position: relative;
+}
+.linha-tempo__item + .linha-tempo__item::before {
+  content: "";
+  position: absolute;
+  left: 139px;
+  top: -10px;
+  height: 20px;
+  border-left: 2px dotted var(--fundo-3);
+}
+.linha-tempo__quando {
+  font-size: 12px;
+  color: var(--texto-2);
+  padding-top: 2px;
+}
+.linha-tempo__marca {
+  width: 14px;
+  height: 14px;
+  margin-top: 1px;
+  background: currentColor;
+}
+.linha-tempo__corpo {
+  display: grid;
+  gap: 4px;
+}
+.linha-tempo__corpo .hud {
+  font-size: 12px;
+}
+.linha-tempo__de-para {
+  font-size: 20px;
+  color: var(--texto);
+}
+.linha-tempo__quem {
+  color: var(--texto-2);
+}
+
+/* ---- Tela inicial / erro ----------------------------------------------- */
+
+.tela-inicial {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  gap: 12px;
+  text-align: center;
+}
+.tela-inicial__texto {
+  margin: 0;
+  font-family: var(--face-hud);
+  font-size: 32px;
+  color: var(--ciano);
+}
+.tela-inicial__erro {
+  margin: 0;
+  color: var(--texto-2);
+  max-width: 60ch;
+}
+
+/* ---- Modo atração (TV) ------------------------------------------------- */
+
+.atracao {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px clamp(12px, 2.4vw, 36px);
+  background: var(--fosforo);
+  border-top: 2px solid var(--azul-arcade);
+  font-size: 12px;
+  color: var(--texto-2);
+  z-index: 40;
+}
+.atracao__tempo {
+  flex: 1;
+  height: 8px;
+  background: repeating-linear-gradient(90deg, var(--violeta) 0 10px, transparent 10px 13px);
+  transform-origin: left;
+  animation: tempo-quadro linear both;
+  animation-timing-function: steps(24, end);
+}
+@keyframes tempo-quadro {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Na TV tudo cresce para ser lido do fundo da sala, e o que é de mesa some.
+   Os numerais do placar já crescem sozinhos pelas container queries. */
+.app--tv .jogador,
+.app--tv .controle--mesa {
+  display: none;
+}
+.app--tv .placar__rotulo {
+  font-size: 20px;
+}
+.app--tv .placar__sub {
+  font-size: 16px;
+}
+.app--tv .painel__titulo {
+  font-size: 24px;
+}
+.app--tv .selo,
+.app--tv .paginas {
+  font-size: 20px;
+}
+.app--tv .painel__nota,
+.app--tv .tabela th,
+.app--tv .dist__nome,
+.app--tv .dist__concluidas,
+.app--tv .lacuna__texto .hud,
+.app--tv .legenda-painel li {
+  font-size: 16px;
+}
+.app--tv .tabela__meta {
+  font-size: 16px;
+}
+.app--tv .titulo-card {
+  font-size: 32px;
+}
+.app--tv .tabela__pessoa {
+  font-size: 22px;
+}
+.app--tv .legenda-painel {
+  display: none;
+}
+.app--tv .dist__linha {
+  grid-template-columns: 176px minmax(0, 1fr) auto;
+}
+.app--tv .link-card,
+.app--tv .dist__valor {
+  font-size: 24px;
+}
+.app--tv .tabela__dias {
+  font-size: 40px;
+}
+.app--tv .lacuna__detalhe {
+  font-size: 22px;
+}
+.app--tv .atracao {
+  font-size: 20px;
+  padding-block: 14px;
+}
+.app--tv .hoje {
+  grid-template-columns: minmax(0, 2.5fr) minmax(320px, 1fr);
+}
+
+/* ---- Estreito ---------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+  .hoje {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .placar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 16px;
+  }
+  .placar__item:nth-child(odd) {
+    border-left: 0;
+  }
+  /* A taxa tem mais caracteres que os contadores: linha inteira. */
+  .placar__item:last-child {
+    grid-column: 1 / -1;
+  }
+  .jogador {
+    flex-basis: 100%;
+    min-width: 0;
+  }
+
+  .so-largo {
+    display: none;
+  }
+  .tabela__retornos {
+    display: inline;
+  }
+  .titulo-card {
+    -webkit-line-clamp: 3;
+  }
+  .controles {
+    margin-left: 0;
+  }
+  .jogador__projeto {
+    max-width: 100%;
+    flex: 1;
+  }
+  .linha-tempo__item {
+    grid-template-columns: 14px minmax(0, 1fr);
+  }
+  .linha-tempo__quando {
+    grid-column: 2;
+  }
+  .linha-tempo__marca {
+    grid-row: 1 / span 2;
+  }
+  .linha-tempo__item + .linha-tempo__item::before {
+    display: none;
+  }
+}
+
+/* ---- Legenda: a lei das cores, para quem olha de longe ----------------- */
+
+.legenda-painel ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.legenda-painel li {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--texto-2);
+}
+.legenda-painel__amostra {
+  width: 28px;
+  height: 12px;
+  background: currentColor;
+}
+.legenda-painel__amostra.estatica {
+  border: 2px solid var(--aco);
+}
