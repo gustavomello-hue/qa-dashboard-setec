@@ -133,6 +133,11 @@ describe("rota na URL", () => {
 });
 
 describe("modo atração", () => {
+  it("?fora sobrevive à ida e volta junto com filtros", () => {
+    const r = lerRota("#/hoje?prefixo=WEB&fora");
+    expect(r.fora).toBe(true);
+    expect(escreverRota(r)).toBe("#/hoje?prefixo=WEB&fora");
+  });
   it("?tv liga o modo e sobrevive à ida e volta", () => {
     const r = lerRota("#/hoje?tv");
     expect(r.tv).toBe(true);
@@ -163,6 +168,10 @@ describe("etiquetas do título", async () => {
     expect(separarEtiquetas("[QA][Cata-treco] Registrar solicitação")).toEqual({
       etiquetas: "[QA][Cata-treco]", resto: "Registrar solicitação",
     });
+  });
+  it("separador depois da etiqueta não sobra no título", () => {
+    expect(separarEtiquetas("[Portal] - Ajustar título institucional").resto).toBe("Ajustar título institucional");
+    expect(separarEtiquetas("[API] : Consulta").resto).toBe("Consulta");
   });
   it("título sem etiqueta fica igual", () => {
     expect(separarEtiquetas("Multi-Evento - Falha no envio")).toEqual({ etiquetas: "", resto: "Multi-Evento - Falha no envio" });

@@ -7,3 +7,9 @@ dist/
 public/dados-local.json
 
 .env.local
+
+# Impeccable: capturas de revisão e imagens de referência do catálogo
+# (material de trabalho, não vai para o repositório público).
+.impeccable/review/
+.impeccable/ref/
+.impeccable/mocks/

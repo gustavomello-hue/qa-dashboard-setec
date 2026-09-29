@@ -7,9 +7,9 @@ export const POR_PAGINA = 10;
 /** Na TV ninguém rola: a página inteira precisa caber numa tela 1080p. */
 export const POR_PAGINA_TV = 6;
 
-export function filaFiltrada(dados: Dashboard, filtro: Filtro) {
+export function filaFiltrada(dados: Dashboard, filtro: Filtro, soForaDoPainel = false) {
   const passa = passaNoFiltro(dados, filtro);
-  return dados.fila_qa.filter((c) => passa(c.project_id));
+  return dados.fila_qa.filter((c) => passa(c.project_id) && (!soForaDoPainel || c.no_painel === false));
 }
 
 interface Props {
@@ -19,11 +19,18 @@ interface Props {
   porPagina?: number;
   mudarPagina?: (p: number) => void;
   abrirCard: (id: number) => void;
+  /** Mostra só os cards que o painel do Kanboard não exibe. */
+  soForaDoPainel?: boolean;
+  alternarForaDoPainel?: () => void;
 }
 
 /** A fila de QA do card mais parado ao mais recente, em páginas de tela cheia. */
-export function Fila({ dados, filtro, pagina, porPagina = POR_PAGINA, mudarPagina, abrirCard }: Props) {
-  const fila = filaFiltrada(dados, filtro);
+export function Fila({
+  dados, filtro, pagina, porPagina = POR_PAGINA, mudarPagina, abrirCard,
+  soForaDoPainel = false, alternarForaDoPainel,
+}: Props) {
+  const fila = filaFiltrada(dados, filtro, soForaDoPainel);
+  const foraDoPainel = filaFiltrada(dados, filtro).filter((c) => c.no_painel === false).length;
   const { itens, total } = paginar(fila, porPagina, pagina);
   const atual = Math.min(pagina, total - 1);
   const desde = inicioDaUltimaColeta(dados);
@@ -31,9 +38,24 @@ export function Fila({ dados, filtro, pagina, porPagina = POR_PAGINA, mudarPagin
   return (
     <section className="moldura painel fila" aria-labelledby="t-fila">
       <header className="painel__cabeca">
-        <h2 id="t-fila" className="hud painel__titulo">
-          FILA DE QA <span className="num" style={{ color: "var(--ciano)" }}>{placar(fila.length)}</span>
-        </h2>
+        <div className="fila__titulos">
+          <h2 id="t-fila" className="hud painel__titulo">
+            FILA DE QA <span className="num" style={{ color: "var(--ciano)" }}>{placar(fila.length)}</span>
+          </h2>
+          {(foraDoPainel > 0 || soForaDoPainel) &&
+            (alternarForaDoPainel ? (
+              <button
+                className="fora-contador hud"
+                aria-pressed={soForaDoPainel}
+                onClick={alternarForaDoPainel}
+                title="Cards em Teste/QA que o painel do Kanboard não mostra (projeto fora da lista do painel)"
+              >
+                {soForaDoPainel ? "MOSTRAR TODOS" : `${placar(foraDoPainel, 2)} FORA DO PAINEL`}
+              </button>
+            ) : (
+              <span className="fora-contador hud">{placar(foraDoPainel, 2)} FORA DO PAINEL</span>
+            ))}
+        </div>
         <div className="paginas hud" aria-label="Páginas da fila">
           {mudarPagina && (
             <button className="botao-icone" disabled={atual === 0} onClick={() => mudarPagina(atual - 1)} aria-label="Página anterior">
@@ -50,7 +72,7 @@ export function Fila({ dados, filtro, pagina, porPagina = POR_PAGINA, mudarPagin
       </header>
 
       {fila.length === 0 ? (
-        <p className="painel__vazio hud">NENHUM CARD EM QA</p>
+        <p className="painel__vazio hud">{soForaDoPainel ? "NENHUM CARD FORA DO PAINEL" : "NENHUM CARD EM QA"}</p>
       ) : (
         <table className="tabela">
           <thead className="hud">
@@ -83,6 +105,11 @@ export function Fila({ dados, filtro, pagina, porPagina = POR_PAGINA, mudarPagin
                       {resto}
                     </a>
                     <span className="tabela__meta hud">
+                      {c.no_painel === false && (
+                        <span className="fora-painel" title="Este card não aparece no painel Teste de QA do Kanboard">
+                          FORA DO PAINEL
+                        </span>
+                      )}
                       {etiquetas && <span>{etiquetas}</span>}
                       <span>{nomeCurto(c.projeto)}</span>
                       {c.retornos > 0 && <span className="tabela__retornos">{c.retornos} retorno{c.retornos > 1 ? "s" : ""}</span>}

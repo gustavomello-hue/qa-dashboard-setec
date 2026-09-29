@@ -16,6 +16,8 @@ export interface Rota {
   card?: number;
   /** Modo atração (TV da sala): percorre as telas sozinho. */
   tv?: boolean;
+  /** Fila só com os cards que o painel do Kanboard não mostra. */
+  fora?: boolean;
 }
 
 const PREFIXOS: Prefixo[] = ["DEV", "WEB", "MOB", "Demandas", "Outros"];
@@ -35,6 +37,7 @@ export function lerRota(hash: string): Rota {
     filtro,
     ...(Number.isInteger(card) && card > 0 ? { card } : {}),
     ...(p.has("tv") ? { tv: true } : {}),
+    ...(p.has("fora") ? { fora: true } : {}),
   };
 }
 
@@ -44,7 +47,9 @@ export function escreverRota(r: Rota): string {
   if (r.filtro.projeto !== undefined) p.set("projeto", String(r.filtro.projeto));
   if (r.card !== undefined) p.set("card", String(r.card));
   if (r.tv) p.set("tv", "");
-  const busca = p.toString().replace(/tv=(&|$)/, "tv$1");
+  if (r.fora) p.set("fora", "");
+  // Flags sem valor ficam "?tv" e "?fora", não "?tv=".
+  const busca = p.toString().replace(/\b(tv|fora)=(&|$)/g, "$1$2");
   return `#/${r.tela}${busca ? `?${busca}` : ""}`;
 }
 

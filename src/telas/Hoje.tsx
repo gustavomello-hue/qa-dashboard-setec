@@ -12,16 +12,27 @@ interface Props {
   porPagina?: number;
   mudarPagina?: (p: number) => void;
   abrirCard: (id: number) => void;
+  soForaDoPainel?: boolean;
+  alternarForaDoPainel?: () => void;
 }
 
-export function Hoje({ dados, filtro, pagina, porPagina, mudarPagina, abrirCard }: Props) {
+export function Hoje({ dados, filtro, pagina, porPagina, mudarPagina, abrirCard, soForaDoPainel, alternarForaDoPainel }: Props) {
   return (
     <div className="hoje">
-      <Fila dados={dados} filtro={filtro} pagina={pagina} porPagina={porPagina} mudarPagina={mudarPagina} abrirCard={abrirCard} />
+      <Fila
+        dados={dados}
+        filtro={filtro}
+        pagina={pagina}
+        porPagina={porPagina}
+        mudarPagina={mudarPagina}
+        abrirCard={abrirCard}
+        soForaDoPainel={soForaDoPainel}
+        alternarForaDoPainel={alternarForaDoPainel}
+      />
       <div className="hoje__lado">
         <Distribuicao dados={dados} filtro={filtro} />
         <PainelSinal dados={dados} />
-        <Legenda />
+        <Legenda mostrarForaDoPainel={dados.fila_qa.some((c) => c.no_painel === false)} />
       </div>
     </div>
   );

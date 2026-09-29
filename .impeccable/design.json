@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-29T19:32:20.472Z",
+  "generatedAt": "2026-09-29T19:44:45.294Z",
   "title": "Design System: QA·SETEC",
   "extensions": {
     "colorMeta": {
@@ -246,33 +246,93 @@
       }
     },
     "typographyMeta": {
-      "display": {
-        "displayName": "Numeral de placar",
-        "purpose": "Numerais do placar; 32–112px por container query em degraus, taxa 24–64px."
+      "label": {
+        "displayName": "Rótulo HUD",
+        "purpose": "Silkscreen 400 12px: todo rótulo de mesa, controles, botão, eixos do gráfico."
       },
-      "headline": {
-        "displayName": "Título do card",
-        "purpose": "Título do card na tela CARD, Jersey 15 32px."
+      "nav": {
+        "displayName": "Navegação",
+        "purpose": "Silkscreen 400 16px: menu de fases, rótulo da busca, selo SEM SINAL; rótulos menores na TV."
       },
       "title": {
         "displayName": "Título de painel",
-        "purpose": "Títulos de painel em Silkscreen 700 16px (TV 24px)."
+        "purpose": "Silkscreen 700 16px."
       },
-      "body-lg": {
-        "displayName": "Título na fila",
-        "purpose": "Título do card na fila, Jersey 15 22px, 2 linhas (3 no celular, 30px na TV)."
+      "numeral-sm": {
+        "displayName": "Numeral pequeno",
+        "purpose": "Silkscreen 16px: número do card, distribuição, tabela mensal."
       },
       "body": {
         "displayName": "Texto corrido",
-        "purpose": "Nomes, detalhes, select, tooltip. Jersey 15, nunca abaixo de 18px na mesa."
+        "purpose": "Jersey 15 18px: nomes, detalhes, select, tooltip do gráfico."
       },
-      "label": {
-        "displayName": "Rótulo HUD",
-        "purpose": "Rótulos, cabeçalhos, controles. Silkscreen 400, 12px ou mais, nunca negrito abaixo de 16px."
+      "body-md": {
+        "displayName": "Texto médio",
+        "purpose": "Jersey 15 20px: ficha do card, linha do tempo."
+      },
+      "label-tv": {
+        "displayName": "Rótulo TV",
+        "purpose": "Silkscreen 20px: rótulos do placar, selo, paginação e rodapé na TV."
+      },
+      "body-lg": {
+        "displayName": "Título na fila",
+        "purpose": "Jersey 15 22px: título do card na fila; designado e lacuna na TV."
       },
       "numeral": {
-        "displayName": "Numeral de tabela",
-        "purpose": "Números tabulares em Silkscreen, com zeros à esquerda nos contadores."
+        "displayName": "Numeral",
+        "purpose": "Silkscreen 700 24px: dias em QA, ficha, marca."
+      },
+      "title-tv": {
+        "displayName": "Título de painel TV",
+        "purpose": "Silkscreen 700 24px na cena TV."
+      },
+      "field": {
+        "displayName": "Campo",
+        "purpose": "Jersey 15 24px na busca de card."
+      },
+      "headline": {
+        "displayName": "Título do card",
+        "purpose": "Jersey 15 32px: tela CARD e título da fila na TV."
+      },
+      "numeral-tv": {
+        "displayName": "Numeral TV",
+        "purpose": "Silkscreen 700 40px: dias em QA na TV."
+      },
+      "display-24": {
+        "displayName": "Placar 24",
+        "purpose": "Degrau de 24px do numeral do placar, escolhido por container query."
+      },
+      "display-32": {
+        "displayName": "Placar 32",
+        "purpose": "Degrau de 32px do numeral do placar, escolhido por container query."
+      },
+      "display-40": {
+        "displayName": "Placar 40",
+        "purpose": "Degrau de 40px do numeral do placar, escolhido por container query."
+      },
+      "display-48": {
+        "displayName": "Placar 48",
+        "purpose": "Degrau de 48px do numeral do placar, escolhido por container query."
+      },
+      "display-56": {
+        "displayName": "Placar 56",
+        "purpose": "Degrau de 56px do numeral do placar, escolhido por container query."
+      },
+      "display-64": {
+        "displayName": "Placar 64",
+        "purpose": "Degrau de 64px do numeral do placar, escolhido por container query."
+      },
+      "display-80": {
+        "displayName": "Placar 80",
+        "purpose": "Degrau de 80px do numeral do placar, escolhido por container query."
+      },
+      "display-96": {
+        "displayName": "Placar 96",
+        "purpose": "Degrau de 96px do numeral do placar, escolhido por container query."
+      },
+      "display-112": {
+        "displayName": "Placar 112",
+        "purpose": "Degrau de 112px do numeral do placar, escolhido por container query."
       }
     },
     "shadows": [
@@ -298,8 +358,8 @@
       },
       {
         "name": "grade-tiles",
-        "value": "linear-gradient(to bottom, rgb(49 73 255 / 0.07) 1px, transparent 1px), linear-gradient(to right, rgb(49 73 255 / 0.07) 1px, transparent 1px); background-size: 8px 8px",
-        "purpose": "Grade 8×8 dentro das molduras; só com CRT ligado."
+        "value": "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' shape-rendering='crispEdges'%3E%3Crect width='1' height='1' fill='%233149ff' fill-opacity='0.22'/%3E%3C/svg%3E\") / 8px 8px",
+        "purpose": "Padrão SVG: um pixel azul-arcade (fill-opacity 0.22) no canto de cada tile 8×8, no fundo das molduras; só com CRT ligado."
       },
       {
         "name": "estatica",
@@ -322,6 +382,11 @@
         "name": "tempo-quadro",
         "value": "12s steps(24, end)",
         "purpose": "Barra de blocos do modo atração; um quadro a cada 12s."
+      },
+      {
+        "name": "grafico-sem-animacao",
+        "value": "animation: false",
+        "purpose": "O gráfico mensal aparece inteiro, sem crescimento suave."
       },
       {
         "name": "movimento-reduzido",
@@ -371,7 +436,7 @@
       "refersTo": "seletor-prefixo",
       "description": "TODOS, 1P DEV…4P DEMANDAS; radio que recorta o HUD e as telas.",
       "html": "<div class=\"ds-prefixos\" role=\"radiogroup\"><button class=\"ds-prefixo\" role=\"radio\" aria-checked=\"true\">TODOS</button><button class=\"ds-prefixo\" role=\"radio\" aria-checked=\"false\"><span class=\"ds-prefixo__num\">1P</span>DEV</button><button class=\"ds-prefixo\" role=\"radio\" aria-checked=\"false\"><span class=\"ds-prefixo__num\">2P</span>WEB</button></div>",
-      "css": ".ds-prefixos{display:flex;gap:4px;background:var(--fosforo);padding:8px}.ds-prefixo{display:inline-flex;align-items:baseline;gap:6px;padding:6px 10px;border:2px solid var(--fundo-3);background:var(--fundo-2);color:var(--texto-2);font-family:var(--face-hud);font-size:13px;letter-spacing:.04em;cursor:pointer}.ds-prefixo__num{font-size:12px;color:var(--texto-3)}.ds-prefixo:hover{border-color:var(--violeta);color:var(--texto)}.ds-prefixo[aria-checked=true]{color:var(--texto);background:var(--azul-arcade);border-color:var(--azul-arcade);box-shadow:0 0 0 2px var(--fosforo),0 0 0 4px var(--violeta);}.ds-prefixo[aria-checked=true] .ds-prefixo__num{color:var(--texto)}.ds-prefixo:focus-visible{outline:2px dashed var(--texto);outline-offset:3px}"
+      "css": ".ds-prefixos{display:flex;gap:4px;background:var(--fosforo);padding:8px}.ds-prefixo{display:inline-flex;align-items:baseline;gap:6px;padding:6px 10px;border:2px solid var(--fundo-3);background:var(--fundo-2);color:var(--texto-2);font-family:var(--face-hud);font-size:12px;letter-spacing:.04em;cursor:pointer}.ds-prefixo__num{font-size:12px;color:var(--texto-3)}.ds-prefixo:hover{border-color:var(--violeta);color:var(--texto)}.ds-prefixo[aria-checked=true]{color:var(--texto);background:var(--azul-arcade);border-color:var(--azul-arcade);box-shadow:0 0 0 2px var(--fosforo),0 0 0 4px var(--violeta);}.ds-prefixo[aria-checked=true] .ds-prefixo__num{color:var(--texto)}.ds-prefixo:focus-visible{outline:2px dashed var(--texto);outline-offset:3px}"
     },
     {
       "name": "Botão primário",
@@ -379,7 +444,7 @@
       "refersTo": "botao",
       "description": "Ação principal (abrir card); azul-arcade com anel, violeta no hover.",
       "html": "<button class=\"ds-botao\">ABRIR CARD</button>",
-      "css": ".ds-botao{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:2px solid var(--azul-arcade);background:var(--azul-arcade);color:var(--texto);font-family:var(--face-hud);font-size:14px;cursor:pointer;box-shadow:0 0 0 2px var(--fosforo),0 0 0 4px var(--violeta);}.ds-botao:hover{background:var(--violeta);border-color:var(--violeta)}.ds-botao:focus-visible{outline:2px dashed var(--texto);outline-offset:6px}"
+      "css": ".ds-botao{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:2px solid var(--azul-arcade);background:var(--azul-arcade);color:var(--texto);font-family:var(--face-hud);font-size:12px;cursor:pointer;box-shadow:0 0 0 2px var(--fosforo),0 0 0 4px var(--violeta);}.ds-botao:hover{background:var(--violeta);border-color:var(--violeta)}.ds-botao:focus-visible{outline:2px dashed var(--texto);outline-offset:6px}"
     },
     {
       "name": "Controle",
@@ -403,7 +468,7 @@
       "refersTo": "display",
       "description": "Rótulo, numeral com zeros à esquerda na cor de estado e comparação com o último dia útil.",
       "html": "<dl class=\"ds-placar\"><div class=\"ds-placar__item\"><dt class=\"ds-placar__rotulo\">EM QA</dt><dd class=\"ds-placar__valor\"><span class=\"ds-placar__num\">059</span><span class=\"ds-placar__sub\">AGORA</span></dd></div><div class=\"ds-placar__item ds-placar__item--reprov\"><dt class=\"ds-placar__rotulo\">REPROVADOS</dt><dd class=\"ds-placar__valor\"><span class=\"ds-placar__num\">004</span><span class=\"ds-placar__sub\">SEG 28: 001</span></dd></div></dl>",
-      "css": ".ds-placar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:0;padding:14px 0 16px;border-top:2px solid var(--azul-arcade);border-bottom:2px solid var(--azul-arcade);background:var(--fosforo)}.ds-placar__item{display:grid;gap:6px;padding:0 16px;color:var(--ciano)}.ds-placar__item--reprov{color:var(--vermelho)}.ds-placar__item+.ds-placar__item{border-left:2px dotted var(--fundo-3)}.ds-placar__rotulo{font-family:var(--face-hud);font-size:13px;letter-spacing:.04em}.ds-placar__valor{margin:0;display:grid;gap:4px}.ds-placar__num{font-family:var(--face-hud);font-variant-numeric:tabular-nums;font-size:48px;font-weight:700;line-height:.95;text-shadow:var(--brilho)}.ds-placar__sub{font-family:var(--face-hud);font-size:12px;color:var(--texto-3)}"
+      "css": ".ds-placar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:0;padding:14px 0 16px;border-top:2px solid var(--azul-arcade);border-bottom:2px solid var(--azul-arcade);background:var(--fosforo)}.ds-placar__item{display:grid;gap:6px;padding:0 16px;color:var(--ciano)}.ds-placar__item--reprov{color:var(--vermelho)}.ds-placar__item+.ds-placar__item{border-left:2px dotted var(--fundo-3)}.ds-placar__rotulo{font-family:var(--face-hud);font-size:12px;letter-spacing:.04em}.ds-placar__valor{margin:0;display:grid;gap:4px}.ds-placar__num{font-family:var(--face-hud);font-variant-numeric:tabular-nums;font-size:48px;font-weight:700;line-height:.95;text-shadow:var(--brilho)}.ds-placar__sub{font-family:var(--face-hud);font-size:12px;color:var(--texto-3)}"
     },
     {
       "name": "Barra de blocos",
@@ -427,7 +492,7 @@
     "overview": "O painel é uma tela de fliperama CRT: preto-fósforo, um placar fixo no topo, telas inteiras tratadas como fases e um modo atração que roda sozinho na TV da sala. Tudo é desenhado no grão do pixel: fontes bitmap, molduras de linha dupla com cantos em degrau, barras feitas de blocos, ícones desenhados em grade 7×7. Nenhuma curva, nenhum gradiente decorativo, nenhum raio de canto.\n\nA densidade é de HUD: muitos números, pouco texto, e cada cor carrega exatamente um significado. A atmosfera CRT (linhas de varredura, brilho de fósforo, grade de tiles 8×8) é uma camada que se liga e desliga e fica gravada por navegador; o painel continua inteiro e legível sem ela. O que não foi medido nunca some: aparece riscado como estática.\n\nO mundo recusa o admin padrão (barra lateral, cartões brancos de KPI, azul de SaaS) e recusa transformar pessoas em jogadores. O vocabulário de fliperama vale para telas, filtros e dados, nunca para quem trabalha.",
     "keyCharacteristics": [
       "Paleta de 15 cores em uso, sob lei: cor de estado = um significado só.",
-      "Duas faces pixeladas escolhidas por teste de leitura em 1:1: Silkscreen para rótulos e números, Jersey 15 para texto corrido.",
+      "Duas faces pixeladas escolhidas por teste de leitura em 1:1: Silkscreen para rótulos e números, Jersey 15 para texto corrido, numa escala de degraus inteiros (12, 16, 18, 20, 22, 24, 32, 40, 48, 56, 64, 80, 96, 112px).",
       "Numerais de placar com zeros à esquerda (059, 002) e tamanho por container query.",
       "Molduras 9-slice de linha dupla (azul-arcade fora, violeta dentro), cantos em degrau, zero raio.",
       "Movimento em degraus (`steps()`), nunca contínuo; conteúdo nunca começa escondido.",
@@ -465,6 +530,11 @@
         "section": "typography"
       },
       {
+        "name": "The Literal Step Rule",
+        "body": "Todo tamanho de fonte é um degrau literal da escala (12, 16, 18, 20, 22, 24, 32, 40, 48, 56, 64, 80, 96, 112px). Nada de `clamp()`, `em` ou valores intermediários como 13px ou 14px: o pixel da fonte precisa cair em múltiplo inteiro.",
+        "section": "typography"
+      },
+      {
         "name": "The Bitmap Percent Rule",
         "body": "O \"%\" nunca é o glifo da fonte (na Silkscreen lê como Z, na Jersey pequena como ×): é o ícone bitmap \"porcento\", a 0.62em do número.",
         "section": "typography"
@@ -476,7 +546,7 @@
       },
       {
         "name": "The Scoreboard Step Rule",
-        "body": "Numerais do placar crescem por container query em degraus fixos (32, 40, 48, 64, 80, 96, 112px, com limiares em 128, 154, 205, 256, 308, 358px de largura do item), nunca por `clamp()` contínuo: o pixel da fonte precisa cair em múltiplo inteiro.",
+        "body": "Numerais do placar crescem por container query em degraus fixos, com limiares em 128, 154, 205, 256, 308 e 358px de largura do item: contadores 32 → 40 → 48 → 64 → 80 → 96 → 112px, taxa 24 → 24 → 32 → 40 → 48 → 56 → 64px. Nunca `clamp()` contínuo.",
         "section": "layout"
       },
       {
@@ -490,6 +560,7 @@
       "Do manter azul-arcade e violeta restritos a moldura, navegação e seleção.",
       "Do riscar como estática (hachura 135° aco-escuro, borda aço) tudo que não foi medido.",
       "Do usar Silkscreen 400 a partir de 12px para rótulos e números, e Jersey 15 a partir de 18px para texto corrido.",
+      "Do escolher todo tamanho de fonte entre os degraus literais da escala (12, 16, 18, 20, 22, 24, 32, 40, 48, 56, 64, 80, 96, 112px).",
       "Do desenhar o \"%\" com o ícone bitmap \"porcento\" e novos ícones como bitmaps 7×7 com `crispEdges`.",
       "Do fazer numerais de placar crescerem por container query em degraus fixos.",
       "Do animar em degraus (`steps()`) e deixar o conteúdo visível desde o primeiro quadro.",
@@ -503,7 +574,7 @@
       "Don't pôr Silkscreen em negrito abaixo de 16px nem abaixo de 12px em qualquer peso.",
       "Don't usar o glifo \"%\" das fontes nem ícones de glifo unicode ou de biblioteca vetorial.",
       "Don't arredondar cantos, usar sombra de elevação ou gradiente decorativo.",
-      "Don't começar uma tela escondida à espera de animação, nem usar piscar contínuo ou som.",
+      "Don't começar uma tela escondida à espera de animação, nem usar piscar contínuo, crescimento suave ou som.",
       "Don't voltar ao admin padrão: barra lateral, cartões brancos de KPI, azul de SaaS."
     ]
   }

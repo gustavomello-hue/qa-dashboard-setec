@@ -68,6 +68,12 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
               <div><dt className="hud">PROJETO</dt><dd>{nomeCurto(metricas.projeto)}</dd></div>
               <div><dt className="hud">CRIADOR</dt><dd>{metricas.criador || "—"}</dd></div>
               <div><dt className="hud">CONCLUÍDO POR</dt><dd>{metricas.concluido_por || "—"}</dd></div>
+              {naFila && naFila.no_painel !== undefined && naFila.no_painel !== null && (
+                <div>
+                  <dt className="hud">PAINEL DO KANBOARD</dt>
+                  <dd>{naFila.no_painel ? "Aparece no painel" : <span className="fora-painel hud">FORA DO PAINEL</span>}</dd>
+                </div>
+              )}
             </dl>
           )}
           <ol className="linha-tempo">

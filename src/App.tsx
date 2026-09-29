@@ -85,7 +85,7 @@ function Painel({ dados, erro, crt, alternarCrt }: PainelProps) {
     .filter((p) => !filtro.prefixo || p.prefixo === filtro.prefixo)
     .sort((a, b) => nomeCurto(a.nome).localeCompare(nomeCurto(b.nome)));
 
-  const chaveTela = `${tela}|${filtro.prefixo ?? ""}|${filtro.projeto ?? ""}|${paginaVisivel}|${rota.card ?? ""}`;
+  const chaveTela = `${tela}|${filtro.prefixo ?? ""}|${filtro.projeto ?? ""}|${paginaVisivel}|${rota.card ?? ""}|${rota.fora ? "fora" : ""}`;
 
   return (
     <div className={`app${crt ? " crt" : ""}${rota.tv ? " app--tv" : ""}`}>
@@ -176,6 +176,8 @@ function Painel({ dados, erro, crt, alternarCrt }: PainelProps) {
             porPagina={rota.tv ? POR_PAGINA_TV : undefined}
             mudarPagina={rota.tv ? undefined : setPagina}
             abrirCard={abrirCard}
+            soForaDoPainel={!rota.tv && !!rota.fora}
+            alternarForaDoPainel={rota.tv ? undefined : () => { setPagina(0); irPara({ ...rota, fora: !rota.fora }); }}
           />
         )}
         {tela === "mensal" && <Mensal dados={dados} filtro={filtro} />}

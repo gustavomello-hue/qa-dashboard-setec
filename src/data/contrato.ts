@@ -54,6 +54,12 @@ export interface CardNaFila {
   dias_em_qa: number | null;
   retornos: number;
   link: string;
+  /**
+   * Se o card aparece no painel "Teste de QA" do Kanboard (plugin
+   * PainelKanboard), que tem a própria lista de projetos. null = painel não
+   * consultado nesta coleta; ausente em JSONs anteriores a este campo.
+   */
+  no_painel?: boolean | null;
 }
 
 export interface Distribuicao {
@@ -184,6 +190,8 @@ export interface Dashboard {
     qa_confiavel_desde: string;
   };
   projetos: Projeto[];
+  /** Resultado da consulta ao painel do Kanboard nesta coleta. */
+  painel_kanboard?: { consultado: boolean; cards: number | null };
   fila_qa: CardNaFila[];
   distribuicao: Distribuicao[];
   resumo_mensal: ResumoMensal[];

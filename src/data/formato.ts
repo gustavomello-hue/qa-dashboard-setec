@@ -49,7 +49,9 @@ export function nomeCurto(projeto: string): string {
 export function separarEtiquetas(titulo: string): { etiquetas: string; resto: string } {
   const m = titulo.match(/^\s*((?:\[[^\]]*\]\s*)+)(.*)$/);
   if (!m || !m[2].trim()) return { etiquetas: "", resto: titulo.trim() };
-  return { etiquetas: m[1].replace(/\]\s*\[/g, "][").trim(), resto: m[2].trim() };
+  // "[Portal] - Ajustar título" não pode sobrar como "- Ajustar título".
+  const resto = m[2].replace(/^[\s\-–—:|]+/, "").trim() || m[2].trim();
+  return { etiquetas: m[1].replace(/\]\s*\[/g, "][").trim(), resto };
 }
 
 export function porcento(v: number | null): string {

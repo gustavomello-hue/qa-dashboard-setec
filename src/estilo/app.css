@@ -441,6 +441,40 @@
   display: none;
   color: var(--vermelho);
 }
+
+/* Fora do painel do Kanboard: metadado, não estado. Lilás com contorno
+   tracejado ("fora da moldura"), nunca uma das cores da lei. */
+.fora-painel {
+  display: inline-block;
+  padding: 0 6px;
+  border: 2px dashed var(--lilas);
+  color: var(--texto);
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.fila__titulos {
+  display: flex;
+  align-items: center;
+  gap: 8px 16px;
+  flex-wrap: wrap;
+}
+.fora-contador {
+  padding: 4px 10px;
+  border: 2px dashed var(--lilas);
+  background: none;
+  color: var(--texto);
+  font-size: 12px;
+}
+button.fora-contador {
+  cursor: pointer;
+}
+button.fora-contador:hover,
+button.fora-contador[aria-pressed="true"] {
+  border-style: solid;
+  background: var(--fundo-3);
+}
 .tabela__pessoa {
   font-size: 18px;
   line-height: 1.1;
@@ -911,4 +945,8 @@
 }
 .legenda-painel__amostra.estatica {
   border: 2px solid var(--aco);
+}
+.legenda-painel__amostra--fora {
+  background: none;
+  border: 2px dashed var(--lilas);
 }
