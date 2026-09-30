@@ -328,3 +328,46 @@ export function feedRecente(d: Dashboard, filtro: Filtro, limite = 30): Evento[]
   }
   return saida.sort((a, b) => b.momento - a.momento);
 }
+
+// --------------------------------------------------------------------------
+// Mensal: % de cards reprovados, a mesma conta da Equipe e da Pessoa
+// --------------------------------------------------------------------------
+
+export interface TaxaMes {
+  ano_mes: string;
+  cardsJulgados: number;
+  cardsReprovados: number;
+  taxa: number | null;
+}
+
+/**
+ * Por mês: dos cards julgados (aprovados ou reprovados), quantos foram
+ * reprovados ao menos uma vez. Vem das atribuições do responsável, que têm
+ * exatamente um fato por saída de QA, então somar a equipe não duplica card.
+ */
+export function taxaCardsPorMes(d: Dashboard, filtro: Filtro): Map<string, TaxaMes> {
+  const passa = passaNoFiltro(d, filtro);
+  const julgados = new Map<string, Set<number>>();
+  const reprovados = new Map<string, Set<number>>();
+  const add = (m: Map<string, Set<number>>, mes: string, task: number) => {
+    const s = m.get(mes) ?? new Set<number>();
+    s.add(task);
+    m.set(mes, s);
+  };
+  for (const a of d.atribuicoes ?? []) {
+    if (!passa(a.project_id)) continue;
+    if (a.metrica === "aprovado" || a.metrica === "reprovado") add(julgados, a.ano_mes, a.task_id);
+    if (a.metrica === "reprovado") add(reprovados, a.ano_mes, a.task_id);
+  }
+  const saida = new Map<string, TaxaMes>();
+  for (const [mes, cards] of julgados) {
+    const rep = reprovados.get(mes)?.size ?? 0;
+    saida.set(mes, {
+      ano_mes: mes,
+      cardsJulgados: cards.size,
+      cardsReprovados: rep,
+      taxa: cards.size ? Math.round((1000 * rep) / cards.size) / 10 : null,
+    });
+  }
+  return saida;
+}

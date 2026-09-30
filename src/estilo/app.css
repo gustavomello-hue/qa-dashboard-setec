@@ -1119,7 +1119,7 @@ details.bloco > summary {
 
 .linha-tempo__item {
   display: grid;
-  grid-template-columns: 96px 150px minmax(0, 1fr);
+  grid-template-columns: 96px 150px minmax(0, 1fr) auto;
   gap: 10px;
   align-items: baseline;
   padding: 7px 10px 7px 14px;
@@ -1333,4 +1333,71 @@ a.link-pessoa:hover {
   fill: none;
   stroke: var(--tinta-2);
   stroke-width: 1;
+}
+
+/* ---------- Clarify ---------- */
+
+/* Tempo na coluna para onde o evento levou o card. Em Teste/QA, em tinta forte. */
+.linha-tempo__estadia {
+  font-family: var(--face-dado);
+  font-size: 12px;
+  color: var(--tinta-3);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.linha-tempo__estadia--qa {
+  color: var(--tinta-1);
+  font-weight: 500;
+}
+
+.celula-denominador {
+  display: block;
+  font-size: 11.5px;
+}
+
+.tabela-grupo__nota {
+  padding: 0 10px 8px;
+}
+
+.glossario {
+  font-size: 12.5px;
+  color: var(--tinta-2);
+}
+
+.glossario summary {
+  cursor: pointer;
+  width: max-content;
+}
+
+.glossario dl {
+  margin: 8px 0 0;
+  padding: 10px 14px;
+  background: var(--faixa);
+  border: 1px solid var(--filete);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 8px 20px;
+  max-width: 1100px;
+}
+
+.glossario dt {
+  font-weight: 600;
+  color: var(--tinta-1);
+}
+
+.glossario dd {
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .linha-tempo__estadia {
+    text-align: left;
+  }
+}
+
+/* Na Agora a tela é fixa: o glossário aberto rola por dentro em vez de espremer as baias. */
+.agora__rodape .glossario dl {
+  max-height: 40vh;
+  overflow: auto;
 }

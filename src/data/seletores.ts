@@ -52,7 +52,7 @@ export interface ContagemDia {
   entraram: number;
   aprovados: number;
   reprovados: number;
-  /** Chegaram em Concluídas sem sair do QA (evento 'concluida'). */
+  /** Foram para Concluídas vindos de outra coluna, sem passar por Teste/QA (evento 'concluida'). */
   concluidosSemQa: number;
 }
 
@@ -207,4 +207,34 @@ export function indiceTitulos(d: Dashboard): Map<number, string> {
 /** {project_id: nome} */
 export function indiceProjetos(d: Dashboard): Map<number, string> {
   return new Map(d.projetos.map((p) => [p.id, p.nome]));
+}
+
+export interface Permanencia {
+  /** Segundos na coluna de destino do evento. */
+  segundos: number;
+  coluna: string;
+  emQa: boolean;
+  /** O card continua nessa coluna agora (conta até o momento da coleta). */
+  atual: boolean;
+}
+
+/**
+ * Quanto tempo o card ficou na coluna para onde cada evento o levou. Só
+ * afirma quando a sequência fecha (o próximo evento sai da mesma coluna em
+ * que este entrou): um movimento perdido entre os dois deixaria o tempo falso.
+ */
+export function permanencias(historico: Evento[], ateMomento: number | null): (Permanencia | null)[] {
+  const FIM: Evento["evento"][] = ["sumiu", "fechada"];
+  return historico.map((e, i) => {
+    const prox = historico[i + 1];
+    const coluna = e.para_coluna ?? "";
+    if (!coluna) return null;
+    const emQa = e.para_papel === "qa";
+    if (prox) {
+      if (prox.de_coluna !== coluna || prox.momento < e.momento) return null;
+      return { segundos: prox.momento - e.momento, coluna, emQa, atual: false };
+    }
+    if (!ateMomento || e.para_papel === "concluida" || FIM.includes(e.evento) || ateMomento < e.momento) return null;
+    return { segundos: ateMomento - e.momento, coluna, emQa, atual: true };
+  });
 }

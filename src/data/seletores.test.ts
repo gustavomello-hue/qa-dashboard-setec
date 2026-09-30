@@ -196,3 +196,31 @@ describe("etiquetas do título", async () => {
     expect(separarEtiquetas("[QA] ").resto).toBe("[QA]");
   });
 });
+
+describe("permanência em cada coluna", async () => {
+  const { permanencias } = await import("./seletores");
+  const passo = (tipo: Evento["evento"], quando: string, de: string | null, para: string, papel: Evento["para_papel"]): Evento => ({
+    ...evento(tipo, quando), de_coluna: de, para_coluna: para, para_papel: papel,
+  });
+  it("fecha as passagens encadeadas e deixa em aberto a atual", () => {
+    const h = [
+      passo("entrou_qa", "2026-09-01T10:00:00", "Andamento", "Teste/QA", "qa"),
+      passo("qa_para_correcao", "2026-09-04T09:00:00", "Teste/QA", "Correções", "correcao"),
+    ];
+    const [qa, correcao] = permanencias(h, ts("2026-09-06T09:00:00"));
+    expect(qa).toEqual({ segundos: 71 * 3600, coluna: "Teste/QA", emQa: true, atual: false });
+    expect(correcao?.atual).toBe(true);
+    expect(correcao?.segundos).toBe(48 * 3600);
+  });
+  it("não inventa tempo quando falta um movimento entre dois eventos", () => {
+    const h = [
+      passo("entrou_qa", "2026-09-01T10:00:00", "Andamento", "Teste/QA", "qa"),
+      passo("entrou_qa", "2026-09-05T10:00:00", "Correções", "Teste/QA", "qa"),
+    ];
+    expect(permanencias(h, null)[0]).toBeNull();
+  });
+  it("concluído não tem permanência em aberto", () => {
+    const h = [passo("qa_para_concluida", "2026-09-01T10:00:00", "Teste/QA", "Concluídas", "concluida")];
+    expect(permanencias(h, ts("2026-09-06T09:00:00"))[0]).toBeNull();
+  });
+});

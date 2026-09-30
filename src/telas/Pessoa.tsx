@@ -9,6 +9,7 @@ import {
   taxaReprovacaoQa, testados, PAPEIS_CARGA, type CardContado,
 } from "../data/pessoas";
 import { Kpi } from "../componentes/Kpi";
+import { DEFINICAO } from "../data/glossario";
 import { BarraCarga, LegendaCarga } from "../componentes/BarraCarga";
 import { Grafico, base, cor, useTema, type OpcoesGrafico } from "../componentes/Grafico";
 import { Icone } from "../componentes/Icone";
@@ -107,7 +108,8 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar }: Pr
           <Kpi rotulo="Aprovados" valor={r.aprovados} anterior={a.aprovados} rotuloAnterior={antes} tom="aprovado" />
           <Kpi rotulo="Reprovações" valor={r.reprovacoes} anterior={a.reprovacoes} rotuloAnterior={antes} tom="reprovado"
             dica={`${r.cardsReprovados} card(s) distinto(s)`} />
-          <Kpi rotulo="% reprovação (por card)" valor={porcento(taxaReprovacao(r))} anterior={porcento(taxaReprovacao(a))} rotuloAnterior={antes} />
+          <Kpi rotulo="% cards reprovados" valor={porcento(taxaReprovacao(r))} anterior={porcento(taxaReprovacao(a))} rotuloAnterior={antes}
+            dica={`${r.cardsReprovados} de ${r.cardsJulgados} cards julgados. ${DEFINICAO.cardsReprovados}`} />
           <Kpi rotulo="Concluídos" valor={concluidos(r)} anterior={concluidos(a)} rotuloAnterior={antes}
             dica={`${r.aprovados} aprovados em QA + ${r.concluidosSemQa} sem QA`} />
           <Kpi rotulo="Concluídos sem QA" valor={r.concluidosSemQa} anterior={a.concluidosSemQa} rotuloAnterior={antes} tom="sem-qa" />
@@ -120,7 +122,8 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar }: Pr
           <Kpi rotulo="Testados" valor={testados(r)} anterior={testados(a)} rotuloAnterior={antes} tom="entrada" />
           <Kpi rotulo="Aprovou" valor={r.testouAprovado} anterior={a.testouAprovado} rotuloAnterior={antes} tom="aprovado" />
           <Kpi rotulo="Reprovou" valor={r.testouReprovado} anterior={a.testouReprovado} rotuloAnterior={antes} tom="reprovado" />
-          <Kpi rotulo="% reprovação (por card)" valor={porcento(taxaReprovacaoQa(r))} anterior={porcento(taxaReprovacaoQa(a))} rotuloAnterior={antes} />
+          <Kpi rotulo="% cards reprovados" valor={porcento(taxaReprovacaoQa(r))} anterior={porcento(taxaReprovacaoQa(a))} rotuloAnterior={antes}
+            dica={`${r.cardsTestadosReprovados} de ${r.cardsTestados} cards testados. ${DEFINICAO.cardsReprovouQa}`} />
           <Kpi rotulo="Devolveu" valor={r.testouDevolvido} anterior={a.testouDevolvido} rotuloAnterior={antes} tom="devolvido" />
           {!dev && <Kpi rotulo="Criados" valor={r.criados} anterior={a.criados} rotuloAnterior={antes} />}
         </dl>
@@ -222,7 +225,7 @@ function ListaCards({
                   {quem?.(c) && <span>{quem(c)}</span>}
                 </span>
               </span>
-              {mostrarVezes && <span className="num" title="Vezes no período">{c.vezes}×</span>}
+              {mostrarVezes && <span className="num" title={`${c.vezes} vez(es) no período`}>{c.vezes}×</span>}
             </li>
           ))}
         </ul>

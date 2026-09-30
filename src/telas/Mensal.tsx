@@ -2,7 +2,9 @@ import { useMemo } from "react";
 import type { Dashboard, Grupo } from "../data/contrato";
 import { mesCurto, numero, porcento } from "../data/formato";
 import { resumoPorMes, type Filtro } from "../data/seletores";
-import { ROTULO_GRUPO, composicaoPorMes } from "../data/pessoas";
+import { ROTULO_GRUPO, composicaoPorMes, taxaCardsPorMes } from "../data/pessoas";
+import { DEFINICAO } from "../data/glossario";
+import { Glossario } from "../componentes/Glossario";
 import { Grafico, base, cor, useTema, type OpcoesGrafico } from "../componentes/Grafico";
 
 const MEDICAO: Record<string, string> = {
@@ -10,11 +12,6 @@ const MEDICAO: Record<string, string> = {
   "em andamento": "Em andamento",
   "parcial (reconstruído)": "Parcial",
 };
-
-/** % dos julgamentos (aprovado + reprovado) que foram reprovação. */
-function reprovacao(taxaAprovacao: number | null): number | null {
-  return taxaAprovacao === null ? null : Math.round(10 * (100 - taxaAprovacao)) / 10;
-}
 
 const GRUPOS_COMPOSICAO: Grupo[] = ["dev", "estagiario_dev", "qa", "estagiario_qa", "gestao", "outros"];
 const COR_GRUPO: Record<Grupo, string> = {
@@ -30,8 +27,12 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
   const tema = useTema();
   const linhas = resumoPorMes(dados, filtro);
   const composicao = composicaoPorMes(dados, filtro);
+  // % de cards reprovados: a mesma conta da Equipe e da Pessoa (por card, não por evento).
+  const taxas = taxaCardsPorMes(dados, filtro);
+  const taxaDe = (mes: string) => taxas.get(mes)?.taxa ?? null;
   const meses = linhas.map((l) => mesCurto(l.ano_mes));
-  const chave = linhas.map((l) => `${l.ano_mes}${l.entradas}${l.aprovados}${l.reprovados}${l.tempo_medio_qa_h}`).join() + tema;
+  const chave =
+    linhas.map((l) => `${l.ano_mes}${l.entradas}${l.aprovados}${l.reprovados}${l.tempo_medio_qa_h}${taxaDe(l.ano_mes)}`).join() + tema;
 
   const volume = useMemo<OpcoesGrafico>(() => {
     const b = base();
@@ -52,12 +53,12 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
     return {
       ...b,
       xAxis: { ...(b.xAxis as object), data: meses },
-      yAxis: { ...(b.yAxis as object), max: 100, axisLabel: { color: cor("--tinta-3"), formatter: "{value}%" } },
+      yAxis: { ...(b.yAxis as object), min: 0, axisLabel: { color: cor("--tinta-3"), formatter: "{value}%" } },
       series: [
         {
-          name: "% reprovação",
+          name: "% cards reprovados",
           type: "line",
-          data: linhas.map((l) => reprovacao(l.taxa_aprovacao)),
+          data: linhas.map((l) => taxaDe(l.ano_mes)),
           itemStyle: { color: cor("--reprovado") },
           lineStyle: { width: 2 },
           symbolSize: 6,
@@ -109,7 +110,10 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
   return (
     <div className="mensal">
       <section className="bloco mensal__largo" aria-labelledby="t-tabela-mes">
-        <h2 id="t-tabela-mes" className="bloco__titulo">Resumo</h2>
+        <header className="bloco__cabeca">
+          <h2 id="t-tabela-mes" className="bloco__titulo">Resumo</h2>
+          <Glossario />
+        </header>
         <div className="rolavel-x">
           <table className="tabela">
             <thead>
@@ -118,8 +122,8 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
                 <th scope="col" className="num"><span className="coluna-tom etiqueta--entrada">Entraram</span></th>
                 <th scope="col" className="num"><span className="coluna-tom etiqueta--aprovado">Aprovados</span></th>
                 <th scope="col" className="num"><span className="coluna-tom etiqueta--reprovado">Reprovados</span></th>
-                <th scope="col" className="num">% reprov.</th>
-                <th scope="col" className="num">Tempo médio em QA</th>
+                <th scope="col" className="num" title={DEFINICAO.cardsReprovados}>% cards reprov.</th>
+                <th scope="col" className="num" title={DEFINICAO.tempoEmQa}>Tempo médio em QA</th>
                 <th scope="col" className="num" title="Cards criados por quem está no grupo Gestão do equipe.json">Criados pela gestão</th>
                 <th scope="col">Medição</th>
               </tr>
@@ -131,7 +135,14 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
                   <td className="num">{numero(l.entradas)}</td>
                   <td className="num">{numero(l.aprovados)}</td>
                   <td className="num">{numero(l.reprovados)}</td>
-                  <td className="num">{porcento(reprovacao(l.taxa_aprovacao))}</td>
+                  <td className="num">
+                    {porcento(taxaDe(l.ano_mes))}
+                    {taxas.get(l.ano_mes) && (
+                      <span className="meta celula-denominador">
+                        {taxas.get(l.ano_mes)!.cardsReprovados} de {taxas.get(l.ano_mes)!.cardsJulgados}
+                      </span>
+                    )}
+                  </td>
                   <td className="num">{l.tempo_medio_qa_h === null ? "—" : `${l.tempo_medio_qa_h.toLocaleString("pt-BR")} h`}</td>
                   <td className="num">{numero(composicao.find((c) => c.ano_mes === l.ano_mes)?.criadosGestao ?? 0)}</td>
                   <td><span className="meta">{MEDICAO[l.completude] ?? l.completude}</span></td>
@@ -152,10 +163,10 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
 
       <section className="bloco" aria-labelledby="t-reprov">
         <header className="bloco__cabeca">
-          <h2 id="t-reprov" className="bloco__titulo">% de reprovação</h2>
-          <p className="nota">Reprovações ÷ (aprovações + reprovações)</p>
+          <h2 id="t-reprov" className="bloco__titulo">% de cards reprovados</h2>
+          <p className="nota">Cards reprovados ao menos uma vez ÷ cards julgados no mês</p>
         </header>
-        <Grafico opcoes={qualidade} altura={200} rotulo="Percentual de reprovação por mês" />
+        <Grafico opcoes={qualidade} altura={200} rotulo="Percentual de cards reprovados por mês" />
       </section>
 
       <section className="bloco" aria-labelledby="t-tempo">

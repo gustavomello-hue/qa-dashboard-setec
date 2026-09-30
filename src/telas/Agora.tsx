@@ -6,6 +6,8 @@ import { Kpi, type Tom } from "../componentes/Kpi";
 import { BarraCarga, LegendaCarga } from "../componentes/BarraCarga";
 import { Fila } from "../componentes/Fila";
 import { Lacunas } from "../componentes/Sinal";
+import { Glossario } from "../componentes/Glossario";
+import { DEFINICAO } from "../data/glossario";
 
 interface Props {
   dados: Dashboard;
@@ -51,7 +53,7 @@ export function Agora({ dados, filtro, agora, hrefCard, hrefPessoa, soForaDoPain
           tom="sem-qa"
           anterior={k.comparacao.concluidosSemQa}
           rotuloAnterior={ontem} dicaAnterior={dicaOntem}
-          dica="Cards que chegaram em Concluídas sem sair da coluna Teste/QA"
+          dica={DEFINICAO.semQa}
         />
       </dl>
 
@@ -60,6 +62,7 @@ export function Agora({ dados, filtro, agora, hrefCard, hrefPessoa, soForaDoPain
       <Feed dados={dados} filtro={filtro} hrefCard={hrefCard} />
       <div className="agora__rodape">
         <Lacunas dados={dados} />
+        <Glossario />
       </div>
     </div>
   );

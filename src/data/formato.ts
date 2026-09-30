@@ -93,3 +93,13 @@ export const NOME_PAPEL: Record<string, string> = {
   concluida: "Concluídas",
   outra: "Outras",
 };
+
+/** Duração legível: "45 min", "71 h", "3 dias". Horas até 48 h; dias daí para cima. */
+export function duracao(segundos: number): string {
+  const min = Math.max(0, Math.round(segundos / 60));
+  if (min < 60) return `${min} min`;
+  const h = Math.round(min / 60);
+  if (h < 48) return `${h} h`;
+  const dias = Math.round(h / 24);
+  return `${dias} dias`;
+}

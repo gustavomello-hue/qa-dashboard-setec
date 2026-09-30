@@ -9,6 +9,8 @@ import {
   taxaReprovacaoQa, testados, PAPEIS_CARGA, type Resumo,
 } from "../data/pessoas";
 import { Sparkline } from "../componentes/Sparkline";
+import { Glossario } from "../componentes/Glossario";
+import { DEFINICAO } from "../data/glossario";
 import { Icone } from "../componentes/Icone";
 
 interface Props {
@@ -33,27 +35,27 @@ const SEMANAS = 8;
 
 function colunasDev(carga: (uid: number) => number): Coluna[] {
   return [
-    { id: "entregues", rotulo: "Entregues", dica: "Entraram em QA com a pessoa como responsável", valor: (r) => r.entregues, tom: "entrada" },
-    { id: "aprovados", rotulo: "Aprovados", dica: "Saíram de QA para Concluídas", valor: (r) => r.aprovados, tom: "aprovado" },
-    { id: "reprovacoes", rotulo: "Reprovações", dica: "Voltas de QA para Correções (um card reprovado 2 vezes conta 2)", valor: (r) => r.reprovacoes, tom: "reprovado" },
-    { id: "taxa", rotulo: "% reprov.", dica: "Cards julgados que foram reprovados ao menos uma vez (por card)", valor: (r) => taxaReprovacao(r), formato: "pct" },
-    { id: "devolvidos", rotulo: "Devolvidos", dica: "Saíram de QA para outra coluna que não Correções nem Concluídas", valor: (r) => r.devolvidos },
-    { id: "concluidos", rotulo: "Concluídos", dica: "Aprovados em QA + concluídos sem QA", valor: (r) => concluidos(r) },
-    { id: "semqa", rotulo: "Sem QA", dica: "Chegaram em Concluídas sem sair de Teste/QA", valor: (r) => r.concluidosSemQa, tom: "sem-qa" },
-    { id: "criados", rotulo: "Criados", dica: "Cards criados pela pessoa", valor: (r) => r.criados },
-    { id: "carga", rotulo: "Abertos", dica: "Cards abertos agora (a iniciar, andamento, QA, correções)", valor: (_, uid) => carga(uid) },
+    { id: "entregues", rotulo: "Entregues", dica: DEFINICAO.entregues, valor: (r) => r.entregues, tom: "entrada" },
+    { id: "aprovados", rotulo: "Aprovados", dica: DEFINICAO.aprovados, valor: (r) => r.aprovados, tom: "aprovado" },
+    { id: "reprovacoes", rotulo: "Reprovações", dica: DEFINICAO.reprovacoes, valor: (r) => r.reprovacoes, tom: "reprovado" },
+    { id: "taxa", rotulo: "% cards reprov.", dica: DEFINICAO.cardsReprovados, valor: (r) => taxaReprovacao(r), formato: "pct" },
+    { id: "devolvidos", rotulo: "Devolvidos", dica: DEFINICAO.devolvidos, valor: (r) => r.devolvidos },
+    { id: "concluidos", rotulo: "Concluídos", dica: DEFINICAO.concluidos, valor: (r) => concluidos(r) },
+    { id: "semqa", rotulo: "Sem QA", dica: DEFINICAO.semQa, valor: (r) => r.concluidosSemQa, tom: "sem-qa" },
+    { id: "criados", rotulo: "Criados", dica: DEFINICAO.criados, valor: (r) => r.criados },
+    { id: "carga", rotulo: "Abertos", dica: DEFINICAO.abertos, valor: (_, uid) => carga(uid) },
   ];
 }
 
 function colunasQa(carga: (uid: number) => number): Coluna[] {
   return [
-    { id: "testados", rotulo: "Testados", dica: "Aprovou + reprovou (saídas de QA feitas pela pessoa)", valor: (r) => testados(r), tom: "entrada" },
-    { id: "aprovou", rotulo: "Aprovou", dica: "Moveu de QA para Concluídas", valor: (r) => r.testouAprovado, tom: "aprovado" },
-    { id: "reprovou", rotulo: "Reprovou", dica: "Moveu de QA para Correções", valor: (r) => r.testouReprovado, tom: "reprovado" },
-    { id: "taxa", rotulo: "% reprov.", dica: "Cards testados que a pessoa reprovou ao menos uma vez (por card)", valor: (r) => taxaReprovacaoQa(r), formato: "pct" },
-    { id: "devolveu", rotulo: "Devolveu", dica: "Moveu de QA para outra coluna", valor: (r) => r.testouDevolvido },
-    { id: "criados", rotulo: "Criados", dica: "Cards criados pela pessoa (bugs abertos)", valor: (r) => r.criados },
-    { id: "carga", rotulo: "Abertos", dica: "Cards abertos agora com a pessoa como responsável", valor: (_, uid) => carga(uid) },
+    { id: "testados", rotulo: "Testados", dica: DEFINICAO.testados, valor: (r) => testados(r), tom: "entrada" },
+    { id: "aprovou", rotulo: "Aprovou", dica: DEFINICAO.aprovou, valor: (r) => r.testouAprovado, tom: "aprovado" },
+    { id: "reprovou", rotulo: "Reprovou", dica: DEFINICAO.reprovou, valor: (r) => r.testouReprovado, tom: "reprovado" },
+    { id: "taxa", rotulo: "% cards reprov.", dica: DEFINICAO.cardsReprovouQa, valor: (r) => taxaReprovacaoQa(r), formato: "pct" },
+    { id: "devolveu", rotulo: "Devolveu", dica: DEFINICAO.devolveu, valor: (r) => r.testouDevolvido },
+    { id: "criados", rotulo: "Criados", dica: DEFINICAO.criados, valor: (r) => r.criados },
+    { id: "carga", rotulo: "Abertos", dica: DEFINICAO.abertos, valor: (_, uid) => carga(uid) },
   ];
 }
 
@@ -86,8 +88,9 @@ export function Equipe({ dados, filtro, periodo, inativos, alternarInativos, hre
     <div className="equipe">
       <div className="barra-acoes">
         <p className="nota">
-          Crédito ao responsável <strong>no momento</strong> de cada evento. Comparação com {rotuloAnterior(periodo, agora)} ao passar o mouse.
+          Crédito ao responsável <strong>no momento</strong> de cada evento. Passe o mouse sobre um número para ver {rotuloAnterior(periodo, agora)}.
         </p>
+        <Glossario />
         <label className="alternador">
           <input type="checkbox" checked={inativos} onChange={alternarInativos} /> Mostrar quem saiu da equipe
         </label>
@@ -110,7 +113,7 @@ export function Equipe({ dados, filtro, periodo, inativos, alternarInativos, hre
             rodape={
               g === "qa" ? (
                 <p className="nota">
-                  Saídas de QA sem autor identificado no período: <strong>{saidasSemAutor}</strong>.
+                  Saídas de QA sem autor registrado no Kanboard: <strong>{saidasSemAutor}</strong> (não atribuídas a ninguém).
                   {naoQa.length > 0 && (
                     <>
                       {" "}Saídas de QA feitas por quem não é QA:{" "}
@@ -131,16 +134,17 @@ export function Equipe({ dados, filtro, periodo, inativos, alternarInativos, hre
       })}
 
       <details className="bloco">
-        <summary className="bloco__titulo">Gestão e outros <span className="nota">(fora das tabelas, contam nos totais)</span></summary>
+        <summary className="bloco__titulo">Gestão e outros</summary>
+        <p className="nota tabela-grupo__nota">Fora das tabelas por pessoa, mas os cards deles contam nos totais da equipe.</p>
         <TabelaGrupo
           grupo="outros"
           semTitulo
           pessoas={pessoasFora(dados, comAtividade)}
           colunas={[
-            { id: "criados", rotulo: "Criados", dica: "Cards criados", valor: (r) => r.criados },
-            { id: "entregues", rotulo: "Entregues", dica: "Entraram em QA como responsável", valor: (r) => r.entregues, tom: "entrada" },
-            { id: "semqa", rotulo: "Sem QA", dica: "Concluídos sem sair de Teste/QA", valor: (r) => r.concluidosSemQa, tom: "sem-qa" },
-            { id: "naoqa", rotulo: "Saídas de QA", dica: "Moveu cards para fora de Teste/QA sem ser do QA", valor: (r) => r.saidasNaoQa },
+            { id: "criados", rotulo: "Criados", dica: DEFINICAO.criados, valor: (r) => r.criados },
+            { id: "entregues", rotulo: "Entregues", dica: DEFINICAO.entregues, valor: (r) => r.entregues, tom: "entrada" },
+            { id: "semqa", rotulo: "Sem QA", dica: DEFINICAO.semQa, valor: (r) => r.concluidosSemQa, tom: "sem-qa" },
+            { id: "naoqa", rotulo: "Saídas de QA", dica: DEFINICAO.naoQa, valor: (r) => r.saidasNaoQa },
           ]}
           resumo={(uid) => porPessoa.get(uid) ?? resumoVazio()}
           anterior={(uid) => antes.get(uid) ?? resumoVazio()}

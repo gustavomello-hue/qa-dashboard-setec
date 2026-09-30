@@ -2,6 +2,7 @@ import type { Dashboard } from "../data/contrato";
 import { dataHora, nomeCurto, separarEtiquetas } from "../data/formato";
 import { inicioDaUltimaColeta, passaNoFiltro, type Filtro } from "../data/seletores";
 import { indicePessoas } from "../data/pessoas";
+import { DEFINICAO } from "../data/glossario";
 
 export function filaFiltrada(dados: Dashboard, filtro: Filtro, soForaDoPainel = false) {
   const passa = passaNoFiltro(dados, filtro);
@@ -53,8 +54,8 @@ export function Fila({ dados, filtro, hrefCard, soForaDoPainel = false, alternar
               <tr>
                 <th scope="col">Card</th>
                 <th scope="col">Título</th>
-                <th scope="col" className="num">Dias</th>
-                <th scope="col" className="num" title="Retornos para correção">Ret.</th>
+                <th scope="col" className="num" title={DEFINICAO.diasEmQa}>Dias em QA</th>
+                <th scope="col" className="num" title={DEFINICAO.retornos}>Retornos</th>
               </tr>
             </thead>
             <tbody>

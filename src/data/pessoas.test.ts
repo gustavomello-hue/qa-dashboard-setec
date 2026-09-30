@@ -139,3 +139,19 @@ describe("carga, cards e composição", () => {
     expect(set.criadosGestao).toBe(1);
   });
 });
+
+describe("% de cards reprovados por mês", () => {
+  it("conta card distinto, na equipe toda, e respeita o filtro", async () => {
+    const { taxaCardsPorMes } = await import("./pessoas");
+    const d = dashboard({
+      atribuicoes: [
+        at("reprovado", 1, 1), at("reprovado", 1, 1), at("aprovado", 2, 1), // card 1: julgado e reprovado
+        at("aprovado", 1, 2), // card 2: só aprovado
+        at("reprovado", 2, 3, "2026-09-10", 2), // card 3: outro projeto (WEB)
+      ],
+    });
+    const set = taxaCardsPorMes(d, {}).get("2026-09")!;
+    expect([set.cardsJulgados, set.cardsReprovados, set.taxa]).toEqual([3, 2, 66.7]);
+    expect(taxaCardsPorMes(d, { prefixo: "DEV" }).get("2026-09")!.taxa).toBe(50);
+  });
+});

@@ -1,6 +1,8 @@
 import type { Dashboard, Evento } from "../data/contrato";
-import { NOME_EVENTO, dataHora, nomeCurto, numero } from "../data/formato";
-import { historicoDoCard } from "../data/seletores";
+import { NOME_EVENTO, dataHora, duracao, nomeCurto, numero } from "../data/formato";
+import { historicoDoCard, permanencias } from "../data/seletores";
+import { indicePessoas } from "../data/pessoas";
+import { DEFINICAO } from "../data/glossario";
 import { Icone } from "../componentes/Icone";
 import type { Tom } from "../componentes/Kpi";
 
@@ -18,6 +20,11 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
   const naFila = card ? dados.fila_qa.find((c) => c.task_id === card) : undefined;
   const titulo = metricas?.titulo || naFila?.titulo || historico.findLast((e) => e.titulo)?.titulo;
   const link = metricas?.link || naFila?.link || historico.findLast((e) => e.link)?.link;
+  // Quanto tempo o card ficou em cada coluna: o que o Kanboard não guarda.
+  const estadias = permanencias(historico, dados.coleta.momento);
+  // O histórico traz o nome completo do Kanboard; a tela usa o nome curto da equipe.
+  const curto = new Map([...indicePessoas(dados).values()].map((p) => [p.nome_kanboard, p.nome]));
+  const nome = (n: string | null | undefined) => (n ? curto.get(n) ?? n : "");
 
   return (
     <div className="card-tela">
@@ -65,11 +72,14 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
           {metricas && (
             <dl className="ficha">
               <div><dt>Entradas em QA</dt><dd className="num">{numero(metricas.entradas_qa)}</dd></div>
-              <div><dt>Retornos p/ correção</dt><dd className="num">{numero(metricas.retornos)}</dd></div>
-              <div><dt>Tempo total em QA</dt><dd className="num">{metricas.horas_qa === null ? "—" : `${metricas.horas_qa.toLocaleString("pt-BR")} h`}</dd></div>
+              <div><dt title={DEFINICAO.retornos}>Retornos para correção</dt><dd className="num">{numero(metricas.retornos)}</dd></div>
+              <div>
+                <dt>Tempo total em QA</dt>
+                <dd className="num">{metricas.horas_qa === null ? "—" : duracao(metricas.horas_qa * 3600)}</dd>
+              </div>
               <div><dt>Projeto</dt><dd>{nomeCurto(metricas.projeto)}</dd></div>
-              <div><dt>Criador</dt><dd>{metricas.criador || "—"}</dd></div>
-              <div><dt>Concluído por</dt><dd>{metricas.concluido_por || "—"}</dd></div>
+              <div><dt>Criador</dt><dd>{nome(metricas.criador) || "—"}</dd></div>
+              <div><dt>Concluído por</dt><dd>{nome(metricas.concluido_por) || "—"}</dd></div>
               {naFila && naFila.no_painel !== undefined && naFila.no_painel !== null && (
                 <div>
                   <dt>Painel do Kanboard</dt>
@@ -87,8 +97,14 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
                 </span>
                 <span className="linha-tempo__de-para">
                   {e.de_coluna ?? "?"} <Icone nome="seta" tamanho={12} /> {e.para_coluna ?? "?"}
-                  {e.movido_por && <span className="meta"> · por {e.movido_por}</span>}
+                  {e.movido_por && <span className="meta"> · por {nome(e.movido_por)}</span>}
                   {e.origem === "atividade" && <span className="meta"> · amostra do Kanboard</span>}
+                </span>
+                <span className={`linha-tempo__estadia${estadias[i]?.emQa ? " linha-tempo__estadia--qa" : ""}`}>
+                  {estadias[i] &&
+                    (estadias[i]!.atual
+                      ? `há ${duracao(estadias[i]!.segundos)} em ${estadias[i]!.coluna}`
+                      : `${duracao(estadias[i]!.segundos)} em ${estadias[i]!.coluna}`)}
                 </span>
               </li>
             ))}
