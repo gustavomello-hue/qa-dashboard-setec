@@ -34,8 +34,24 @@ export function intervalo(p: Periodo, agora: Date): Intervalo {
   return { de: somarDias(hoje, -6), ate: hoje };
 }
 
+/** O mês escolhido é o corrente, ainda sem fim. */
+export function emAndamento(p: Periodo, agora: Date): boolean {
+  return p.tipo === "mes" && p.mes === mesLocal(agora);
+}
+
+/**
+ * Período de comparação. Mês fechado compara com o mês anterior inteiro; o
+ * mês corrente compara com o MESMO trecho do anterior (1 a 3 de outubro contra
+ * 1 a 3 de setembro): três dias contra um mês inteiro pareceria uma queda.
+ */
 export function intervaloAnterior(p: Periodo, agora: Date): Intervalo {
-  if (p.tipo === "mes") return doMes(mesAnterior(p.mes));
+  if (p.tipo === "mes") {
+    const anterior = doMes(mesAnterior(p.mes));
+    if (!emAndamento(p, agora)) return anterior;
+    const [a, m] = mesAnterior(p.mes).split("-").map(Number);
+    const dia = Math.min(agora.getDate(), new Date(a, m, 0).getDate());
+    return { de: anterior.de, ate: `${mesAnterior(p.mes)}-${String(dia).padStart(2, "0")}` };
+  }
   const atual = intervalo(p, agora);
   return { de: somarDias(atual.de, -7), ate: somarDias(atual.de, -1) };
 }
@@ -59,8 +75,17 @@ export function rotuloPeriodo(p: Periodo): string {
   return p.tipo === "7d" ? "Últimos 7 dias" : mesCurto(p.mes);
 }
 
-export function rotuloAnterior(p: Periodo): string {
-  return p.tipo === "7d" ? "7 dias anteriores" : mesCurto(mesAnterior(p.mes));
+/** "out/26 · em andamento, até dia 3" para o mês corrente; senão o rótulo curto. */
+export function rotuloPeriodoLongo(p: Periodo, agora: Date): string {
+  return p.tipo === "mes" && emAndamento(p, agora)
+    ? `${mesCurto(p.mes)} · em andamento, até dia ${agora.getDate()}`
+    : rotuloPeriodo(p);
+}
+
+export function rotuloAnterior(p: Periodo, agora: Date): string {
+  if (p.tipo === "7d") return "7 dias anteriores";
+  const mes = mesCurto(mesAnterior(p.mes));
+  return emAndamento(p, agora) ? `${mes} até dia ${intervaloAnterior(p, agora).ate.slice(8).replace(/^0/, "")}` : mes;
 }
 
 /** "2026-09" | "7d" na URL. */

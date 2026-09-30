@@ -17,18 +17,38 @@ export const INTERVALO_MS = 10 * 60 * 1000;
 
 export class ErroDeDados extends Error {}
 
+/** Desiste de uma busca travada: sem isso, uma rede ruim deixa o painel em "Carregando…" para sempre. */
+const TEMPO_LIMITE_MS = 20 * 1000;
+
 export async function buscarDashboard(url = URL_DADOS): Promise<Dashboard> {
   // O parâmetro fura o cache do navegador; o do raw (~5 min) é aceitável.
-  const resposta = await fetch(`${url}?t=${Date.now()}`, { cache: "no-store" });
-  if (!resposta.ok) {
-    throw new ErroDeDados(`Não foi possível baixar os dados (HTTP ${resposta.status}).`);
+  let resposta: Response;
+  try {
+    resposta = await fetch(`${url}?t=${Date.now()}`, { cache: "no-store", signal: AbortSignal.timeout(TEMPO_LIMITE_MS) });
+  } catch (e) {
+    const tempo = e instanceof DOMException && (e.name === "TimeoutError" || e.name === "AbortError");
+    throw new ErroDeDados(
+      tempo
+        ? "O GitHub demorou mais de 20 s para responder. A rede pode estar lenta."
+        : "Sem conexão com o GitHub, de onde vêm os dados. Verifique a internet ou a VPN.",
+    );
   }
-  const dados = (await resposta.json()) as Dashboard;
+  if (resposta.status === 404) {
+    throw new ErroDeDados("O arquivo de dados não foi encontrado no GitHub (branch `dados`). A publicação pode não ter rodado ainda.");
+  }
+  if (!resposta.ok) {
+    throw new ErroDeDados(`O GitHub respondeu com erro (HTTP ${resposta.status}). Tente de novo em alguns minutos.`);
+  }
+  let dados: Dashboard;
+  try {
+    dados = (await resposta.json()) as Dashboard;
+  } catch {
+    throw new ErroDeDados("O arquivo de dados chegou incompleto ou corrompido. Tente de novo; se persistir, a publicação precisa ser refeita.");
+  }
   if (dados.versao !== VERSAO_CONTRATO) {
     throw new ErroDeDados(
-      `Formato de dados v${dados.versao}, mas este site entende v${VERSAO_CONTRATO}. ` +
-        "Atualize o site ou o exportador.",
-    );
+      `Os dados estão no formato v${dados.versao} e este site entende v${VERSAO_CONTRATO}. ` +
+        "Recarregue a página (Ctrl+F5) para buscar a versão nova do site.");
   }
   return dados;
 }

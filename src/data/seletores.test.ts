@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { Dashboard, Evento, ResumoMensal } from "./contrato";
 import {
   contarDia,
+  diaDeReferencia,
   diaLocal,
   estadoAtualizacao,
   kpisHoje,
@@ -111,6 +112,13 @@ describe("atualização e lacunas", () => {
   const d = dashboard();
   it("3h sem coleta no expediente de dia útil = atrasado", () => {
     expect(estadoAtualizacao(d, new Date("2026-09-28T18:00:00")).atrasado).toBe(true);
+  });
+  it("coleta de ontem: outroDia, e os contadores contam o dia da coleta", () => {
+    const manha = new Date("2026-09-29T08:00:00");
+    const e = estadoAtualizacao(d, manha);
+    expect(e.outroDia).toBe(true);
+    expect(diaLocal(diaDeReferencia(d, manha))).toBe("2026-09-28");
+    expect(diaLocal(diaDeReferencia(d, new Date("2026-09-28T16:00:00")))).toBe("2026-09-28");
   });
   it("fora do expediente não acusa atraso", () => {
     expect(estadoAtualizacao(d, new Date("2026-09-28T22:00:00")).atrasado).toBe(false);

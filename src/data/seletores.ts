@@ -139,16 +139,34 @@ export interface EstadoAtualizacao {
   minutos: number | null;
   /** Mais de `lacuna_horas` sem coleta, dentro do expediente de dia útil. */
   atrasado: boolean;
+  /** A última coleta é de outro dia: "hoje" ainda não foi medido. */
+  outroDia: boolean;
+  momento: number | null;
 }
 
 export function estadoAtualizacao(d: Dashboard, agora: Date): EstadoAtualizacao {
   const momento = d.coleta.momento;
-  if (!momento) return { minutos: null, atrasado: true };
+  if (!momento) return { minutos: null, atrasado: true, outroDia: false, momento: null };
   const minutos = Math.floor((agora.getTime() / 1000 - momento) / 60);
   const [abre, fecha] = d.regras.expediente;
   const hora = agora.getHours() + agora.getMinutes() / 60;
   const noExpediente = ehDiaUtil(agora) && hora >= abre && hora < fecha;
-  return { minutos, atrasado: noExpediente && minutos > d.regras.lacuna_horas * 60 };
+  return {
+    minutos,
+    atrasado: noExpediente && minutos > d.regras.lacuna_horas * 60,
+    outroDia: diaLocal(new Date(momento * 1000)) !== diaLocal(agora),
+    momento,
+  };
+}
+
+/**
+ * O "dia" que os contadores do dia podem afirmar: hoje, se a última coleta é
+ * de hoje; senão, o dia da última coleta. Contar "hoje" sobre dado de ontem
+ * mostraria zeros que não foram medidos.
+ */
+export function diaDeReferencia(d: Dashboard, agora: Date): Date {
+  const e = estadoAtualizacao(d, agora);
+  return e.outroDia && e.momento ? new Date(e.momento * 1000) : agora;
 }
 
 export function lacunasRecentes(d: Dashboard, agora: Date, dias = 7): Lacuna[] {

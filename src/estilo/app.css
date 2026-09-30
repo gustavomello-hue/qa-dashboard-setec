@@ -1200,3 +1200,137 @@ details.bloco > summary {
     margin-left: 0;
   }
 }
+
+/* ---------- Harden: estados, atraso, acessibilidade ---------- */
+
+/* Links que eram botões: mesma aparência, agora abrem em nova aba. */
+a.aba,
+a.link-pessoa,
+a.botao {
+  text-decoration: none;
+  color: inherit;
+}
+
+a.link-pessoa:hover {
+  text-decoration: underline;
+}
+
+/* O foco vai ao conteúdo na troca de tela; o contorno ali seria ruído. */
+.tela:focus {
+  outline: none;
+}
+
+.pular {
+  position: absolute;
+  left: 8px;
+  top: -40px;
+  z-index: 10;
+  border: 1px solid var(--n5);
+  border-radius: 2px;
+  background: var(--faixa);
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.pular:focus {
+  top: 8px;
+}
+
+/* Aviso de dado velho: uma faixa inteira, com rótulo escrito, entre a barra e o quadro. */
+.aviso {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 16px 0;
+  padding: 8px 14px 8px 16px;
+  background: var(--faixa);
+  border: 1px solid var(--filete);
+  box-shadow: inset var(--porta) 0 0 var(--n6);
+  font-size: 13px;
+  color: var(--tinta-2);
+}
+
+.aviso strong {
+  color: var(--tinta-1);
+  font-weight: 600;
+}
+
+.aviso__marca {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  box-shadow: inset 0 0 0 1.5px var(--tinta-2);
+}
+
+/* Coleta parada no expediente: a faixa escurece, sem virar alarme vermelho. */
+.aviso--grave {
+  box-shadow: inset var(--porta) 0 0 var(--tinta-1);
+  color: var(--tinta-1);
+}
+
+.aviso--grave .aviso__marca {
+  background: var(--tinta-1);
+  box-shadow: none;
+}
+
+/* Contadores de um momento que já passou: tinta secundária, não "ao vivo". */
+.kpis--velho .kpi__valor {
+  color: var(--tinta-2);
+}
+
+.botao--mini {
+  height: 22px;
+  padding: 0 8px;
+  margin-left: 8px;
+  font-size: 12px;
+}
+
+.selo__erro {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Carga inicial: o contorno do quadro, parado. */
+.esqueleto {
+  display: grid;
+  gap: 12px;
+  height: 100%;
+  grid-template-columns: 0.8fr 1.7fr 1fr;
+  grid-template-rows: 72px 1fr;
+}
+
+.esqueleto__kpis {
+  grid-column: 1 / -1;
+  background: var(--faixa);
+  border: 1px solid var(--filete);
+}
+
+.esqueleto__baia {
+  background: var(--baia);
+  box-shadow: var(--sombra-baia);
+}
+
+.falha {
+  max-width: 520px;
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  padding: 24px 28px;
+  background: var(--faixa);
+  border: 1px solid var(--filete);
+  box-shadow: inset var(--porta) 0 0 var(--tinta-1);
+  color: var(--tinta-2);
+}
+
+.falha__titulo {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--tinta-1);
+}
+
+/* Semana ainda em curso: barra vazada, para não parecer queda. */
+.sparkline__parcial {
+  fill: none;
+  stroke: var(--tinta-2);
+  stroke-width: 1;
+}

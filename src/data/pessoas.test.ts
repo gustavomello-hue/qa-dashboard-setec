@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 import type { Atribuicao, Dashboard, Metrica, Pessoa } from "./contrato";
 import {
   atribuicoesDe, cargaPorPessoa, cardsDaMetrica, composicaoPorMes, grupoPrincipal, inicioDaSemana,
-  porSemana, resumirPorPessoa, semanas, taxaReprovacao, taxaReprovacaoQa,
+  porSemana, resumirPorPessoa, semanaIncompleta, semanas, taxaReprovacao, taxaReprovacaoQa,
 } from "./pessoas";
-import { intervalo, intervaloAnterior, mesesDisponiveis, ultimoDia } from "./periodo";
+import { intervalo, intervaloAnterior, mesesDisponiveis, rotuloAnterior, ultimoDia } from "./periodo";
 
 let momento = 1_790_000_000;
 function at(metrica: Metrica, user_id: number | null, task_id: number, dia = "2026-09-10", project_id = 1): Atribuicao {
@@ -64,10 +64,23 @@ describe("filtro de período e projeto", () => {
     expect(atribuicoesDe(d, set, { prefixo: "WEB" }).map((a) => a.task_id)).toEqual([3]);
   });
   it("anterior de setembro é agosto; 7 dias anteriores encostam", () => {
-    expect(intervaloAnterior({ tipo: "mes", mes: "2026-09" }, new Date())).toEqual({ de: "2026-08-01", ate: "2026-08-31" });
+    // Setembro já fechado (hoje é outubro): compara com agosto inteiro.
+    expect(intervaloAnterior({ tipo: "mes", mes: "2026-09" }, new Date(2026, 9, 5))).toEqual({ de: "2026-08-01", ate: "2026-08-31" });
     const hoje = new Date(2026, 8, 30);
     expect(intervalo({ tipo: "7d" }, hoje)).toEqual({ de: "2026-09-24", ate: "2026-09-30" });
     expect(intervaloAnterior({ tipo: "7d" }, hoje)).toEqual({ de: "2026-09-17", ate: "2026-09-23" });
+  });
+  it("mês em andamento compara com o mesmo trecho do anterior", () => {
+    const dia3 = new Date(2026, 9, 3);
+    expect(intervaloAnterior({ tipo: "mes", mes: "2026-10" }, dia3)).toEqual({ de: "2026-09-01", ate: "2026-09-03" });
+    expect(rotuloAnterior({ tipo: "mes", mes: "2026-10" }, dia3)).toBe("set/26 até dia 3");
+    expect(rotuloAnterior({ tipo: "mes", mes: "2026-09" }, dia3)).toBe("ago/26");
+    // 31 de março contra fevereiro: para no último dia de fevereiro.
+    expect(intervaloAnterior({ tipo: "mes", mes: "2027-03" }, new Date(2027, 2, 31)).ate).toBe("2027-02-28");
+  });
+  it("semana incompleta: quarta sim, domingo não", () => {
+    expect(semanaIncompleta("2026-09-30")).toBe(true);
+    expect(semanaIncompleta("2026-10-04")).toBe(false);
   });
   it("virada de ano no mês anterior", () => {
     expect(intervaloAnterior({ tipo: "mes", mes: "2027-01" }, new Date()).de).toBe("2026-12-01");

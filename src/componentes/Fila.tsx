@@ -11,14 +11,14 @@ export function filaFiltrada(dados: Dashboard, filtro: Filtro, soForaDoPainel = 
 interface Props {
   dados: Dashboard;
   filtro: Filtro;
-  abrirCard: (id: number) => void;
+  hrefCard: (id: number) => string;
   /** Mostra só os cards que o painel do Kanboard não exibe. */
   soForaDoPainel?: boolean;
   alternarForaDoPainel?: () => void;
 }
 
 /** A fila de QA, do card mais parado ao mais recente. Rola dentro do bloco. */
-export function Fila({ dados, filtro, abrirCard, soForaDoPainel = false, alternarForaDoPainel }: Props) {
+export function Fila({ dados, filtro, hrefCard, soForaDoPainel = false, alternarForaDoPainel }: Props) {
   const fila = filaFiltrada(dados, filtro, soForaDoPainel);
   const foraDoPainel = filaFiltrada(dados, filtro).filter((c) => c.no_painel === false).length;
   const desde = inicioDaUltimaColeta(dados);
@@ -64,9 +64,9 @@ export function Fila({ dados, filtro, abrirCard, soForaDoPainel = false, alterna
                 return (
                   <tr key={c.task_id}>
                     <td className="celula-card">
-                      <button className="link-card" onClick={() => abrirCard(c.task_id)} title="Ver a linha do tempo do card">
+                      <a className="link-card" href={hrefCard(c.task_id)} title="Ver a linha do tempo do card">
                         #{c.task_id}
-                      </button>
+                      </a>
                     </td>
                     <td className="celula-titulo">
                       <a href={c.link} target="_blank" rel="noreferrer" title={c.titulo}>{resto}</a>

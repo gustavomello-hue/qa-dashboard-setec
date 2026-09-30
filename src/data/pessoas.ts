@@ -169,6 +169,12 @@ export function semanas(ate: string, n: number): string[] {
   return Array.from({ length: n }, (_, i) => diaLocal(new Date(a, m - 1, d - 7 * (n - 1 - i))));
 }
 
+/** A semana que contém `fim` ainda não acabou (o domingo dela é depois de `fim`). */
+export function semanaIncompleta(fim: string): boolean {
+  const [a, m, d] = inicioDaSemana(fim).split("-").map(Number);
+  return diaLocal(new Date(a, m - 1, d + 6)) > fim;
+}
+
 /** Contagem semanal de algumas métricas de uma pessoa (atribuições já filtradas por projeto). */
 export function porSemana(
   atribs: Atribuicao[], uid: number, metricas: Metrica[], inicios: string[],

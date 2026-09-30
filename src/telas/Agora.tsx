@@ -1,6 +1,6 @@
 import type { Dashboard } from "../data/contrato";
 import { NOME_EVENTO, diaCurto, hora, separarEtiquetas } from "../data/formato";
-import { diaLocal, kpisHoje, indiceTitulos, passaNoFiltro, inicioDaUltimaColeta, type Filtro } from "../data/seletores";
+import { diaDeReferencia, diaLocal, estadoAtualizacao, kpisHoje, indiceTitulos, passaNoFiltro, inicioDaUltimaColeta, type Filtro } from "../data/seletores";
 import { cargaPorPessoa, cargaVazia, feedRecente, grupoPrincipal, indicePessoas, pessoasDaCarga, PAPEIS_CARGA, ROTULO_GRUPO } from "../data/pessoas";
 import { Kpi, type Tom } from "../componentes/Kpi";
 import { BarraCarga, LegendaCarga } from "../componentes/BarraCarga";
@@ -10,32 +10,43 @@ import { Lacunas } from "../componentes/Sinal";
 interface Props {
   dados: Dashboard;
   filtro: Filtro;
-  abrirCard: (id: number) => void;
-  abrirPessoa: (id: number) => void;
+  /** Relógio do painel (anda a cada minuto): decide se o dado ainda é "de agora". */
+  agora: Date;
+  hrefCard: (id: number) => string;
+  hrefPessoa: (id: number) => string;
   soForaDoPainel: boolean;
   alternarForaDoPainel?: () => void;
 }
 
-export function Agora({ dados, filtro, abrirCard, abrirPessoa, soForaDoPainel, alternarForaDoPainel }: Props) {
-  const k = kpisHoje(dados, new Date(), filtro);
+export function Agora({ dados, filtro, agora, hrefCard, hrefPessoa, soForaDoPainel, alternarForaDoPainel }: Props) {
+  // Os contadores do dia só afirmam o que foi medido: com a coleta de outro
+  // dia, contam aquele dia; com a coleta parada, dizem até que horas.
+  const estado = estadoAtualizacao(dados, agora);
+  const referencia = diaDeReferencia(dados, agora);
+  const velho = estado.atrasado || estado.outroDia;
+  const quando = estado.outroDia
+    ? diaCurto(diaLocal(referencia))
+    : estado.atrasado && estado.momento ? `até ${hora(estado.momento)}` : "hoje";
+  const momentoFila = estado.outroDia ? `em ${diaCurto(diaLocal(referencia))}` : estado.atrasado && estado.momento ? `às ${hora(estado.momento)}` : "agora";
+
+  const k = kpisHoje(dados, referencia, filtro);
   const ontem = diaCurto(k.diaComparacao);
   // Na segunda-feira a comparação é com a sexta: "Ontem" ali seria falso.
-  const agora = new Date();
   const diaDeOntem = diaLocal(new Date(agora.getFullYear(), agora.getMonth(), agora.getDate() - 1));
   const dicaOntem = k.diaComparacao === diaDeOntem ? "Ontem" : `Último dia útil (${ontem})`;
   const desde = inicioDaUltimaColeta(dados);
   const passa = passaNoFiltro(dados, filtro);
-  const novos = desde === null ? 0 : dados.fila_qa.filter((c) => passa(c.project_id) && (c.entrou_em ?? 0) > desde).length;
+  const novos = velho || desde === null ? 0 : dados.fila_qa.filter((c) => passa(c.project_id) && (c.entrou_em ?? 0) > desde).length;
 
   return (
     <div className="agora">
-      <dl className="kpis" aria-label="Hoje">
-        <Kpi rotulo="Em QA agora" valor={k.emQaAgora} tom="entrada" sub={novos > 0 ? `${novos} novo${novos > 1 ? "s" : ""} nesta coleta` : "na coluna Teste/QA"} />
-        <Kpi rotulo="Entraram hoje" valor={k.hoje.entraram} tom="entrada" anterior={k.comparacao.entraram} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
-        <Kpi rotulo="Aprovados hoje" valor={k.hoje.aprovados} tom="aprovado" anterior={k.comparacao.aprovados} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
-        <Kpi rotulo="Reprovados hoje" valor={k.hoje.reprovados} tom="reprovado" anterior={k.comparacao.reprovados} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
+      <dl className={`kpis${velho ? " kpis--velho" : ""}`} aria-label={`Contadores de ${quando}`}>
+        <Kpi rotulo={`Em QA ${momentoFila}`} valor={k.emQaAgora} tom="entrada" sub={novos > 0 ? `${novos} novo${novos > 1 ? "s" : ""} nesta coleta` : "na coluna Teste/QA"} />
+        <Kpi rotulo={`Entraram ${quando}`} valor={k.hoje.entraram} tom="entrada" anterior={k.comparacao.entraram} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
+        <Kpi rotulo={`Aprovados ${quando}`} valor={k.hoje.aprovados} tom="aprovado" anterior={k.comparacao.aprovados} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
+        <Kpi rotulo={`Reprovados ${quando}`} valor={k.hoje.reprovados} tom="reprovado" anterior={k.comparacao.reprovados} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
         <Kpi
-          rotulo="Concluídos sem QA hoje"
+          rotulo={`Concluídos sem QA ${quando}`}
           valor={k.hoje.concluidosSemQa}
           tom="sem-qa"
           anterior={k.comparacao.concluidosSemQa}
@@ -44,9 +55,9 @@ export function Agora({ dados, filtro, abrirCard, abrirPessoa, soForaDoPainel, a
         />
       </dl>
 
-      <CargaEquipe dados={dados} filtro={filtro} abrirPessoa={abrirPessoa} />
-      <Fila dados={dados} filtro={filtro} abrirCard={abrirCard} soForaDoPainel={soForaDoPainel} alternarForaDoPainel={alternarForaDoPainel} />
-      <Feed dados={dados} filtro={filtro} abrirCard={abrirCard} />
+      <CargaEquipe dados={dados} filtro={filtro} hrefPessoa={hrefPessoa} />
+      <Fila dados={dados} filtro={filtro} hrefCard={hrefCard} soForaDoPainel={soForaDoPainel} alternarForaDoPainel={alternarForaDoPainel} />
+      <Feed dados={dados} filtro={filtro} hrefCard={hrefCard} />
       <div className="agora__rodape">
         <Lacunas dados={dados} />
       </div>
@@ -54,7 +65,7 @@ export function Agora({ dados, filtro, abrirCard, abrirPessoa, soForaDoPainel, a
   );
 }
 
-function CargaEquipe({ dados, filtro, abrirPessoa }: { dados: Dashboard; filtro: Filtro; abrirPessoa: (id: number) => void }) {
+function CargaEquipe({ dados, filtro, hrefPessoa }: { dados: Dashboard; filtro: Filtro; hrefPessoa: (id: number) => string }) {
   const cargas = cargaPorPessoa(dados, filtro);
   const pessoas = pessoasDaCarga(dados);
   const total = (uid: number) => PAPEIS_CARGA.reduce((s, p) => s + (cargas.get(uid)?.[p] ?? 0), 0);
@@ -81,7 +92,7 @@ function CargaEquipe({ dados, filtro, abrirPessoa }: { dados: Dashboard; filtro:
               <ul className="carga-lista">
                 {lista.map((p) => (
                   <li key={p.user_id} className="carga-linha">
-                    <button className="link-pessoa" onClick={() => abrirPessoa(p.user_id)}>{p.nome}</button>
+                    <a className="link-pessoa" href={hrefPessoa(p.user_id)}>{p.nome}</a>
                     <BarraCarga carga={cargas.get(p.user_id) ?? cargaVazia()} max={max} />
                     <span className="num carga-linha__total">{total(p.user_id)}</span>
                   </li>
@@ -104,7 +115,7 @@ const TOM_EVENTO: Record<string, Tom> = {
   criada: "neutro",
 };
 
-function Feed({ dados, filtro, abrirCard }: { dados: Dashboard; filtro: Filtro; abrirCard: (id: number) => void }) {
+function Feed({ dados, filtro, hrefCard }: { dados: Dashboard; filtro: Filtro; hrefCard: (id: number) => string }) {
   const eventos = feedRecente(dados, filtro, 40);
   // O que chegou nesta coleta entra no quadro com o gesto de inserir a faixa.
   const desde = inicioDaUltimaColeta(dados);
@@ -142,7 +153,7 @@ function Feed({ dados, filtro, abrirCard }: { dados: Dashboard; filtro: Filtro; 
                     </span>
                   </span>
                   <span className="feed__titulo" title={titulo}>
-                    <button className="link-card" onClick={() => abrirCard(e.task_id)}>#{e.task_id}</button> {titulo}
+                    <a className="link-card" href={hrefCard(e.task_id)}>#{e.task_id}</a> {titulo}
                   </span>
                 </div>
               </li>

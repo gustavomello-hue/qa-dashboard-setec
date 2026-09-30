@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import type { Dashboard } from "../data/contrato";
 import { NOME_PAPEL, dataCurta, diasDesde, nomeCurto, numero, porcento, separarEtiquetas } from "../data/formato";
-import { intervalo, intervaloAnterior, rotuloAnterior, rotuloPeriodo, ultimoDia, type Periodo } from "../data/periodo";
+import { intervalo, intervaloAnterior, rotuloAnterior, rotuloPeriodoLongo, ultimoDia, type Periodo } from "../data/periodo";
 import { indiceProjetos, indiceTitulos, type Filtro } from "../data/seletores";
 import {
-  ROTULO_GRUPO, atribuicoesDe, inicioDaSemana, cardsAbertos, cardsDaMetrica, cargaPorPessoa, cargaVazia, concluidos, ehQa,
+  ROTULO_GRUPO, atribuicoesDe, inicioDaSemana, semanaIncompleta, cardsAbertos, cardsDaMetrica, cargaPorPessoa, cargaVazia, concluidos, ehQa,
   indicePessoas, nomeDe, porSemana, projetosTestados, resumirPorPessoa, resumoVazio, semanas, taxaReprovacao,
   taxaReprovacaoQa, testados, PAPEIS_CARGA, type CardContado,
 } from "../data/pessoas";
@@ -18,13 +18,14 @@ interface Props {
   filtro: Filtro;
   periodo: Periodo;
   uid?: number;
-  abrirCard: (id: number) => void;
-  voltar: () => void;
+  hrefCard: (id: number) => string;
+  /** Link de volta para a Equipe (mantém filtros e período). */
+  hrefVoltar: string;
 }
 
 const SEMANAS = 12;
 
-export function Pessoa({ dados, filtro, periodo, uid, abrirCard, voltar }: Props) {
+export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar }: Props) {
   const pessoas = indicePessoas(dados);
   const pessoa = uid !== undefined ? pessoas.get(uid) : undefined;
   const tema = useTema();
@@ -33,7 +34,7 @@ export function Pessoa({ dados, filtro, periodo, uid, abrirCard, voltar }: Props
   const atribs = atribuicoesDe(dados, atual, filtro);
   const r = (uid !== undefined && resumirPorPessoa(atribs).porPessoa.get(uid)) || resumoVazio();
   const a = (uid !== undefined && resumirPorPessoa(atribuicoesDe(dados, intervaloAnterior(periodo, agora), filtro)).porPessoa.get(uid)) || resumoVazio();
-  const antes = rotuloAnterior(periodo);
+  const antes = rotuloAnterior(periodo, agora);
   const qa = pessoa ? ehQa(pessoa) : false;
   const dev = pessoa ? pessoa.grupos.some((g) => g === "dev" || g === "estagiario_dev") || r.entregues > 0 : false;
 
@@ -41,7 +42,16 @@ export function Pessoa({ dados, filtro, periodo, uid, abrirCard, voltar }: Props
   const desde = dados.equipe?.desde ?? dados.regras.qa_confiavel_desde;
   const inicios = semanas(ultimoDia(atual, agora), SEMANAS).filter((s) => s >= inicioDaSemana(`${desde}-01`));
   const historico = atribuicoesDe(dados, { de: inicios[0], ate: atual.ate }, filtro);
-  const serie = (metricas: Parameters<typeof porSemana>[2]) => (uid === undefined ? [] : porSemana(historico, uid, metricas, inicios));
+  const parcial = semanaIncompleta(ultimoDia(atual, agora));
+  // A última semana, se ainda está em curso, sai vazada: não é queda, é semana pela metade.
+  const serie = (metricas: Parameters<typeof porSemana>[2]) => {
+    const valores = uid === undefined ? [] : porSemana(historico, uid, metricas, inicios);
+    return valores.map((v, i) =>
+      parcial && i === valores.length - 1
+        ? { value: v, itemStyle: { color: "transparent", borderColor: cor("--tinta-2"), borderWidth: 1 } }
+        : v,
+    );
+  };
 
   const opcoes = useMemo<OpcoesGrafico>(() => {
     const series = qa
@@ -63,7 +73,7 @@ export function Pessoa({ dados, filtro, periodo, uid, abrirCard, voltar }: Props
     return (
       <div className="vazio">
         <p>Pessoa não encontrada.</p>
-        <button className="botao" onClick={voltar}><Icone nome="voltar" /> Voltar para a equipe</button>
+        <a className="botao" href={hrefVoltar}><Icone nome="voltar" /> Voltar para a equipe</a>
       </div>
     );
   }
@@ -79,7 +89,7 @@ export function Pessoa({ dados, filtro, periodo, uid, abrirCard, voltar }: Props
   return (
     <div className="pessoa">
       <header className="pessoa__cabeca">
-        <button className="botao botao--leve" onClick={voltar}><Icone nome="voltar" /> Equipe</button>
+        <a className="botao botao--leve" href={hrefVoltar}><Icone nome="voltar" /> Equipe</a>
         <div>
           <h1 className="pessoa__nome">{pessoa.nome}</h1>
           <p className="meta">
@@ -88,7 +98,7 @@ export function Pessoa({ dados, filtro, periodo, uid, abrirCard, voltar }: Props
             {pessoa.nome_kanboard && pessoa.nome_kanboard !== pessoa.nome && ` · ${pessoa.nome_kanboard}`}
           </p>
         </div>
-        <p className="pessoa__periodo">{rotuloPeriodo(periodo)}</p>
+        <p className="pessoa__periodo">{rotuloPeriodoLongo(periodo, agora)}</p>
       </header>
 
       {dev && (
@@ -132,7 +142,7 @@ export function Pessoa({ dados, filtro, periodo, uid, abrirCard, voltar }: Props
               vazio="Nenhum card concluído sem passar pelo QA no período."
               titulos={titulos}
               projetos={projetos}
-              abrirCard={abrirCard}
+              hrefCard={hrefCard}
               quem={(c) => (c.por !== null && c.por !== uid ? `movido por ${nomeDe(pessoas, c.por)}` : "")}
             />
           )}
@@ -163,7 +173,7 @@ export function Pessoa({ dados, filtro, periodo, uid, abrirCard, voltar }: Props
             <LegendaCarga />
           </header>
           <BarraCarga carga={carga} max={Math.max(1, PAPEIS_CARGA.reduce((s, p) => s + carga[p], 0))} />
-          <ListaAbertos cards={abertos} titulos={titulos} projetos={projetos} abrirCard={abrirCard} />
+          <ListaAbertos cards={abertos} titulos={titulos} projetos={projetos} hrefCard={hrefCard} />
         </section>
 
         <ListaCards
@@ -172,7 +182,7 @@ export function Pessoa({ dados, filtro, periodo, uid, abrirCard, voltar }: Props
           vazio="Nenhuma reprovação no período."
           titulos={titulos}
           projetos={projetos}
-          abrirCard={abrirCard}
+          hrefCard={hrefCard}
           mostrarVezes
         />
       </div>
@@ -181,14 +191,14 @@ export function Pessoa({ dados, filtro, periodo, uid, abrirCard, voltar }: Props
 }
 
 function ListaCards({
-  titulo, cards, vazio, titulos, projetos, abrirCard, mostrarVezes, quem,
+  titulo, cards, vazio, titulos, projetos, hrefCard, mostrarVezes, quem,
 }: {
   titulo: string;
   cards: CardContado[];
   vazio: string;
   titulos: Map<number, string>;
   projetos: Map<number, string>;
-  abrirCard: (id: number) => void;
+  hrefCard: (id: number) => string;
   mostrarVezes?: boolean;
   quem?: (c: CardContado) => string;
 }) {
@@ -203,7 +213,7 @@ function ListaCards({
         <ul className="lista-cards rolavel">
           {cards.map((c) => (
             <li key={c.task_id}>
-              <button className="link-card" onClick={() => abrirCard(c.task_id)}>#{c.task_id}</button>
+              <a className="link-card" href={hrefCard(c.task_id)}>#{c.task_id}</a>
               <span className="lista-cards__titulo">
                 <TituloCard titulo={titulos.get(c.task_id)} />
                 <span className="meta">
@@ -222,12 +232,12 @@ function ListaCards({
 }
 
 function ListaAbertos({
-  cards, titulos, projetos, abrirCard,
+  cards, titulos, projetos, hrefCard,
 }: {
   cards: ReturnType<typeof cardsAbertos>;
   titulos: Map<number, string>;
   projetos: Map<number, string>;
-  abrirCard: (id: number) => void;
+  hrefCard: (id: number) => string;
 }) {
   const visiveis = cards.filter((c) => c.papel !== "backlog");
   const backlog = cards.length - visiveis.length;
@@ -236,7 +246,7 @@ function ListaAbertos({
       <ul className="lista-cards rolavel">
         {visiveis.map((c) => (
           <li key={c.task_id}>
-            <button className="link-card" onClick={() => abrirCard(c.task_id)}>#{c.task_id}</button>
+            <a className="link-card" href={hrefCard(c.task_id)}>#{c.task_id}</a>
             <span className="lista-cards__titulo">
               <TituloCard titulo={titulos.get(c.task_id)} />
               <span className="meta">

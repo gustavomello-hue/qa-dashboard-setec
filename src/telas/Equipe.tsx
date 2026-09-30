@@ -5,7 +5,7 @@ import { intervalo, intervaloAnterior, rotuloAnterior, ultimoDia, type Periodo }
 import type { Filtro } from "../data/seletores";
 import {
   GRUPOS_TABELA, ROTULO_GRUPO, atribuicoesDe, cargaPorPessoa, concluidos, indicePessoas, nomeDe,
-  pessoasDoGrupo, pessoasFora, porSemana, resumirPorPessoa, resumoVazio, semanas, taxaReprovacao,
+  pessoasDoGrupo, pessoasFora, porSemana, semanaIncompleta, resumirPorPessoa, resumoVazio, semanas, taxaReprovacao,
   taxaReprovacaoQa, testados, PAPEIS_CARGA, type Resumo,
 } from "../data/pessoas";
 import { Sparkline } from "../componentes/Sparkline";
@@ -17,7 +17,7 @@ interface Props {
   periodo: Periodo;
   inativos: boolean;
   alternarInativos: () => void;
-  abrirPessoa: (id: number) => void;
+  hrefPessoa: (id: number) => string;
 }
 
 interface Coluna {
@@ -62,14 +62,16 @@ const SPARK: Record<"dev" | "qa", { metricas: Metrica[]; rotulo: string }> = {
   qa: { metricas: ["testou_aprovado", "testou_reprovado"], rotulo: "testados" },
 };
 
-export function Equipe({ dados, filtro, periodo, inativos, alternarInativos, abrirPessoa }: Props) {
+export function Equipe({ dados, filtro, periodo, inativos, alternarInativos, hrefPessoa }: Props) {
   const agora = new Date();
   const atual = intervalo(periodo, agora);
   const atribs = atribuicoesDe(dados, atual, filtro);
   const { porPessoa, saidasSemAutor } = resumirPorPessoa(atribs);
   const { porPessoa: antes } = resumirPorPessoa(atribuicoesDe(dados, intervaloAnterior(periodo, agora), filtro));
   // A sparkline olha as 8 semanas até o fim do período, com o mesmo filtro de projeto.
-  const inicios = semanas(ultimoDia(atual, agora), SEMANAS);
+  const fim = ultimoDia(atual, agora);
+  const inicios = semanas(fim, SEMANAS);
+  const parcial = semanaIncompleta(fim);
   const historico = atribuicoesDe(dados, { de: inicios[0], ate: atual.ate }, filtro);
   const cargas = cargaPorPessoa(dados, filtro);
   const carga = (uid: number) => PAPEIS_CARGA.reduce((s, p) => s + (cargas.get(uid)?.[p] ?? 0), 0);
@@ -84,7 +86,7 @@ export function Equipe({ dados, filtro, periodo, inativos, alternarInativos, abr
     <div className="equipe">
       <div className="barra-acoes">
         <p className="nota">
-          Crédito ao responsável <strong>no momento</strong> de cada evento. Comparação com {rotuloAnterior(periodo)} ao passar o mouse.
+          Crédito ao responsável <strong>no momento</strong> de cada evento. Comparação com {rotuloAnterior(periodo, agora)} ao passar o mouse.
         </p>
         <label className="alternador">
           <input type="checkbox" checked={inativos} onChange={alternarInativos} /> Mostrar quem saiu da equipe
@@ -103,7 +105,8 @@ export function Equipe({ dados, filtro, periodo, inativos, alternarInativos, abr
             anterior={(uid) => antes.get(uid) ?? resumoVazio()}
             tendencia={(uid) => porSemana(historico, uid, SPARK[tipo].metricas, inicios)}
             rotuloTendencia={SPARK[tipo].rotulo}
-            abrirPessoa={abrirPessoa}
+            parcial={parcial}
+            hrefPessoa={hrefPessoa}
             rodape={
               g === "qa" ? (
                 <p className="nota">
@@ -114,7 +117,7 @@ export function Equipe({ dados, filtro, periodo, inativos, alternarInativos, abr
                       {naoQa.map(([uid, r], i) => (
                         <span key={uid}>
                           {i > 0 && ", "}
-                          <button className="link-pessoa" onClick={() => abrirPessoa(uid)}>{nomeDe(pessoas, uid)}</button> ({r.saidasNaoQa})
+                          <a className="link-pessoa" href={hrefPessoa(uid)}>{nomeDe(pessoas, uid)}</a> ({r.saidasNaoQa})
                         </span>
                       ))}
                       .
@@ -141,7 +144,7 @@ export function Equipe({ dados, filtro, periodo, inativos, alternarInativos, abr
           ]}
           resumo={(uid) => porPessoa.get(uid) ?? resumoVazio()}
           anterior={(uid) => antes.get(uid) ?? resumoVazio()}
-          abrirPessoa={abrirPessoa}
+          hrefPessoa={hrefPessoa}
           mostrarGrupo
         />
       </details>
@@ -157,7 +160,9 @@ interface TabelaProps {
   anterior: (uid: number) => Resumo;
   tendencia?: (uid: number) => number[];
   rotuloTendencia?: string;
-  abrirPessoa: (id: number) => void;
+  /** A última semana da tendência ainda não acabou. */
+  parcial?: boolean;
+  hrefPessoa: (id: number) => string;
   rodape?: React.ReactNode;
   semTitulo?: boolean;
   mostrarGrupo?: boolean;
@@ -169,7 +174,7 @@ function formatar(v: number | null, c: Coluna): string {
 }
 
 function TabelaGrupo({
-  grupo, pessoas, colunas, resumo, anterior, tendencia, rotuloTendencia, abrirPessoa, rodape, semTitulo, mostrarGrupo,
+  grupo, pessoas, colunas, resumo, anterior, tendencia, rotuloTendencia, parcial = false, hrefPessoa, rodape, semTitulo, mostrarGrupo,
 }: TabelaProps) {
   // Abre em ordem alfabética (sem ranking); clicar no cabeçalho ordena.
   const [ordem, setOrdem] = useState<{ id: string; desc: boolean } | null>(null);
@@ -228,7 +233,7 @@ function TabelaGrupo({
                 return (
                   <tr key={p.user_id} className={p.ativo === false ? "inativo" : undefined}>
                     <th scope="row">
-                      <button className="link-pessoa" onClick={() => abrirPessoa(p.user_id)}>{p.nome}</button>
+                      <a className="link-pessoa" href={hrefPessoa(p.user_id)}>{p.nome}</a>
                       {p.ativo === false && <span className="meta"> saiu da equipe</span>}
                     </th>
                     {mostrarGrupo && <td><span className="meta">{p.grupos.map((g) => ROTULO_GRUPO[g]).join(", ")}</span></td>}
@@ -247,7 +252,7 @@ function TabelaGrupo({
                     })}
                     {tendencia && (
                       <td>
-                        <Sparkline valores={tendencia(p.user_id)} rotulo={`${p.nome}: ${rotuloTendencia} por semana`} />
+                        <Sparkline valores={tendencia(p.user_id)} rotulo={`${p.nome}: ${rotuloTendencia} por semana`} parcial={parcial} />
                       </td>
                     )}
                   </tr>

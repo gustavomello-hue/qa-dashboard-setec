@@ -1,12 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useDashboard } from "./data/carregar";
-import { TELAS, useRota, type Rota, type Tela } from "./data/rota";
+import { TELAS, escreverRota, useRota, type Rota, type Tela } from "./data/rota";
 import type { Dashboard, Prefixo } from "./data/contrato";
 import type { Filtro } from "./data/seletores";
 import { mesesDisponiveis, periodoPadrao, escreverPeriodo, lerPeriodo, rotuloPeriodo } from "./data/periodo";
 import { SEGUNDOS_POR_QUADRO, sequenciaAtracao } from "./data/atracao";
-import { nomeCurto } from "./data/formato";
-import { SeloColeta } from "./componentes/Sinal";
+import { haQuanto, nomeCurto } from "./data/formato";
+import { estadoAtualizacao } from "./data/seletores";
+import { AvisoColeta, SeloColeta } from "./componentes/Sinal";
 import { filaFiltrada } from "./componentes/Fila";
 import { Icone } from "./componentes/Icone";
 import { Agora } from "./telas/Agora";
@@ -19,20 +20,63 @@ const NOMES: Record<Tela, string> = { agora: "Agora", equipe: "Equipe", pessoa: 
 const PREFIXOS: Prefixo[] = ["DEV", "WEB", "MOB", "Demandas"];
 
 export function App() {
-  const { dados, erro, carregando } = useDashboard();
+  const { dados, erro, carregando, recarregar } = useDashboard();
   if (!dados) {
-    return (
-      <div className="tela-inicial" role="status">
-        <p>{erro ? "Não foi possível carregar os dados." : carregando ? "Carregando…" : "Sem dados."}</p>
-        {erro && <p className="nota">{erro}</p>}
-      </div>
-    );
+    if (erro && !carregando) return <FalhaInicial erro={erro} recarregar={recarregar} />;
+    return <Esqueleto />;
   }
-  return <Painel dados={dados} erro={erro} />;
+  return <Painel dados={dados} erro={erro} recarregar={recarregar} />;
 }
 
-function Painel({ dados, erro }: { dados: Dashboard; erro: string | null }) {
+/** Primeira carga: o contorno do quadro já no lugar, sem piscar nem girar. */
+function Esqueleto() {
+  return (
+    <div className="app app--cheia" aria-busy="true">
+      <header className="topo">
+        <div className="topo__linha">
+          <p className="marca"><span className="marca__qa">QA</span> SETEC</p>
+        </div>
+      </header>
+      <main className="tela">
+        <p className="sr" role="status">Carregando os dados do painel…</p>
+        <div className="esqueleto" aria-hidden="true">
+          <div className="esqueleto__kpis" />
+          <div className="esqueleto__baia" />
+          <div className="esqueleto__baia" />
+          <div className="esqueleto__baia" />
+        </div>
+      </main>
+    </div>
+  );
+}
+
+/** Nenhum dado chegou: diz o que houve e oferece tentar de novo. */
+function FalhaInicial({ erro, recarregar }: { erro: string; recarregar: () => void }) {
+  return (
+    <main className="tela-inicial">
+      <div className="falha" role="alert">
+        <h1 className="falha__titulo">Não foi possível carregar o painel</h1>
+        <p>{erro}</p>
+        <button className="botao" onClick={recarregar}>Tentar de novo</button>
+      </div>
+    </main>
+  );
+}
+
+/** Relógio do painel: "há X min" e o aviso de coleta parada andam sozinhos. */
+function useRelogio(ms = 30 * 1000): Date {
+  const [agora, setAgora] = useState(() => new Date());
+  useEffect(() => {
+    const id = window.setInterval(() => setAgora(new Date()), ms);
+    return () => window.clearInterval(id);
+  }, [ms]);
+  return agora;
+}
+
+function Painel({ dados, erro, recarregar }: { dados: Dashboard; erro: string | null; recarregar: () => void }) {
   const [rota, irPara] = useRota();
+  const agora = useRelogio();
+  const principal = useRef<HTMLElement>(null);
 
   // --- Modo TV ------------------------------------------------------------
   const sequencia = useMemo(() => sequenciaAtracao((f) => filaFiltrada(dados, f).length), [dados]);
@@ -71,7 +115,28 @@ function Painel({ dados, erro }: { dados: Dashboard; erro: string | null }) {
 
   const mudarFiltro = (f: Filtro) => ir({ filtro: f });
   const abrirCard = (card?: number) => irPara({ tela: "card", filtro: {}, card });
-  const abrirPessoa = (pessoa: number) => ir({ tela: "pessoa", pessoa, tv: false });
+  // Links de verdade: cada visão abre em nova aba (Ctrl+clique) e cabe num link.
+  const hrefCard = (card: number) => escreverRota({ tela: "card", filtro: {}, card });
+  const hrefPessoa = (pessoa: number) => escreverRota({ ...rota, tela: "pessoa", pessoa, tv: false });
+  const hrefTela = (t: Tela) =>
+    escreverRota({ ...rota, tela: t, tv: false, pessoa: undefined, card: t === "card" ? rota.card : undefined });
+
+  // Título da aba: a tela e, se a coleta parou, há quanto tempo.
+  const estado = estadoAtualizacao(dados, agora);
+  useEffect(() => {
+    const atraso = estado.atrasado && estado.minutos !== null ? `Coleta parada ${haQuanto(estado.minutos)} · ` : "";
+    document.title = `${atraso}${NOMES[tela]} · QA SETEC`;
+  }, [tela, estado.atrasado, estado.minutos]);
+
+  // Troca de tela leva o foco ao conteúdo: o leitor de tela anuncia a tela nova.
+  const primeira = useRef(true);
+  useEffect(() => {
+    if (primeira.current) {
+      primeira.current = false;
+      return;
+    }
+    if (!rota.tv) principal.current?.focus({ preventScroll: true });
+  }, [tela, rota.pessoa, rota.card, rota.tv]);
   const projetos = dados.projetos
     .filter((p) => !filtro.prefixo || p.prefixo === filtro.prefixo)
     .sort((a, b) => nomeCurto(a.nome).localeCompare(nomeCurto(b.nome)));
@@ -81,6 +146,7 @@ function Painel({ dados, erro }: { dados: Dashboard; erro: string | null }) {
 
   return (
     <div className={`app${rota.tv ? " app--tv" : ""}${tela === "agora" ? " app--cheia" : ""}`}>
+      <button className="pular" onClick={() => principal.current?.focus()}>Pular para o conteúdo</button>
       <header className="topo">
         <div className="topo__linha">
           <p className="marca"><span className="marca__qa">QA</span> SETEC</p>
@@ -88,20 +154,20 @@ function Painel({ dados, erro }: { dados: Dashboard; erro: string | null }) {
             <ul className="abas">
               {TELAS.map((t, i) => (
                 <li key={t}>
-                  <button
+                  <a
                     className="aba"
+                    href={hrefTela(t)}
                     aria-current={tela === t || (t === "equipe" && tela === "pessoa") ? "page" : undefined}
                     aria-keyshortcuts={String(i + 1)}
-                    onClick={() => ir({ tela: t, tv: false })}
                   >
                     <kbd className="tecla" aria-hidden="true">{i + 1}</kbd>
                     {NOMES[t]}
-                  </button>
+                  </a>
                 </li>
               ))}
             </ul>
           </nav>
-          <SeloColeta dados={dados} erro={erro} />
+          <SeloColeta dados={dados} erro={erro} agora={agora} recarregar={recarregar} />
         </div>
 
         {usaFiltro && (
@@ -171,13 +237,17 @@ function Painel({ dados, erro }: { dados: Dashboard; erro: string | null }) {
         )}
       </header>
 
-      <main className="tela" key={`${tela}|${rota.pessoa ?? ""}|${rota.card ?? ""}`}>
+      <AvisoColeta dados={dados} agora={agora} />
+
+      <main className="tela" key={`${tela}|${rota.pessoa ?? ""}|${rota.card ?? ""}`} ref={principal} tabIndex={-1}>
+        {tela !== "pessoa" && <h1 className="sr">{NOMES[tela]}</h1>}
         {tela === "agora" && (
           <Agora
             dados={dados}
             filtro={filtro}
-            abrirCard={abrirCard}
-            abrirPessoa={abrirPessoa}
+            agora={agora}
+            hrefCard={hrefCard}
+            hrefPessoa={hrefPessoa}
             soForaDoPainel={!rota.tv && !!rota.fora}
             alternarForaDoPainel={rota.tv ? undefined : () => ir({ fora: !rota.fora })}
           />
@@ -189,7 +259,7 @@ function Painel({ dados, erro }: { dados: Dashboard; erro: string | null }) {
             periodo={periodo}
             inativos={!!rota.inativos}
             alternarInativos={() => ir({ inativos: !rota.inativos })}
-            abrirPessoa={abrirPessoa}
+            hrefPessoa={hrefPessoa}
           />
         )}
         {tela === "pessoa" && (
@@ -198,8 +268,8 @@ function Painel({ dados, erro }: { dados: Dashboard; erro: string | null }) {
             filtro={filtro}
             periodo={periodo}
             uid={rota.pessoa}
-            abrirCard={abrirCard}
-            voltar={() => ir({ tela: "equipe", pessoa: undefined })}
+            hrefCard={hrefCard}
+            hrefVoltar={escreverRota({ ...rota, tela: "equipe", pessoa: undefined })}
           />
         )}
         {tela === "mensal" && <Mensal dados={dados} filtro={filtro} />}

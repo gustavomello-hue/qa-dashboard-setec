@@ -1,20 +1,55 @@
 import type { Dashboard } from "../data/contrato";
-import { dataHora, haQuanto, hora } from "../data/formato";
-import { estadoAtualizacao, lacunasRecentes } from "../data/seletores";
+import { dataHora, diaCurto, haQuanto, hora } from "../data/formato";
+import { diaLocal, estadoAtualizacao, lacunasRecentes } from "../data/seletores";
 
-/** Selo da coleta no topo: horário, idade e o aviso quando atrasa. */
-export function SeloColeta({ dados, erro }: { dados: Dashboard; erro: string | null }) {
-  const estado = estadoAtualizacao(dados, new Date());
+/**
+ * Selo da coleta no topo: horário e idade. Não é região viva: seria
+ * re-anunciado a cada atualização. O que precisa ser anunciado (atraso) vai
+ * no AvisoColeta.
+ */
+export function SeloColeta({ dados, erro, agora, recarregar }: { dados: Dashboard; erro: string | null; agora: Date; recarregar: () => void }) {
+  const estado = estadoAtualizacao(dados, agora);
   const momento = dados.coleta.momento;
   return (
-    <div className={`selo${estado.atrasado ? " selo--atrasado" : ""}`} role="status">
+    <div className={`selo${estado.atrasado ? " selo--atrasado" : ""}`}>
       <span className="selo__ponto" aria-hidden="true" />
       <span>
         {estado.atrasado ? "Sem coleta desde " : "Coleta das "}
-        {momento ? (estado.atrasado ? dataHora(momento) : hora(momento)) : "—"}
+        {momento ? (estado.atrasado || estado.outroDia ? dataHora(momento) : hora(momento)) : "—"}
       </span>
       <span className="selo__idade">{estado.minutos !== null ? haQuanto(estado.minutos) : "sem data"}</span>
-      {erro && <span className="selo__erro" title={erro}>Falha ao atualizar · mostrando o último dado bom</span>}
+      {erro && (
+        <span className="selo__erro" title={erro}>
+          Falha ao atualizar
+          <button className="botao botao--mini" onClick={recarregar}>Tentar de novo</button>
+        </span>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Faixa de aviso quando o dado não é de agora. A coleta parada no expediente
+ * é o caso grave: sem este aviso, "Entraram hoje 0" parece equipe parada
+ * quando é o coletor que parou.
+ */
+export function AvisoColeta({ dados, agora }: { dados: Dashboard; agora: Date }) {
+  const estado = estadoAtualizacao(dados, agora);
+  if (!estado.momento || (!estado.atrasado && !estado.outroDia)) return null;
+  const quando = estado.outroDia ? `${diaCurto(diaLocal(new Date(estado.momento * 1000)))} às ${hora(estado.momento)}` : hora(estado.momento);
+  return (
+    <div className={`aviso${estado.atrasado ? " aviso--grave" : ""}`} role="status">
+      <span className="aviso__marca" aria-hidden="true" />
+      {estado.atrasado ? (
+        <p>
+          <strong>Coleta parada {estado.minutos !== null ? haQuanto(estado.minutos) : ""}.</strong> Os números param em {quando}.
+          {" "}Confira se o PC da coleta está ligado e o Agendador de Tarefas rodando.
+        </p>
+      ) : (
+        <p>
+          <strong>Ainda não houve coleta hoje.</strong> Os números são de {quando}, a última coleta.
+        </p>
+      )}
     </div>
   );
 }
