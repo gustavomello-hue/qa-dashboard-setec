@@ -371,3 +371,16 @@ export function taxaCardsPorMes(d: Dashboard, filtro: Filtro): Map<string, TaxaM
   }
   return saida;
 }
+
+/**
+ * Teto da escala das barras de carga. Um valor muito acima do resto (1,5× o
+ * segundo maior) achataria todo mundo em tracinhos: nesse caso a escala para
+ * em 1,2× o segundo maior e a barra de quem passa sai "cortada", com o número
+ * inteiro ao lado. O número nunca é alterado, só o desenho.
+ */
+export function escalaCarga(totais: number[]): number {
+  const ordem = [...totais].sort((a, b) => b - a);
+  const [maior = 0, segundo = 0] = ordem;
+  if (segundo > 0 && maior > 1.5 * segundo) return Math.ceil(segundo * 1.2);
+  return Math.max(1, maior);
+}

@@ -50,7 +50,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 12.5px;
+  font-size: var(--t-meta);
   font-weight: 600;
   letter-spacing: 0.06em;
   color: var(--tinta-2);
@@ -98,7 +98,7 @@
 
 .tecla {
   font-family: var(--face-dado);
-  font-size: 10px;
+  font-size: var(--t-rotulo);
   line-height: 14px;
   min-width: 16px;
   text-align: center;
@@ -119,7 +119,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 12.5px;
+  font-size: var(--t-meta);
   color: var(--tinta-2);
 }
 
@@ -176,7 +176,7 @@
   background: var(--faixa);
   padding: 3px 10px;
   color: var(--tinta-2);
-  font-size: 13px;
+  font-size: var(--t-dado);
   box-shadow: 0 1px 0 var(--filete);
 }
 
@@ -199,7 +199,7 @@
   background: var(--faixa);
   padding: 0 8px;
   max-width: 280px;
-  font-size: 13px;
+  font-size: var(--t-dado);
 }
 
 .campo:hover {
@@ -215,7 +215,7 @@
   border-radius: 2px;
   background: var(--faixa);
   padding: 0 12px;
-  font-size: 13px;
+  font-size: var(--t-dado);
   font-weight: 500;
 }
 
@@ -239,7 +239,7 @@
   background: var(--faixa);
   border-radius: 2px;
   padding: 1px 8px;
-  font-size: 12px;
+  font-size: var(--t-meta);
   color: var(--tinta-2);
 }
 
@@ -255,7 +255,7 @@
   background: var(--faixa);
   color: var(--tinta-2);
   font-family: var(--face-dado);
-  font-size: 12px;
+  font-size: var(--t-meta);
 }
 
 /* ---------- Baia ---------- */
@@ -279,11 +279,11 @@
 }
 
 .bloco__titulo {
-  font-size: 11.5px;
+  font-size: var(--t-titulo-baia);
   font-weight: 600;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: var(--tinta-2);
+  color: var(--tinta-1);
 }
 
 details.bloco > summary {
@@ -321,12 +321,12 @@ details.bloco > summary {
 
 .nota {
   color: var(--tinta-2);
-  font-size: 12.5px;
+  font-size: var(--t-meta);
 }
 
 .meta {
   color: var(--tinta-3);
-  font-size: 12px;
+  font-size: var(--t-meta);
   display: inline-flex;
   flex-wrap: wrap;
   gap: 0 10px;
@@ -344,7 +344,7 @@ details.bloco > summary {
 
 .link-card {
   font-family: var(--face-dado);
-  font-size: 12.5px;
+  font-size: var(--t-meta);
   font-weight: 500;
   color: var(--tinta-1);
   white-space: nowrap;
@@ -368,7 +368,7 @@ details.bloco > summary {
   align-items: center;
   gap: 4px;
   color: var(--tinta-2);
-  font-size: 13px;
+  font-size: var(--t-dado);
 }
 
 /* ---------- Porta-faixa: a única casa da cor ---------- */
@@ -384,7 +384,7 @@ details.bloco > summary {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 10.5px;
+  font-size: var(--t-rotulo);
   font-weight: 600;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -411,7 +411,7 @@ details.bloco > summary {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-size: 10.5px;
+  font-size: var(--t-rotulo);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -482,7 +482,7 @@ details.bloco > summary {
 
 .kpi__rotulo {
   grid-area: rotulo;
-  font-size: 11.5px;
+  font-size: var(--t-titulo-baia);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -493,7 +493,7 @@ details.bloco > summary {
   grid-area: valor;
   font-family: var(--face-dado);
   font-variant-numeric: tabular-nums;
-  font-size: 28px;
+  font-size: var(--t-numeral);
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: -0.02em;
@@ -501,7 +501,7 @@ details.bloco > summary {
 
 .kpi__sub {
   grid-area: sub;
-  font-size: 12px;
+  font-size: var(--t-meta);
   color: var(--tinta-3);
   text-align: right;
   padding-bottom: 3px;
@@ -533,7 +533,7 @@ details.bloco > summary {
   z-index: 1;
   background: var(--baia);
   color: var(--tinta-2);
-  font-size: 11px;
+  font-size: var(--t-rotulo);
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -563,7 +563,7 @@ details.bloco > summary {
 }
 
 .tabela td.num {
-  font-size: 13px;
+  font-size: var(--t-dado);
 }
 
 /* Colunas numéricas alinham à direita, cabeçalho junto. */
@@ -585,7 +585,7 @@ details.bloco > summary {
 
 .tabela tfoot th {
   padding-left: 14px;
-  font-size: 11px;
+  font-size: var(--t-rotulo);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--tinta-2);
@@ -706,7 +706,7 @@ details.bloco > summary {
   list-style: none;
   margin: 0;
   padding: 0;
-  font-size: 12px;
+  font-size: var(--t-meta);
   color: var(--tinta-2);
 }
 
@@ -726,7 +726,7 @@ details.bloco > summary {
 }
 
 .carga-grupo__titulo {
-  font-size: 10.5px;
+  font-size: var(--t-rotulo);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -782,6 +782,11 @@ details.bloco > summary {
   .agora__rodape {
     grid-column: 1 / -1;
   }
+
+  /* Posições fixas: a ordem no HTML (fila antes da carga) é a de leitura. */
+  .agora .carga-equipe { grid-column: 1; grid-row: 2; }
+  .agora .fila { grid-column: 2; grid-row: 2; }
+  .agora .feed { grid-column: 3; grid-row: 2; }
 }
 
 .agora__rodape {
@@ -796,7 +801,7 @@ details.bloco > summary {
 }
 
 .feed__dia {
-  font-size: 10.5px;
+  font-size: var(--t-rotulo);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -823,7 +828,7 @@ details.bloco > summary {
 
 .feed__hora {
   grid-area: hora;
-  font-size: 12px;
+  font-size: var(--t-meta);
   color: var(--tinta-3);
   text-align: left;
   padding-top: 1px;
@@ -853,7 +858,7 @@ details.bloco > summary {
 
 .feed__titulo {
   grid-area: titulo;
-  font-size: 13px;
+  font-size: var(--t-dado);
   line-height: 1.4;
   height: 2.8em;
   display: -webkit-box;
@@ -890,7 +895,7 @@ details.bloco > summary {
   align-items: center;
   gap: 6px;
   color: var(--tinta-2);
-  font-size: 13px;
+  font-size: var(--t-dado);
 }
 
 .alternador input {
@@ -919,7 +924,7 @@ details.bloco > summary {
 }
 
 .pessoa__nome {
-  font-size: 22px;
+  font-size: var(--t-destaque);
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.2;
@@ -1061,7 +1066,7 @@ details.bloco > summary {
 }
 
 .busca__rotulo {
-  font-size: 11.5px;
+  font-size: var(--t-titulo-baia);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -1074,7 +1079,7 @@ details.bloco > summary {
 }
 
 .card-tela__titulo {
-  font-size: 16px;
+  font-size: var(--t-titulo);
   font-weight: 600;
 }
 
@@ -1093,7 +1098,7 @@ details.bloco > summary {
 }
 
 .ficha dt {
-  font-size: 11px;
+  font-size: var(--t-rotulo);
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -1106,7 +1111,7 @@ details.bloco > summary {
 }
 
 .ficha dd.num {
-  font-size: 18px;
+  font-size: var(--t-titulo);
 }
 
 .linha-tempo {
@@ -1129,7 +1134,7 @@ details.bloco > summary {
 
 .linha-tempo__quando {
   color: var(--tinta-3);
-  font-size: 12px;
+  font-size: var(--t-meta);
   text-align: left;
 }
 
@@ -1176,7 +1181,7 @@ details.bloco > summary {
   }
 
   .kpi__valor {
-    font-size: 24px;
+    font-size: var(--t-numeral-estreito);
   }
 
   .kpi:last-child:nth-child(odd) {
@@ -1229,7 +1234,7 @@ a.link-pessoa:hover {
   border-radius: 2px;
   background: var(--faixa);
   padding: 6px 12px;
-  font-size: 13px;
+  font-size: var(--t-dado);
 }
 
 .pular:focus {
@@ -1246,7 +1251,7 @@ a.link-pessoa:hover {
   background: var(--faixa);
   border: 1px solid var(--filete);
   box-shadow: inset var(--porta) 0 0 var(--n6);
-  font-size: 13px;
+  font-size: var(--t-dado);
   color: var(--tinta-2);
 }
 
@@ -1282,7 +1287,7 @@ a.link-pessoa:hover {
   height: 22px;
   padding: 0 8px;
   margin-left: 8px;
-  font-size: 12px;
+  font-size: var(--t-meta);
 }
 
 .selo__erro {
@@ -1323,7 +1328,7 @@ a.link-pessoa:hover {
 }
 
 .falha__titulo {
-  font-size: 16px;
+  font-size: var(--t-titulo);
   font-weight: 600;
   color: var(--tinta-1);
 }
@@ -1340,7 +1345,7 @@ a.link-pessoa:hover {
 /* Tempo na coluna para onde o evento levou o card. Em Teste/QA, em tinta forte. */
 .linha-tempo__estadia {
   font-family: var(--face-dado);
-  font-size: 12px;
+  font-size: var(--t-meta);
   color: var(--tinta-3);
   text-align: right;
   white-space: nowrap;
@@ -1353,7 +1358,7 @@ a.link-pessoa:hover {
 
 .celula-denominador {
   display: block;
-  font-size: 11.5px;
+  font-size: var(--t-titulo-baia);
 }
 
 .tabela-grupo__nota {
@@ -1361,7 +1366,7 @@ a.link-pessoa:hover {
 }
 
 .glossario {
-  font-size: 12.5px;
+  font-size: var(--t-meta);
   color: var(--tinta-2);
 }
 
@@ -1400,4 +1405,84 @@ a.link-pessoa:hover {
 .agora__rodape .glossario dl {
   max-height: 40vh;
   overflow: auto;
+}
+
+/* ---------- Distill + layout ---------- */
+
+/* Barra que passa do teto da escala: enche e ganha um corte no fim. */
+.carga--cortada .carga__trilho {
+  -webkit-mask: linear-gradient(90deg, #000 calc(100% - 9px), transparent calc(100% - 9px), transparent calc(100% - 6px), #000 calc(100% - 6px));
+  mask: linear-gradient(90deg, #000 calc(100% - 9px), transparent calc(100% - 9px), transparent calc(100% - 6px), #000 calc(100% - 6px));
+}
+
+/* Números da Pessoa: o fluxo em destaque, o resto em tamanho de apoio. */
+.numeros {
+  display: grid;
+  gap: 6px;
+}
+
+.numeros__titulo {
+  font-size: var(--t-rotulo);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--tinta-2);
+}
+
+.kpis--fluxo {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.kpis--outros {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.kpi--menor {
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
+.kpi--menor .kpi__valor {
+  font-size: var(--t-destaque);
+}
+
+.kpi {
+  grid-template-areas:
+    "rotulo rotulo"
+    "valor sub"
+    "extra extra";
+}
+
+.kpi__extra {
+  grid-area: extra;
+  font-size: var(--t-meta);
+  color: var(--tinta-2);
+  padding-top: 2px;
+}
+
+/* Diferença para o período anterior, sob o número da tabela, sem cor. */
+.delta {
+  display: block;
+  font-size: var(--t-rotulo);
+  line-height: 1.2;
+  color: var(--tinta-3);
+}
+
+/* Abaixo da grade de três baias, cada baia rola por dentro: a fila de 60 cards
+   não empurra a carga e as movimentações para 7 mil pixels de rolagem. */
+@media (max-width: 1099px) {
+  .agora .bloco .rolavel {
+    max-height: 60vh;
+  }
+}
+
+/* ---------- Typeset: medida das notas ---------- */
+
+/* Notas são prosa: no máximo ~80 caracteres por linha, mesmo em tela larga. */
+.nota {
+  max-width: 80ch;
+}
+
+.aviso p {
+  max-width: 110ch;
 }

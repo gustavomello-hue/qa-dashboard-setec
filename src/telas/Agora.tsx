@@ -1,7 +1,7 @@
 import type { Dashboard } from "../data/contrato";
 import { NOME_EVENTO, diaCurto, hora, separarEtiquetas } from "../data/formato";
 import { diaDeReferencia, diaLocal, estadoAtualizacao, kpisHoje, indiceTitulos, passaNoFiltro, inicioDaUltimaColeta, type Filtro } from "../data/seletores";
-import { cargaPorPessoa, cargaVazia, feedRecente, grupoPrincipal, indicePessoas, pessoasDaCarga, PAPEIS_CARGA, ROTULO_GRUPO } from "../data/pessoas";
+import { cargaPorPessoa, cargaVazia, escalaCarga, feedRecente, grupoPrincipal, indicePessoas, pessoasDaCarga, PAPEIS_CARGA, ROTULO_GRUPO } from "../data/pessoas";
 import { Kpi, type Tom } from "../componentes/Kpi";
 import { BarraCarga, LegendaCarga } from "../componentes/BarraCarga";
 import { Fila } from "../componentes/Fila";
@@ -57,8 +57,10 @@ export function Agora({ dados, filtro, agora, hrefCard, hrefPessoa, soForaDoPain
         />
       </dl>
 
-      <CargaEquipe dados={dados} filtro={filtro} hrefPessoa={hrefPessoa} />
+      {/* A fila vem antes da carga na ordem de leitura (celular, Tab, leitor de tela):
+          "o que está parado" é a pergunta nº 1. No desktop a grade põe a carga à esquerda. */}
       <Fila dados={dados} filtro={filtro} hrefCard={hrefCard} soForaDoPainel={soForaDoPainel} alternarForaDoPainel={alternarForaDoPainel} />
+      <CargaEquipe dados={dados} filtro={filtro} hrefPessoa={hrefPessoa} />
       <Feed dados={dados} filtro={filtro} hrefCard={hrefCard} />
       <div className="agora__rodape">
         <Lacunas dados={dados} />
@@ -72,9 +74,9 @@ function CargaEquipe({ dados, filtro, hrefPessoa }: { dados: Dashboard; filtro: 
   const cargas = cargaPorPessoa(dados, filtro);
   const pessoas = pessoasDaCarga(dados);
   const total = (uid: number) => PAPEIS_CARGA.reduce((s, p) => s + (cargas.get(uid)?.[p] ?? 0), 0);
-  const max = Math.max(1, ...pessoas.map((p) => total(p.user_id)));
-  // Agrupa pela ordem DEV, QA, estagiários, e alfabético dentro do grupo.
-  const ordem = ["dev", "qa", "estagiario_dev", "estagiario_qa"];
+  const max = escalaCarga(pessoas.map((p) => total(p.user_id)));
+  // QA primeiro (é quem usa o painel), depois DEV; estagiários em seguida. Alfabético dentro do grupo.
+  const ordem = ["qa", "estagiario_qa", "dev", "estagiario_dev"];
   const grupos = ordem
     .map((g) => ({ g, pessoas: pessoas.filter((p) => grupoPrincipal(p) === g) }))
     .filter((x) => x.pessoas.length);

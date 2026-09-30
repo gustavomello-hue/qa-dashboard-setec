@@ -102,31 +102,76 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar }: Pr
         <p className="pessoa__periodo">{rotuloPeriodoLongo(periodo, agora)}</p>
       </header>
 
+      {/* Primeiro o fluxo (entregou → aprovado/reprovado → concluiu), depois o resto em tamanho
+          menor. A taxa vira contexto da reprovação, não um número de veredito ao lado das contagens. */}
       {dev && (
-        <dl className="kpis" aria-label="Como responsável pelos cards">
-          <Kpi rotulo="Entregues para QA" valor={r.entregues} anterior={a.entregues} rotuloAnterior={antes} tom="entrada" />
-          <Kpi rotulo="Aprovados" valor={r.aprovados} anterior={a.aprovados} rotuloAnterior={antes} tom="aprovado" />
-          <Kpi rotulo="Reprovações" valor={r.reprovacoes} anterior={a.reprovacoes} rotuloAnterior={antes} tom="reprovado"
-            dica={`${r.cardsReprovados} card(s) distinto(s)`} />
-          <Kpi rotulo="% cards reprovados" valor={porcento(taxaReprovacao(r))} anterior={porcento(taxaReprovacao(a))} rotuloAnterior={antes}
-            dica={`${r.cardsReprovados} de ${r.cardsJulgados} cards julgados. ${DEFINICAO.cardsReprovados}`} />
-          <Kpi rotulo="Concluídos" valor={concluidos(r)} anterior={concluidos(a)} rotuloAnterior={antes}
-            dica={`${r.aprovados} aprovados em QA + ${r.concluidosSemQa} sem QA`} />
-          <Kpi rotulo="Concluídos sem QA" valor={r.concluidosSemQa} anterior={a.concluidosSemQa} rotuloAnterior={antes} tom="sem-qa" />
-          <Kpi rotulo="Devolvidos" valor={r.devolvidos} anterior={a.devolvidos} rotuloAnterior={antes} tom="devolvido" />
-          <Kpi rotulo="Criados" valor={r.criados} anterior={a.criados} rotuloAnterior={antes} />
-        </dl>
+        <section className="numeros" aria-labelledby="t-fluxo-dev">
+          <h2 id="t-fluxo-dev" className="numeros__titulo">Fluxo dos cards · como responsável</h2>
+          <dl className="kpis kpis--fluxo">
+            <Kpi rotulo="Entregues para QA" valor={r.entregues} anterior={a.entregues} rotuloAnterior={antes} tom="entrada" dica={DEFINICAO.entregues} />
+            <Kpi rotulo="Aprovados" valor={r.aprovados} anterior={a.aprovados} rotuloAnterior={antes} tom="aprovado" dica={DEFINICAO.aprovados} />
+            <Kpi
+              rotulo="Reprovações"
+              valor={r.reprovacoes}
+              anterior={a.reprovacoes}
+              rotuloAnterior={antes}
+              tom="reprovado"
+              dica={DEFINICAO.reprovacoes}
+              extra={
+                r.cardsJulgados ? (
+                  <>
+                    {r.cardsReprovados} de {r.cardsJulgados} cards julgados ({porcento(taxaReprovacao(r))})
+                  </>
+                ) : (
+                  "Nenhum card julgado no período"
+                )
+              }
+            />
+            <Kpi
+              rotulo="Concluídos"
+              valor={concluidos(r)}
+              anterior={concluidos(a)}
+              rotuloAnterior={antes}
+              dica={DEFINICAO.concluidos}
+              extra={`${r.aprovados} aprovados em QA + ${r.concluidosSemQa} sem QA`}
+            />
+          </dl>
+          <dl className="kpis kpis--outros" aria-label="Outros números como responsável">
+            <Kpi menor rotulo="Concluídos sem QA" valor={r.concluidosSemQa} anterior={a.concluidosSemQa} rotuloAnterior={antes} tom="sem-qa" dica={DEFINICAO.semQa} />
+            <Kpi menor rotulo="Devolvidos" valor={r.devolvidos} anterior={a.devolvidos} rotuloAnterior={antes} tom="devolvido" dica={DEFINICAO.devolvidos} />
+            <Kpi menor rotulo="Criados" valor={r.criados} anterior={a.criados} rotuloAnterior={antes} dica={DEFINICAO.criados} />
+          </dl>
+        </section>
       )}
       {qa && (
-        <dl className="kpis" aria-label="Como QA">
-          <Kpi rotulo="Testados" valor={testados(r)} anterior={testados(a)} rotuloAnterior={antes} tom="entrada" />
-          <Kpi rotulo="Aprovou" valor={r.testouAprovado} anterior={a.testouAprovado} rotuloAnterior={antes} tom="aprovado" />
-          <Kpi rotulo="Reprovou" valor={r.testouReprovado} anterior={a.testouReprovado} rotuloAnterior={antes} tom="reprovado" />
-          <Kpi rotulo="% cards reprovados" valor={porcento(taxaReprovacaoQa(r))} anterior={porcento(taxaReprovacaoQa(a))} rotuloAnterior={antes}
-            dica={`${r.cardsTestadosReprovados} de ${r.cardsTestados} cards testados. ${DEFINICAO.cardsReprovouQa}`} />
-          <Kpi rotulo="Devolveu" valor={r.testouDevolvido} anterior={a.testouDevolvido} rotuloAnterior={antes} tom="devolvido" />
-          {!dev && <Kpi rotulo="Criados" valor={r.criados} anterior={a.criados} rotuloAnterior={antes} />}
-        </dl>
+        <section className="numeros" aria-labelledby="t-fluxo-qa">
+          <h2 id="t-fluxo-qa" className="numeros__titulo">Testes · como QA</h2>
+          <dl className="kpis kpis--fluxo">
+            <Kpi rotulo="Testados" valor={testados(r)} anterior={testados(a)} rotuloAnterior={antes} tom="entrada" dica={DEFINICAO.testados} />
+            <Kpi rotulo="Aprovou" valor={r.testouAprovado} anterior={a.testouAprovado} rotuloAnterior={antes} tom="aprovado" dica={DEFINICAO.aprovou} />
+            <Kpi
+              rotulo="Reprovou"
+              valor={r.testouReprovado}
+              anterior={a.testouReprovado}
+              rotuloAnterior={antes}
+              tom="reprovado"
+              dica={DEFINICAO.reprovou}
+              extra={
+                r.cardsTestados ? (
+                  <>
+                    {r.cardsTestadosReprovados} de {r.cardsTestados} cards testados ({porcento(taxaReprovacaoQa(r))})
+                  </>
+                ) : (
+                  "Nenhum card testado no período"
+                )
+              }
+            />
+          </dl>
+          <dl className="kpis kpis--outros" aria-label="Outros números como QA">
+            <Kpi menor rotulo="Devolveu" valor={r.testouDevolvido} anterior={a.testouDevolvido} rotuloAnterior={antes} tom="devolvido" dica={DEFINICAO.devolveu} />
+            {!dev && <Kpi menor rotulo="Criados" valor={r.criados} anterior={a.criados} rotuloAnterior={antes} dica={DEFINICAO.criados} />}
+          </dl>
+        </section>
       )}
 
       <div className="pessoa__grade">
@@ -173,6 +218,7 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar }: Pr
         <section className="bloco" aria-labelledby="t-carga-pessoa">
           <header className="bloco__cabeca">
             <h2 id="t-carga-pessoa" className="bloco__titulo">Abertos agora <span className="contagem">{abertos.filter((c) => c.papel !== "backlog").length}</span></h2>
+            <p className="nota">Foto de agora: não muda com o período</p>
             <LegendaCarga />
           </header>
           <BarraCarga carga={carga} max={Math.max(1, PAPEIS_CARGA.reduce((s, p) => s + carga[p], 0))} />

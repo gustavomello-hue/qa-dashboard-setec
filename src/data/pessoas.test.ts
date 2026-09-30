@@ -155,3 +155,13 @@ describe("% de cards reprovados por mês", () => {
     expect(taxaCardsPorMes(d, { prefixo: "DEV" }).get("2026-09")!.taxa).toBe(50);
   });
 });
+
+describe("escala da carga", () => {
+  it("corta o valor fora da curva e mantém a escala linear no resto", async () => {
+    const { escalaCarga } = await import("./pessoas");
+    expect(escalaCarga([58, 33, 18, 6])).toBe(40);
+    expect(escalaCarga([20, 18, 3])).toBe(20);
+    expect(escalaCarga([5, 0])).toBe(5);
+    expect(escalaCarga([])).toBe(1);
+  });
+});

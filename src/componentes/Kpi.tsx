@@ -14,12 +14,16 @@ interface Props {
   dicaAnterior?: string;
   sub?: ReactNode;
   dica?: string;
+  /** Linha secundária abaixo do número (ex.: a taxa, rebaixada de número a contexto). */
+  extra?: ReactNode;
+  /** Contador de apoio: numeral menor, para não competir com o fluxo principal. */
+  menor?: boolean;
 }
 
 /** Número grande com a comparação embaixo. A cor diz o que o número É, não se é bom ou ruim. */
-export function Kpi({ rotulo, valor, tom = "neutro", anterior, rotuloAnterior, dicaAnterior, sub, dica }: Props) {
+export function Kpi({ rotulo, valor, tom = "neutro", anterior, rotuloAnterior, dicaAnterior, sub, dica, extra, menor }: Props) {
   return (
-    <div className={`kpi kpi--${tom}`} title={dica}>
+    <div className={`kpi kpi--${tom}${menor ? " kpi--menor" : ""}`} title={dica}>
       <dt className="kpi__rotulo">{rotulo}</dt>
       <dd className="kpi__valor">{typeof valor === "number" ? numero(valor) : valor}</dd>
       <dd
@@ -34,6 +38,7 @@ export function Kpi({ rotulo, valor, tom = "neutro", anterior, rotuloAnterior, d
           sub
         )}
       </dd>
+      {extra && <dd className="kpi__extra">{extra}</dd>}
     </div>
   );
 }

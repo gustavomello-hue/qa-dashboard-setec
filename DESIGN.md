@@ -50,19 +50,19 @@ typography:
     lineHeight: 1.45
   label:
     fontFamily: "Public Sans, system-ui, Segoe UI, sans-serif"
-    fontSize: "11.5px"
+    fontSize: "12px"
     fontWeight: 600
     lineHeight: 1.45
     letterSpacing: "0.07em"
   label-sm:
     fontFamily: "Public Sans, system-ui, Segoe UI, sans-serif"
-    fontSize: "10.5px"
+    fontSize: "11px"
     fontWeight: 600
     lineHeight: 1.45
     letterSpacing: "0.07em"
   dado:
     fontFamily: "JetBrains Mono, ui-monospace, Cascadia Mono, Consolas, monospace"
-    fontSize: "12.5px"
+    fontSize: "12px"
     fontWeight: 400
     lineHeight: 1.45
     fontFeature: "\"tnum\""
@@ -209,12 +209,13 @@ A escala --n0..--n10 é a única fonte de cinza. No tema escuro os mesmos degrau
 
 ### Hierarchy
 - **Numeral** (JetBrains Mono 500, 28px, 1.1, -0.02em; 24px abaixo de 700px): o valor do contador na cabeça do quadro.
+- **Escala em tokens:** os tamanhos moram em `--t-*` no `base.css` (numeral 28, numeral-estreito 24, destaque 22, título 16, corpo 14, dado 13, meta 12, título-baia 12, rótulo 11). O CSS não usa tamanho literal.
 - **Headline** (600, 22px, 1.2, -0.01em): nome da pessoa na tela Pessoa.
 - **Title** (600, 16px): título do card na tela Card.
 - **Body** (400, 14px, 1.45): base do documento, abas.
 - **Body-sm** (400, 13px): conteúdo das faixas, controles, campos, botões, números das tabelas.
-- **Label** (600, 11.5px, 0.06–0.07em, caixa alta, tinta 2): título de baia, rótulo de KPI, rótulo da busca. Cabeçalho de tabela e rótulo de ficha usam o degrau 11px com 0.05em.
-- **Label-sm** (600, 10.5px, 0.07–0.08em, caixa alta): nome do estado ao lado do marcador, título de grupo na carga, dia no feed.
+- **Label** (600, 12px, 0.06–0.07em, caixa alta): título de baia (em tinta 1, para se separar dos rótulos de estado), rótulo de KPI, rótulo da busca. Cabeçalho de tabela e rótulo de ficha usam o degrau de 11px com 0.05em.
+- **Label-sm** (600, 11px, 0.07–0.08em, caixa alta): nome do estado ao lado do marcador, título de grupo na carga, dia no feed. Nada abaixo de 11px.
 - **Dado** (JetBrains Mono 400/500, 12–13px, tabular): #card (500, sublinhado em n5), horários, dias em QA, contagens, período, rodapé do modo TV, rótulos de eixo dos gráficos (11px).
 
 ### Named Rules
@@ -262,7 +263,7 @@ Controles quietos, de borda fina, que afundam quando ligados.
 ### Cards / Containers
 - **Baia:** fundo --baia, cantos retos, sombra de baia, cabeça com título em Label e contagem em mono tinta 1; rola por dentro.
 - **Faixa:** fundo --faixa, cantos retos, porta-faixa de 4px à esquerda, padding 6–7px por 10px com 14px à esquerda, hover em faixa realce. Título e meta numa linha cada, cortados com reticências; o texto completo fica no title.
-- **Ficha** (detalhe do card): grade auto-fit de campos de 140px sobre fundo de faixa, separados por filetes de 1px, rótulo em Label 11px e valor numérico em mono 18px.
+- **Ficha** (detalhe do card): grade auto-fit de campos de 140px sobre fundo de faixa, separados por filetes de 1px, rótulo em Label 11px e valor numérico em mono 16px.
 
 ### Inputs / Fields
 - **Style:** 28px de altura, borda de 1px em filete, 2px de canto, fundo de faixa, 13px; select nativo com o mesmo tratamento; cursor de texto em Azul Entrada.

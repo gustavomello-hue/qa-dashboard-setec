@@ -88,7 +88,7 @@ export function Equipe({ dados, filtro, periodo, inativos, alternarInativos, hre
     <div className="equipe">
       <div className="barra-acoes">
         <p className="nota">
-          Crédito ao responsável <strong>no momento</strong> de cada evento. Passe o mouse sobre um número para ver {rotuloAnterior(periodo, agora)}.
+          Crédito ao responsável <strong>no momento</strong> de cada evento. Sob cada número, a diferença para {rotuloAnterior(periodo, agora)}.
         </p>
         <Glossario />
         <label className="alternador">
@@ -109,6 +109,7 @@ export function Equipe({ dados, filtro, periodo, inativos, alternarInativos, hre
             tendencia={(uid) => porSemana(historico, uid, SPARK[tipo].metricas, inicios)}
             rotuloTendencia={SPARK[tipo].rotulo}
             parcial={parcial}
+            rotuloAnterior={rotuloAnterior(periodo, agora)}
             hrefPessoa={hrefPessoa}
             rodape={
               g === "qa" ? (
@@ -148,6 +149,7 @@ export function Equipe({ dados, filtro, periodo, inativos, alternarInativos, hre
           ]}
           resumo={(uid) => porPessoa.get(uid) ?? resumoVazio()}
           anterior={(uid) => antes.get(uid) ?? resumoVazio()}
+          rotuloAnterior={rotuloAnterior(periodo, agora)}
           hrefPessoa={hrefPessoa}
           mostrarGrupo
         />
@@ -166,10 +168,29 @@ interface TabelaProps {
   rotuloTendencia?: string;
   /** A última semana da tendência ainda não acabou. */
   parcial?: boolean;
+  /** Nome do período de comparação ("ago/26", "set/26 até dia 3"). */
+  rotuloAnterior: string;
   hrefPessoa: (id: number) => string;
   rodape?: React.ReactNode;
   semTitulo?: boolean;
   mostrarGrupo?: boolean;
+}
+
+/**
+ * Diferença para o período anterior, sob o número, em tinta: sem verde nem
+ * vermelho, porque subir reprovação não é "ruim" de uma pessoa, é contexto.
+ */
+function Delta({ atual, anterior, pct }: { atual: number | null; anterior: number | null; pct: boolean }) {
+  // Zero contra zero não é informação: deixa a célula limpa.
+  if (anterior === null || atual === null || (atual === 0 && anterior === 0)) return null;
+  const d = Math.round((atual - anterior) * 10) / 10;
+  const texto = d === 0 ? "=" : `${d > 0 ? "+" : "−"}${Math.abs(d).toLocaleString("pt-BR")}${pct ? " p.p." : ""}`;
+  return (
+    <span className="delta">
+      <span className="sr">variação: </span>
+      {texto}
+    </span>
+  );
 }
 
 function formatar(v: number | null, c: Coluna): string {
@@ -178,7 +199,7 @@ function formatar(v: number | null, c: Coluna): string {
 }
 
 function TabelaGrupo({
-  grupo, pessoas, colunas, resumo, anterior, tendencia, rotuloTendencia, parcial = false, hrefPessoa, rodape, semTitulo, mostrarGrupo,
+  grupo, pessoas, colunas, resumo, anterior, tendencia, rotuloTendencia, parcial = false, rotuloAnterior, hrefPessoa, rodape, semTitulo, mostrarGrupo,
 }: TabelaProps) {
   // Abre em ordem alfabética (sem ranking); clicar no cabeçalho ordena.
   const [ordem, setOrdem] = useState<{ id: string; desc: boolean } | null>(null);
@@ -248,9 +269,10 @@ function TabelaGrupo({
                         <td
                           key={c.id}
                           className={`num${!v ? " zero" : ""}`}
-                          title={va === null ? undefined : `Período anterior: ${formatar(va, c)}`}
+                          title={va === null ? undefined : `${rotuloAnterior}: ${formatar(va, c)}`}
                         >
                           {formatar(v, c)}
+                          <Delta atual={v} anterior={va} pct={c.formato === "pct"} />
                         </td>
                       );
                     })}
