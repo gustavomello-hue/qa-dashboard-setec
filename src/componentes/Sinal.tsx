@@ -2,50 +2,40 @@ import type { Dashboard } from "../data/contrato";
 import { dataHora, haQuanto, hora } from "../data/formato";
 import { estadoAtualizacao, lacunasRecentes } from "../data/seletores";
 
-/** Selo da coleta no canto do HUD: horário, idade e "SEM SINAL" quando atrasa. */
+/** Selo da coleta no topo: horário, idade e o aviso quando atrasa. */
 export function SeloColeta({ dados, erro }: { dados: Dashboard; erro: string | null }) {
   const estado = estadoAtualizacao(dados, new Date());
   const momento = dados.coleta.momento;
   return (
-    <div className={`selo hud${estado.atrasado ? " selo--sem-sinal" : ""}`} role="status">
-      {estado.atrasado ? (
-        <span className="selo__estado">SEM SINAL</span>
-      ) : (
-        <span className="selo__estado">COLETA {momento ? hora(momento) : "—"}</span>
-      )}
-      <span className="selo__idade">
-        {estado.atrasado && momento ? `ÚLTIMA ${dataHora(momento)} · ` : ""}
-        {estado.minutos !== null ? haQuanto(estado.minutos) : "SEM DATA"}
+    <div className={`selo${estado.atrasado ? " selo--atrasado" : ""}`} role="status">
+      <span className="selo__ponto" aria-hidden="true" />
+      <span>
+        {estado.atrasado ? "Sem coleta desde " : "Coleta das "}
+        {momento ? (estado.atrasado ? dataHora(momento) : hora(momento)) : "—"}
       </span>
-      {erro && <span className="selo__erro" title={erro}>FALHA AO ATUALIZAR · MOSTRANDO O ÚLTIMO DADO BOM</span>}
+      <span className="selo__idade">{estado.minutos !== null ? haQuanto(estado.minutos) : "sem data"}</span>
+      {erro && <span className="selo__erro" title={erro}>Falha ao atualizar · mostrando o último dado bom</span>}
     </div>
   );
 }
 
-/** Painel de lacunas: o que não foi medido fica riscado. */
-export function PainelSinal({ dados }: { dados: Dashboard }) {
+/** Lacunas de coleta dos últimos 7 dias: o que não foi medido fica visível. */
+export function Lacunas({ dados }: { dados: Dashboard }) {
   const lacunas = lacunasRecentes(dados, new Date()).slice().reverse();
+  if (lacunas.length === 0) return <p className="nota">Coleta contínua no expediente dos últimos 7 dias.</p>;
   return (
-    <section className="moldura painel" aria-labelledby="t-sinal">
-      <h2 id="t-sinal" className="hud painel__titulo">SINAL · 7 DIAS</h2>
-      {lacunas.length === 0 ? (
-        <p className="painel__vazio hud">COLETA CONTÍNUA NO EXPEDIENTE</p>
-      ) : (
-        <ul className="lacunas">
-          {lacunas.map((l) => (
-            <li key={l.inicio} className="lacuna">
-              <span className="lacuna__faixa estatica" aria-hidden="true" />
-              <span className="lacuna__texto">
-                <span className="hud">{dataHora(l.inicio)} ATÉ {dataHora(l.fim)}</span>
-                <span className="lacuna__detalhe">
-                  {l.horas_expediente.toLocaleString("pt-BR")} h de expediente sem coleta
-                  {l.movimentacoes_perdidas > 0 && ` · ${l.movimentacoes_perdidas} movimento(s) não visto(s)`}
-                </span>
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
+    <details className="nota lacunas">
+      <summary>
+        {lacunas.length} lacuna{lacunas.length > 1 ? "s" : ""} de coleta nos últimos 7 dias
+      </summary>
+      <ul>
+        {lacunas.map((l) => (
+          <li key={l.inicio}>
+            {dataHora(l.inicio)} até {dataHora(l.fim)} · {l.horas_expediente.toLocaleString("pt-BR")} h de expediente
+            {l.movimentacoes_perdidas > 0 && ` · ${l.movimentacoes_perdidas} movimento(s) não visto(s)`}
+          </li>
+        ))}
+      </ul>
+    </details>
   );
 }

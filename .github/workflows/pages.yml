@@ -1,7 +1,7 @@
 # Publica o site no GitHub Pages a cada push na main.
 #
 # Os DADOS não passam por aqui: o site busca o dashboard.json do branch
-# `dados` direto no navegador, e esse branch é atualizado de hora em hora
+# `dados` direto no navegador, e esse branch é atualizado a cada 10 min
 # pelo publicar_dashboard.py. Push no branch `dados` não recompila o site.
 name: Pages
 

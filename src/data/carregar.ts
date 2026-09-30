@@ -3,7 +3,7 @@ import { VERSAO_CONTRATO, type Dashboard } from "./contrato";
 
 // De onde vem o JSON:
 // - publicado: branch `dados` do repo, servido pelo raw do GitHub (o site não
-//   precisa ser recompilado a cada hora);
+//   precisa ser recompilado a cada coleta);
 // - desenvolvimento: public/dados-local.json (npm run dados:local).
 // VITE_DADOS_URL sobrescreve os dois.
 const URL_PADRAO = import.meta.env.DEV
@@ -12,8 +12,8 @@ const URL_PADRAO = import.meta.env.DEV
 
 export const URL_DADOS: string = import.meta.env.VITE_DADOS_URL || URL_PADRAO;
 
-/** Recarrega a cada 15 min, e só com a aba visível. */
-export const INTERVALO_MS = 15 * 60 * 1000;
+/** Recarrega a cada 10 min (o intervalo da coleta), e só com a aba visível. */
+export const INTERVALO_MS = 10 * 60 * 1000;
 
 export class ErroDeDados extends Error {}
 

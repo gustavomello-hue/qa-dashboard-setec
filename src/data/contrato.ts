@@ -1,4 +1,4 @@
-// Formato do dashboard.json, versão 1.
+// Formato do dashboard.json, versão 1 (com os blocos de pessoas, aditivos).
 //
 // Quem gera é o exportar_dashboard.py (repo qa-monitor-setec). As métricas
 // vêm das mesmas funções que montam a planilha painel_qa.xlsx; este site só
@@ -133,14 +133,68 @@ export interface LevantamentoProjeto {
   lead_medio_dias: number | null;
 }
 
-export interface PorResponsavel {
-  ano_mes: string;
-  responsavel: string;
+export type Grupo = "qa" | "dev" | "estagiario_dev" | "estagiario_qa" | "gestao" | "outros";
+
+export interface Pessoa {
   user_id: number;
-  concluidos: number;
-  criados: number;
-  em_qa_agora: number;
-  observacao: string;
+  /** Nome curto do equipe.json (ou o do Kanboard, para quem não está lá). */
+  nome: string;
+  nome_kanboard: string;
+  /** Uma pessoa pode estar em dois grupos (estagiário de QA: qa + estagiario_qa). */
+  grupos: Grupo[];
+  /** null = não está no equipe.json. */
+  ativo: boolean | null;
+  classificado: boolean;
+}
+
+export interface Equipe {
+  grupos: Partial<Record<Grupo, string>>;
+  pessoas: Pessoa[];
+  /** Mês a partir do qual há atribuições. */
+  desde: string;
+}
+
+/**
+ * Métricas creditadas a uma pessoa. As do responsável usam o dono do card NO
+ * MOMENTO do evento; as "testou_*" usam quem moveu o card para fora de QA.
+ */
+export type Metrica =
+  | "entregue_qa"
+  | "aprovado"
+  | "reprovado"
+  | "devolvido"
+  | "concluido_sem_qa"
+  | "criado"
+  | "testou_aprovado"
+  | "testou_reprovado"
+  | "testou_devolvido"
+  | "saida_qa_nao_qa"
+  | "saida_qa_sem_autor";
+
+/** Um fato: "esta pessoa recebe crédito por esta métrica neste card". */
+export interface Atribuicao {
+  momento: number;
+  dia: string;
+  ano_mes: string;
+  metrica: Metrica;
+  /** null só em saida_qa_sem_autor; 0 = card sem responsável. */
+  user_id: number | null;
+  /** Quem moveu o card (null se desconhecido). */
+  por: number | null;
+  task_id: number;
+  project_id: number;
+}
+
+/** Card aberto, fora de Concluídas, com responsável: a carga de agora. */
+export interface CargaCard {
+  task_id: number;
+  titulo: string | null;
+  project_id: number;
+  user_id: number;
+  coluna: string;
+  papel: Papel;
+  desde: number | null;
+  prioridade: number;
 }
 
 export interface Lacuna {
@@ -199,7 +253,10 @@ export interface Dashboard {
   cards: CardMetricas[];
   levantamento_anual: LevantamentoAnual[];
   levantamento_projeto: LevantamentoProjeto[];
-  por_responsavel: PorResponsavel[];
+  /** Ausentes em JSONs anteriores às métricas por pessoa. */
+  equipe?: Equipe;
+  atribuicoes?: Atribuicao[];
+  carga?: CargaCard[];
   /** Momentos das coletas bem-sucedidas. */
   execucoes: number[];
   lacunas: Lacuna[];

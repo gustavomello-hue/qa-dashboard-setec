@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Dashboard das métricas de QA do Kanboard (SETEC). Lê o dashboard.json publicado de hora em hora pelo monitor de QA.",
+  "description": "Dashboard das métricas de QA do Kanboard (SETEC). Lê o dashboard.json publicado a cada 10 min pelo monitor de QA.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
@@ -12,8 +12,6 @@
     "dados:local": "node scripts/copiar-dados-local.mjs"
   },
   "dependencies": {
-    "@fontsource/jersey-15": "^5.3.0",
-    "@fontsource/silkscreen": "^5.3.0",
     "echarts": "^6.1.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"

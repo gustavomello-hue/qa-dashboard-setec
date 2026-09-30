@@ -1,42 +1,86 @@
-@import "@fontsource/silkscreen/400.css";
-@import "@fontsource/silkscreen/700.css";
-@import "@fontsource/jersey-15/400.css";
-
 /*
- * Paleta de 16 cores sob lei. Cada cor de estado tem UM significado e não
- * aparece como enfeite em lugar nenhum:
- *   ciano    = em QA
- *   verde    = aprovado (QA -> Concluídas)
- *   vermelho = reprovado (QA -> Correções)
- *   dourado  = novo desde a última coleta
- *   aço      = lacuna / sem sinal / não medido
- * Azul-arcade e violeta são só moldura e navegação.
+ * Base PROVISÓRIA da v2: neutra, legível, clara/escura pelo sistema. A
+ * identidade visual de verdade é a etapa 3 (/impeccable) e deve substituir
+ * estes valores - os nomes dos tokens podem ficar.
+ *
+ * Cor só com significado:
+ *   --entrada   = entrou em QA / volume
+ *   --aprovado  = QA -> Concluídas
+ *   --reprovado = QA -> Correções
+ *   --sem-qa    = concluído sem passar pelo QA
+ *   --devolvido = saiu de QA para outra coluna
+ * Todo o resto é tom de cinza.
  */
 :root {
-  --fosforo: #07070f;
-  --fundo-2: #0c0e24;
-  --fundo-3: #14173a;
-  --azul-arcade: #3149ff;
-  --violeta: #7446ff;
-  --lilas: #b8a9ff;
-  --texto: #f2f1ff;
-  --texto-2: #b3b6df;
-  --texto-3: #8a8db8;
-  --ciano: #3fe3ff;
-  --verde: #45e07a;
-  --vermelho: #ff5361;
-  --dourado: #ffcc38;
-  --aco: #737696;
-  --aco-escuro: #3a3c55;
+  --fundo: #f6f7f9;
+  --superficie: #ffffff;
+  --superficie-2: #f0f2f5;
+  --linha: #e1e4e9;
+  --linha-forte: #c9ced6;
+  --texto: #1b1f24;
+  --texto-2: #5b6470;
+  --texto-3: #8a929c;
+  --foco: #2f6fdb;
+  --sombra-eixo: rgba(20, 30, 50, 0.06);
 
-  --pixel: 4px;
-  --face-hud: "Silkscreen", ui-monospace, monospace;
-  --face-texto: "Jersey 15", ui-sans-serif, sans-serif;
+  --entrada: #2f6fdb;
+  --aprovado: #1f8a4c;
+  --reprovado: #c93a3a;
+  --sem-qa: #8a5cc7;
+  --devolvido: #b07a12;
 
-  --brilho: 0 0 6px color-mix(in srgb, currentColor 55%, transparent),
-    0 0 18px color-mix(in srgb, currentColor 22%, transparent);
+  --papel-a_iniciar: #b8c0cc;
+  --papel-andamento: #6f93d6;
+  --papel-qa: #2f6fdb;
+  --papel-correcao: #d9745f;
 
-  color-scheme: dark;
+  --grupo-dev: #2f6fdb;
+  --grupo-est-dev: #8fb1ec;
+  --grupo-qa: #1f8a4c;
+  --grupo-est-qa: #86c6a0;
+  --grupo-gestao: #8a5cc7;
+  --grupo-outros: #b8c0cc;
+
+  --raio: 8px;
+  --espaco: 16px;
+  --fonte: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fundo: #121417;
+    --superficie: #1a1d21;
+    --superficie-2: #22262b;
+    --linha: #2c3137;
+    --linha-forte: #3a4047;
+    --texto: #e6e8eb;
+    --texto-2: #a3abb5;
+    --texto-3: #767f8a;
+    --foco: #6ea0f0;
+    --sombra-eixo: rgba(255, 255, 255, 0.05);
+
+    --entrada: #6ea0f0;
+    --aprovado: #4cbb7a;
+    --reprovado: #ea6b6b;
+    --sem-qa: #b28ee6;
+    --devolvido: #d9a53f;
+
+    --papel-a_iniciar: #56606c;
+    --papel-andamento: #4a6fae;
+    --papel-qa: #6ea0f0;
+    --papel-correcao: #c8705c;
+
+    --grupo-dev: #6ea0f0;
+    --grupo-est-dev: #3f5f95;
+    --grupo-qa: #4cbb7a;
+    --grupo-est-qa: #2f7049;
+    --grupo-gestao: #b28ee6;
+    --grupo-outros: #56606c;
+
+    color-scheme: dark;
+  }
 }
 
 *,
@@ -45,51 +89,15 @@
   box-sizing: border-box;
 }
 
-html {
-  background: var(--fosforo);
-  color: var(--texto);
-  font-family: var(--face-texto);
-  font-size: 18px;
-  line-height: 1.3;
-  -webkit-font-smoothing: none;
-  font-smooth: never;
-  text-rendering: optimizeSpeed;
-  scrollbar-color: var(--azul-arcade) var(--fundo-2);
-}
-
+html,
 body {
   margin: 0;
-  min-height: 100vh;
-  background:
-    radial-gradient(ellipse at 50% 0%, var(--fundo-2) 0%, var(--fosforo) 70%) fixed;
-}
-
-::selection {
-  background: var(--ciano);
-  color: var(--fosforo);
-}
-
-::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
-}
-::-webkit-scrollbar-track {
-  background: var(--fundo-2);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--azul-arcade);
-  border: 3px solid var(--fundo-2);
-}
-
-:focus-visible {
-  outline: 2px dashed var(--texto);
-  outline-offset: 3px;
-}
-
-a {
-  color: inherit;
-  text-underline-offset: 4px;
-  text-decoration-thickness: 2px;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: var(--fonte);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
 }
 
 button,
@@ -99,26 +107,29 @@ select {
   color: inherit;
 }
 
-/*
- * Duas vozes pixeladas, escolhidas por teste de leitura em 1:1 (a letra
- * que denuncia é o C: nas faces de abertura de 1 pixel ele fecha em O):
- *  - Silkscreen: rótulos (.hud, peso 400, 12px ou mais) e números (.num).
- *    Letras nunca em negrito abaixo de 16px.
- *  - Jersey 15: todo texto corrido — títulos de card, nomes, detalhes.
- *    Proporcional, com minúsculas e acentos, legível de 18px para cima.
- */
-.num,
-.silk {
-  font-family: var(--face-hud);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0;
+button {
+  cursor: pointer;
 }
 
-.hud {
-  font-family: var(--face-hud);
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  font-variant-numeric: tabular-nums;
+button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+:focus-visible {
+  outline: 2px solid var(--foco);
+  outline-offset: 2px;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
 }
 
 .sr {
@@ -130,63 +141,14 @@ select {
   white-space: nowrap;
 }
 
-/* ---- Camadas CRT (desligáveis) ----------------------------------------- */
-
-.crt::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 50;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgb(0 0 0 / 0) 0,
-    rgb(0 0 0 / 0) 2px,
-    rgb(0 0 0 / 0.22) 3px,
-    rgb(0 0 0 / 0) 4px
-  );
-}
-
-.crt .brilha {
-  text-shadow: var(--brilho);
-}
-
-/* Grade de tiles 8×8: um pixel aceso no canto de cada tile. */
-.crt .moldura {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' shape-rendering='crispEdges'%3E%3Crect width='1' height='1' fill='%233149ff' fill-opacity='0.22'/%3E%3C/svg%3E");
-  background-size: 8px 8px;
-}
-
-/* ---- Moldura pixelada: linha dupla, cantos em degrau (9-slice) ----------
-   Fora: azul-arcade. Um pixel de folga. Dentro: violeta. */
-
-.moldura {
-  border: 8px solid transparent;
-  border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' shape-rendering='crispEdges'%3E%3Cpath fill='%233149ff' d='M4 0h16v2H4zM4 22h16v2H4zM0 4h2v16H0zM22 4h2v16h-2zM2 2h2v2H2zM20 2h2v2h-2zM2 20h2v2H2zM20 20h2v2h-2z'/%3E%3Cpath fill='%237446ff' d='M6 4h12v2H6zM6 18h12v2H6zM4 6h2v12H4zM18 6h2v12h-2z'/%3E%3C/svg%3E")
-    8 / 8px stretch;
-  background-color: color-mix(in srgb, var(--fundo-2) 88%, transparent);
-  background-clip: padding-box;
-}
-
-.moldura--fina {
-  border-width: 4px;
-  border-image-width: 4px;
-}
-
-/* Estática: o que não foi medido fica riscado. */
-.estatica {
-  background: repeating-linear-gradient(
-    135deg,
-    var(--aco-escuro) 0 4px,
-    transparent 4px 8px
-  );
+.num {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+  * {
+    transition: none !important;
+    animation: none !important;
   }
 }

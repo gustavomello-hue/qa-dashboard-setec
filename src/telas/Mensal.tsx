@@ -1,134 +1,180 @@
-import { useEffect, useMemo, useState } from "react";
-import type { Dashboard } from "../data/contrato";
-import { mesCurto, placar } from "../data/formato";
-import { Porcento } from "../componentes/Porcento";
+import { useMemo } from "react";
+import type { Dashboard, Grupo } from "../data/contrato";
+import { mesCurto, numero, porcento } from "../data/formato";
 import { resumoPorMes, type Filtro } from "../data/seletores";
-import { Grafico, type OpcoesGrafico } from "../componentes/Grafico";
+import { ROTULO_GRUPO, composicaoPorMes } from "../data/pessoas";
+import { Grafico, base, cor, useTema, type OpcoesGrafico } from "../componentes/Grafico";
 
 const MEDICAO: Record<string, string> = {
-  completo: "COMPLETO",
-  "em andamento": "EM ANDAMENTO",
-  "parcial (reconstruído)": "PARCIAL",
+  completo: "Completo",
+  "em andamento": "Em andamento",
+  "parcial (reconstruído)": "Parcial",
 };
 
-function serie(nome: string, cor: string, dados: number[]) {
-  return {
-    name: nome,
-    type: "pictorialBar" as const,
-    symbol: "rect",
-    symbolRepeat: true,
-    // Largura do bloco = largura da barra: com poucos meses as colunas
-    // ficam largas como placar, com muitos elas estreitam sozinhas.
-    symbolSize: ["100%", 8],
-    symbolMargin: 3,
-    barGap: "18%",
-    barCategoryGap: "34%",
-    itemStyle: { color: cor },
-    data: dados,
-  };
+/** % dos julgamentos (aprovado + reprovado) que foram reprovação. */
+function reprovacao(taxaAprovacao: number | null): number | null {
+  return taxaAprovacao === null ? null : Math.round(10 * (100 - taxaAprovacao)) / 10;
 }
 
-export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) {
-  const linhas = resumoPorMes(dados, filtro);
-  // O canvas só enxerga a fonte pixelada depois que ela carregou.
-  const [fontes, setFontes] = useState(false);
-  useEffect(() => {
-    document.fonts.ready.then(() => setFontes(true));
-  }, []);
+const GRUPOS_COMPOSICAO: Grupo[] = ["dev", "estagiario_dev", "qa", "estagiario_qa", "gestao", "outros"];
+const COR_GRUPO: Record<Grupo, string> = {
+  dev: "--grupo-dev",
+  estagiario_dev: "--grupo-est-dev",
+  qa: "--grupo-qa",
+  estagiario_qa: "--grupo-est-qa",
+  gestao: "--grupo-gestao",
+  outros: "--grupo-outros",
+};
 
-  const opcoes = useMemo<OpcoesGrafico>(() => {
-    const eixo = { color: "#b3b6df", fontFamily: "Silkscreen", fontSize: 12 };
+export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) {
+  const tema = useTema();
+  const linhas = resumoPorMes(dados, filtro);
+  const composicao = composicaoPorMes(dados, filtro);
+  const meses = linhas.map((l) => mesCurto(l.ano_mes));
+  const chave = linhas.map((l) => `${l.ano_mes}${l.entradas}${l.aprovados}${l.reprovados}${l.tempo_medio_qa_h}`).join() + tema;
+
+  const volume = useMemo<OpcoesGrafico>(() => {
+    const b = base();
     return {
-      // Sem crescimento suave: no resto do painel o movimento é em degraus,
-      // e a entrada da tela já tem a varredura.
-      animation: false,
-      grid: { left: 48, right: 16, top: 16, bottom: 32 },
-      tooltip: {
-        trigger: "axis",
-        backgroundColor: "#0c0e24",
-        borderColor: "#3149ff",
-        borderWidth: 2,
-        textStyle: { color: "#f2f1ff", fontFamily: "Jersey 15", fontSize: 18 },
-        axisPointer: { type: "shadow", shadowStyle: { color: "rgba(116,70,255,0.12)" } },
-      },
-      xAxis: {
-        type: "category",
-        data: linhas.map((l) => mesCurto(l.ano_mes)),
-        axisLine: { lineStyle: { color: "#3149ff", width: 2 } },
-        axisTick: { show: false },
-        axisLabel: eixo,
-      },
-      yAxis: {
-        type: "value",
-        splitLine: { lineStyle: { color: "#14173a", width: 2 } },
-        axisLabel: eixo,
-      },
+      ...b,
+      xAxis: { ...(b.xAxis as object), data: meses },
       series: [
-        serie("Entraram", "#3fe3ff", linhas.map((l) => l.entradas)),
-        serie("Aprovados", "#45e07a", linhas.map((l) => l.aprovados)),
-        serie("Reprovados", "#ff5361", linhas.map((l) => l.reprovados)),
+        { name: "Entraram", type: "bar", data: linhas.map((l) => l.entradas), itemStyle: { color: cor("--entrada") } },
+        { name: "Aprovados", type: "bar", data: linhas.map((l) => l.aprovados), itemStyle: { color: cor("--aprovado") } },
+        { name: "Reprovados", type: "bar", data: linhas.map((l) => l.reprovados), itemStyle: { color: cor("--reprovado") } },
       ],
     };
-    // `fontes` redesenha o canvas quando a Silkscreen chega.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [linhas.map((l) => l.ano_mes + l.entradas + l.aprovados + l.reprovados).join(), fontes]);
+  }, [chave]);
+
+  const qualidade = useMemo<OpcoesGrafico>(() => {
+    const b = base();
+    return {
+      ...b,
+      xAxis: { ...(b.xAxis as object), data: meses },
+      yAxis: { ...(b.yAxis as object), max: 100, axisLabel: { color: cor("--texto-2"), formatter: "{value}%" } },
+      series: [
+        {
+          name: "% reprovação",
+          type: "line",
+          data: linhas.map((l) => reprovacao(l.taxa_aprovacao)),
+          itemStyle: { color: cor("--reprovado") },
+          lineStyle: { width: 2 },
+          symbolSize: 6,
+        },
+      ],
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chave]);
+
+  const tempo = useMemo<OpcoesGrafico>(() => {
+    const b = base();
+    return {
+      ...b,
+      xAxis: { ...(b.xAxis as object), data: meses },
+      series: [
+        {
+          name: "Tempo médio em QA (h)",
+          type: "line",
+          data: linhas.map((l) => l.tempo_medio_qa_h),
+          itemStyle: { color: cor("--entrada") },
+          lineStyle: { width: 2 },
+          symbolSize: 6,
+        },
+      ],
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chave]);
+
+  const chaveComp = composicao.map((c) => c.ano_mes + JSON.stringify(c.entregues)).join() + tema;
+  const grupos = useMemo<OpcoesGrafico>(() => {
+    const b = base();
+    const presentes = GRUPOS_COMPOSICAO.filter((g) => composicao.some((c) => c.entregues[g] > 0));
+    return {
+      ...b,
+      xAxis: { ...(b.xAxis as object), data: composicao.map((c) => mesCurto(c.ano_mes)) },
+      series: presentes.map((g) => ({
+        name: ROTULO_GRUPO[g],
+        type: "bar" as const,
+        stack: "total",
+        data: composicao.map((c) => c.entregues[g]),
+        itemStyle: { color: cor(COR_GRUPO[g]) },
+      })),
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chaveComp]);
+
+  const desde = mesCurto(dados.regras.qa_confiavel_desde);
 
   return (
     <div className="mensal">
-      <section className="moldura painel" aria-labelledby="t-mensal">
-        <header className="painel__cabeca">
-          <h2 id="t-mensal" className="hud painel__titulo">MÊS A MÊS</h2>
-          <ul className="legenda hud" aria-label="Legenda">
-            <li style={{ color: "var(--ciano)" }}><span className="legenda__bloco" />ENTRARAM</li>
-            <li style={{ color: "var(--verde)" }}><span className="legenda__bloco" />APROVADOS</li>
-            <li style={{ color: "var(--vermelho)" }}><span className="legenda__bloco" />REPROVADOS</li>
-          </ul>
+      <section className="bloco mensal__largo" aria-labelledby="t-volume">
+        <header className="bloco__cabeca">
+          <h2 id="t-volume" className="bloco__titulo">Volume de QA por mês</h2>
+          <p className="nota">Desde {desde}: antes disso só há amostra incompleta.</p>
         </header>
-        <Grafico
-          opcoes={opcoes}
-          altura={340}
-          rotulo={`Entradas, aprovados e reprovados por mês desde ${mesCurto(dados.regras.qa_confiavel_desde)}`}
-        />
-        <p className="hud painel__nota">
-          ANTES DE {mesCurto(dados.regras.qa_confiavel_desde)} SÓ HÁ AMOSTRA INCOMPLETA: FICA FORA DO GRÁFICO
-        </p>
+        <Grafico opcoes={volume} altura={280} rotulo={`Entradas, aprovados e reprovados por mês desde ${desde}`} />
       </section>
 
-      <section className="moldura painel" aria-labelledby="t-tabela-mes">
-        <h2 id="t-tabela-mes" className="hud painel__titulo">RESUMO</h2>
-        <div className="rolavel">
-        <table className="tabela tabela--mes">
-          <thead className="hud">
-            <tr>
-              <th scope="col">MÊS</th>
-              <th scope="col" className="direita">ENTRARAM</th>
-              <th scope="col" className="direita">APROV</th>
-              <th scope="col" className="direita">REPROV</th>
-              <th scope="col" className="direita">APROVAÇÃO</th>
-              <th scope="col" className="direita so-largo">TEMPO MÉDIO EM QA</th>
-              <th scope="col">MEDIÇÃO</th>
-            </tr>
-          </thead>
-          <tbody className="num">
-            {linhas.slice().reverse().map((l) => (
-              <tr key={l.ano_mes}>
-                <th scope="row" className="hud">{mesCurto(l.ano_mes)}</th>
-                <td className="direita" style={{ color: "var(--ciano)" }}>{placar(l.entradas)}</td>
-                <td className="direita" style={{ color: "var(--verde)" }}>{placar(l.aprovados)}</td>
-                <td className="direita" style={{ color: "var(--vermelho)" }}>{placar(l.reprovados)}</td>
-                <td className="direita"><Porcento valor={l.taxa_aprovacao} /></td>
-                <td className="direita so-largo">
-                  {l.tempo_medio_qa_h === null ? "—" : `${l.tempo_medio_qa_h.toLocaleString("pt-BR")} H`}
-                </td>
-                <td>
-                  <span className={`medicao hud${l.completude.startsWith("parcial") ? " medicao--parcial" : ""}`}>
-                    {MEDICAO[l.completude] ?? l.completude.toUpperCase()}
-                  </span>
-                </td>
+      <section className="bloco" aria-labelledby="t-reprov">
+        <header className="bloco__cabeca">
+          <h2 id="t-reprov" className="bloco__titulo">% de reprovação</h2>
+          <p className="nota">Reprovações ÷ (aprovações + reprovações)</p>
+        </header>
+        <Grafico opcoes={qualidade} altura={200} rotulo="Percentual de reprovação por mês" />
+      </section>
+
+      <section className="bloco" aria-labelledby="t-tempo">
+        <header className="bloco__cabeca">
+          <h2 id="t-tempo" className="bloco__titulo">Tempo médio em QA</h2>
+          <p className="nota">Horas corridas da entrada à saída de QA</p>
+        </header>
+        <Grafico opcoes={tempo} altura={200} rotulo="Tempo médio em QA por mês, em horas" />
+      </section>
+
+      <section className="bloco mensal__largo" aria-labelledby="t-grupos">
+        <header className="bloco__cabeca">
+          <h2 id="t-grupos" className="bloco__titulo">Entregas para QA por grupo</h2>
+          <p className="nota">Pelo responsável do card no momento da entrega</p>
+        </header>
+        {composicao.length === 0 ? (
+          <p className="vazio">Sem métricas por pessoa neste dashboard.json.</p>
+        ) : (
+          <Grafico opcoes={grupos} altura={240} rotulo="Entregas para QA por mês, empilhadas por grupo" />
+        )}
+      </section>
+
+      <section className="bloco mensal__largo" aria-labelledby="t-tabela-mes">
+        <h2 id="t-tabela-mes" className="bloco__titulo">Resumo</h2>
+        <div className="rolavel-x">
+          <table className="tabela">
+            <thead>
+              <tr>
+                <th scope="col">Mês</th>
+                <th scope="col" className="num">Entraram</th>
+                <th scope="col" className="num">Aprovados</th>
+                <th scope="col" className="num">Reprovados</th>
+                <th scope="col" className="num">% reprov.</th>
+                <th scope="col" className="num">Tempo médio em QA</th>
+                <th scope="col" className="num" title="Cards criados por quem está no grupo Gestão do equipe.json">Criados pela gestão</th>
+                <th scope="col">Medição</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {linhas.slice().reverse().map((l) => (
+                <tr key={l.ano_mes}>
+                  <th scope="row">{mesCurto(l.ano_mes)}</th>
+                  <td className="num texto-entrada">{numero(l.entradas)}</td>
+                  <td className="num texto-aprovado">{numero(l.aprovados)}</td>
+                  <td className="num texto-reprovado">{numero(l.reprovados)}</td>
+                  <td className="num">{porcento(reprovacao(l.taxa_aprovacao))}</td>
+                  <td className="num">{l.tempo_medio_qa_h === null ? "—" : `${l.tempo_medio_qa_h.toLocaleString("pt-BR")} h`}</td>
+                  <td className="num">{numero(composicao.find((c) => c.ano_mes === l.ano_mes)?.criadosGestao ?? 0)}</td>
+                  <td><span className="meta">{MEDICAO[l.completude] ?? l.completude}</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
     </div>

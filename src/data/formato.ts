@@ -1,39 +1,48 @@
-// Formatação pt-BR usada pelas telas. Sem arredondar para "parecer pontos":
-// o zero à esquerda é só a célula fixa do placar; o valor é o exato.
+// Formatação pt-BR usada pelas telas.
 
-const DIAS = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"];
-const MESES = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
+const DIAS = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
+const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
 
-export function placar(n: number, casas = 3): string {
-  return String(n).padStart(casas, "0");
+export function numero(n: number): string {
+  return n.toLocaleString("pt-BR");
 }
 
 export function hora(ts: number): string {
   return new Date(ts * 1000).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 }
 
-export function dataHora(ts: number): string {
+export function dataCurta(ts: number): string {
   const d = new Date(ts * 1000);
-  return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")} ${hora(ts)}`;
+  return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}`;
 }
 
-/** "2026-09-25" -> "SEX 25". */
+export function dataHora(ts: number): string {
+  return `${dataCurta(ts)} ${hora(ts)}`;
+}
+
+/** "2026-09-25" -> "sex 25/09". */
 export function diaCurto(dia: string): string {
   const [a, m, d] = dia.split("-").map(Number);
-  return `${DIAS[new Date(a, m - 1, d).getDay()]} ${String(d).padStart(2, "0")}`;
+  return `${DIAS[new Date(a, m - 1, d).getDay()]} ${String(d).padStart(2, "0")}/${String(m).padStart(2, "0")}`;
 }
 
-/** "2026-09" -> "SET 26". */
+/** "2026-09" -> "set/26". */
 export function mesCurto(anoMes: string): string {
   const [a, m] = anoMes.split("-");
-  return `${MESES[Number(m) - 1]} ${a.slice(2)}`;
+  return `${MESES[Number(m) - 1]}/${a.slice(2)}`;
 }
 
 export function haQuanto(minutos: number): string {
-  if (minutos < 60) return `HÁ ${minutos} MIN`;
+  if (minutos < 1) return "agora";
+  if (minutos < 60) return `há ${minutos} min`;
   const h = Math.floor(minutos / 60);
-  if (h < 48) return `HÁ ${h} H`;
-  return `HÁ ${Math.floor(h / 24)} DIAS`;
+  if (h < 48) return `há ${h} h`;
+  return `há ${Math.floor(h / 24)} dias`;
+}
+
+/** Dias corridos desde um timestamp. */
+export function diasDesde(ts: number | null, agora = Date.now()): number | null {
+  return ts ? Math.floor((agora / 1000 - ts) / 86400) : null;
 }
 
 /** "DEV: SIGIC - Sistema de Gestão..." -> "SIGIC - Sistema de Gestão...". */
@@ -59,28 +68,28 @@ export function porcento(v: number | null): string {
 }
 
 export const NOME_EVENTO: Record<string, string> = {
-  entrou_qa: "ENTROU EM QA",
-  qa_para_concluida: "APROVADO",
-  qa_para_correcao: "REPROVADO",
-  qa_para_outra: "SAIU DE QA",
-  entrou_correcao: "FOI P/ CORREÇÃO",
-  concluida: "CONCLUÍDO",
-  criada: "CRIADO",
-  movimentacao: "MOVIDO",
-  movimentacao_perdida: "MOVIMENTO NÃO VISTO",
-  sumiu: "SAIU DOS ABERTOS",
-  fechada: "FECHADO",
-  mudou_projeto: "MUDOU DE PROJETO",
-  bootstrap: "INÍCIO DA MEDIÇÃO",
+  entrou_qa: "Entrou em QA",
+  qa_para_concluida: "Aprovado",
+  qa_para_correcao: "Reprovado",
+  qa_para_outra: "Devolvido",
+  entrou_correcao: "Foi para correção",
+  concluida: "Concluído sem QA",
+  criada: "Criado",
+  movimentacao: "Movido",
+  movimentacao_perdida: "Movimento não visto",
+  sumiu: "Saiu dos abertos",
+  fechada: "Fechado",
+  mudou_projeto: "Mudou de projeto",
+  bootstrap: "Início da medição",
 };
 
 export const NOME_PAPEL: Record<string, string> = {
-  backlog: "BACKLOG",
-  a_iniciar: "A INICIAR",
-  andamento: "ANDAMENTO",
-  interrompida: "INTERROMPIDO",
-  correcao: "CORREÇÕES",
-  qa: "TESTE/QA",
-  concluida: "CONCLUÍDAS",
-  outra: "OUTRAS",
+  backlog: "Backlog",
+  a_iniciar: "A iniciar",
+  andamento: "Em andamento",
+  interrompida: "Interrompido",
+  correcao: "Correções",
+  qa: "Teste/QA",
+  concluida: "Concluídas",
+  outra: "Outras",
 };

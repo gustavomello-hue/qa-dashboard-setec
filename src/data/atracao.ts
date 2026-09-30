@@ -1,33 +1,29 @@
-// Modo atração: com ?tv na URL o painel percorre sozinho as telas, como o
-// fliperama parado roda a demonstração. Função pura para ser testada.
+// Modo TV: com ?tv na URL o painel percorre sozinho as telas. Função pura
+// para ser testada.
 
 import type { Prefixo } from "./contrato";
 import type { Filtro } from "./seletores";
 
 export interface Quadro {
-  tela: "hoje" | "mensal";
+  tela: "agora" | "equipe" | "mensal";
   filtro: Filtro;
-  pagina: number;
 }
 
-export const SEGUNDOS_POR_QUADRO = 12;
+export const SEGUNDOS_POR_QUADRO = 20;
 export const PREFIXOS_ATRACAO: Prefixo[] = ["DEV", "WEB", "MOB", "Demandas"];
 
 /**
- * Sequência: Hoje (todas as páginas da fila), Mensal, e depois Hoje de cada
- * prefixo que tenha card em QA. `paginas` diz quantas páginas a fila tem
- * para um filtro.
+ * Sequência: Agora, Equipe, Mensal, e depois Agora de cada prefixo que tenha
+ * card em QA. `cardsEmQa` diz quantos cards a fila tem para um filtro.
  */
-export function sequenciaAtracao(paginas: (filtro: Filtro) => number): Quadro[] {
-  const quadros: Quadro[] = [];
-  const hoje = (filtro: Filtro) => {
-    const n = paginas(filtro);
-    for (let p = 0; p < Math.max(1, n); p++) quadros.push({ tela: "hoje", filtro, pagina: p });
-  };
-  hoje({});
-  quadros.push({ tela: "mensal", filtro: {}, pagina: 0 });
+export function sequenciaAtracao(cardsEmQa: (filtro: Filtro) => number): Quadro[] {
+  const quadros: Quadro[] = [
+    { tela: "agora", filtro: {} },
+    { tela: "equipe", filtro: {} },
+    { tela: "mensal", filtro: {} },
+  ];
   for (const prefixo of PREFIXOS_ATRACAO) {
-    if (paginas({ prefixo }) > 0) hoje({ prefixo });
+    if (cardsEmQa({ prefixo }) > 0) quadros.push({ tela: "agora", filtro: { prefixo } });
   }
   return quadros;
 }

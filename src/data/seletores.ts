@@ -52,15 +52,18 @@ export interface ContagemDia {
   entraram: number;
   aprovados: number;
   reprovados: number;
+  /** Chegaram em Concluídas sem sair do QA (evento 'concluida'). */
+  concluidosSemQa: number;
 }
 
 export function contarDia(eventos: Evento[], dia: string, passa: (pid: number) => boolean): ContagemDia {
-  const c: ContagemDia = { entraram: 0, aprovados: 0, reprovados: 0 };
+  const c: ContagemDia = { entraram: 0, aprovados: 0, reprovados: 0, concluidosSemQa: 0 };
   for (const e of eventos) {
     if (e.dia !== dia || !passa(e.project_id)) continue;
     if (e.evento === "entrou_qa") c.entraram++;
     else if (e.evento === "qa_para_concluida") c.aprovados++;
     else if (e.evento === "qa_para_correcao") c.reprovados++;
+    else if (e.evento === "concluida") c.concluidosSemQa++;
   }
   return c;
 }
@@ -171,4 +174,19 @@ export function paginar<T>(itens: T[], porPagina: number, pagina: number): { ite
   const total = Math.max(1, Math.ceil(itens.length / porPagina));
   const p = Math.min(Math.max(0, pagina), total - 1);
   return { itens: itens.slice(p * porPagina, (p + 1) * porPagina), total };
+}
+
+/** {task_id: título} juntando cards, fila, carga e eventos (o mais recente vence). */
+export function indiceTitulos(d: Dashboard): Map<number, string> {
+  const m = new Map<number, string>();
+  for (const e of d.eventos) if (e.titulo) m.set(e.task_id, e.titulo);
+  for (const c of d.carga ?? []) if (c.titulo) m.set(c.task_id, c.titulo);
+  for (const c of d.cards) if (c.titulo) m.set(c.task_id, c.titulo);
+  for (const c of d.fila_qa) if (c.titulo) m.set(c.task_id, c.titulo);
+  return m;
+}
+
+/** {project_id: nome} */
+export function indiceProjetos(d: Dashboard): Map<number, string> {
+  return new Map(d.projetos.map((p) => [p.id, p.nome]));
 }

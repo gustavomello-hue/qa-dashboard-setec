@@ -1,13 +1,15 @@
 import type { Dashboard, Evento } from "../data/contrato";
-import { NOME_EVENTO, dataHora, nomeCurto, placar } from "../data/formato";
+import { NOME_EVENTO, dataHora, nomeCurto, numero } from "../data/formato";
 import { historicoDoCard } from "../data/seletores";
 import { Icone } from "../componentes/Icone";
+import type { Tom } from "../componentes/Kpi";
 
-const COR_EVENTO: Partial<Record<Evento["evento"], string>> = {
-  entrou_qa: "var(--ciano)",
-  qa_para_concluida: "var(--verde)",
-  qa_para_correcao: "var(--vermelho)",
-  movimentacao_perdida: "var(--aco)",
+const TOM_EVENTO: Partial<Record<Evento["evento"], Tom>> = {
+  entrou_qa: "entrada",
+  qa_para_concluida: "aprovado",
+  qa_para_correcao: "reprovado",
+  qa_para_outra: "devolvido",
+  concluida: "sem-qa",
 };
 
 export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; abrir: (id?: number) => void }) {
@@ -20,7 +22,7 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
   return (
     <div className="card-tela">
       <form
-        className="moldura painel busca"
+        className="busca"
         role="search"
         onSubmit={(e) => {
           e.preventDefault();
@@ -28,50 +30,50 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
           abrir(Number.isInteger(id) && id > 0 ? id : undefined);
         }}
       >
-        <label className="hud busca__rotulo" htmlFor="campo-card">CARD #</label>
+        <label className="busca__rotulo" htmlFor="campo-card">Card #</label>
         <input
           id="campo-card"
           name="card"
-          className="busca__campo num"
+          className="campo num"
           inputMode="numeric"
           autoComplete="off"
           placeholder="11635"
           defaultValue={card ?? ""}
           key={card ?? "vazio"}
         />
-        <button type="submit" className="botao hud">
-          <Icone nome="busca" /> BUSCAR
+        <button type="submit" className="botao">
+          <Icone nome="busca" /> Buscar
         </button>
       </form>
 
       {card === undefined ? (
-        <p className="painel__vazio hud">DIGITE O NÚMERO DE UM CARD PARA VER A LINHA DO TEMPO</p>
+        <p className="vazio">Digite o número de um card para ver a linha do tempo.</p>
       ) : historico.length === 0 && !metricas ? (
-        <p className="painel__vazio hud">NENHUMA MOVIMENTAÇÃO REGISTRADA PARA #{card}</p>
+        <p className="vazio">Nenhuma movimentação registrada para #{card}.</p>
       ) : (
-        <section className="moldura painel" aria-labelledby="t-card">
-          <header className="card-tela__cabeca">
+        <section className="bloco" aria-labelledby="t-card">
+          <header className="bloco__cabeca">
             <h2 id="t-card" className="card-tela__titulo">
-              <span className="num" style={{ color: "var(--ciano)" }}>#{card}</span> {titulo}
+              <span className="num texto-entrada">#{card}</span> {titulo}
             </h2>
             {link && (
-              <a className="hud link-externo" href={link} target="_blank" rel="noreferrer">
-                ABRIR NO KANBOARD <Icone nome="externo" />
+              <a className="link-externo" href={link} target="_blank" rel="noreferrer">
+                Abrir no Kanboard <Icone nome="externo" tamanho={14} />
               </a>
             )}
           </header>
           {metricas && (
             <dl className="ficha">
-              <div><dt className="hud">ENTRADAS EM QA</dt><dd className="num" style={{ color: "var(--ciano)" }}>{placar(metricas.entradas_qa, 2)}</dd></div>
-              <div><dt className="hud">RETORNOS P/ CORREÇÃO</dt><dd className="num" style={{ color: "var(--vermelho)" }}>{placar(metricas.retornos, 2)}</dd></div>
-              <div><dt className="hud">TEMPO TOTAL EM QA</dt><dd className="num">{metricas.horas_qa === null ? "—" : `${metricas.horas_qa.toLocaleString("pt-BR")} H`}</dd></div>
-              <div><dt className="hud">PROJETO</dt><dd>{nomeCurto(metricas.projeto)}</dd></div>
-              <div><dt className="hud">CRIADOR</dt><dd>{metricas.criador || "—"}</dd></div>
-              <div><dt className="hud">CONCLUÍDO POR</dt><dd>{metricas.concluido_por || "—"}</dd></div>
+              <div><dt>Entradas em QA</dt><dd className="num">{numero(metricas.entradas_qa)}</dd></div>
+              <div><dt>Retornos p/ correção</dt><dd className={`num${metricas.retornos ? " texto-reprovado" : ""}`}>{numero(metricas.retornos)}</dd></div>
+              <div><dt>Tempo total em QA</dt><dd className="num">{metricas.horas_qa === null ? "—" : `${metricas.horas_qa.toLocaleString("pt-BR")} h`}</dd></div>
+              <div><dt>Projeto</dt><dd>{nomeCurto(metricas.projeto)}</dd></div>
+              <div><dt>Criador</dt><dd>{metricas.criador || "—"}</dd></div>
+              <div><dt>Concluído por</dt><dd>{metricas.concluido_por || "—"}</dd></div>
               {naFila && naFila.no_painel !== undefined && naFila.no_painel !== null && (
                 <div>
-                  <dt className="hud">PAINEL DO KANBOARD</dt>
-                  <dd>{naFila.no_painel ? "Aparece no painel" : <span className="fora-painel hud">FORA DO PAINEL</span>}</dd>
+                  <dt>Painel do Kanboard</dt>
+                  <dd>{naFila.no_painel ? "Aparece no painel" : <span className="marca-fora">fora do painel</span>}</dd>
                 </div>
               )}
             </dl>
@@ -79,17 +81,14 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
           <ol className="linha-tempo">
             {historico.map((e, i) => (
               <li key={i} className="linha-tempo__item">
-                <span className="hud linha-tempo__quando">{dataHora(e.momento)}</span>
-                <span className="linha-tempo__marca" style={{ color: COR_EVENTO[e.evento] ?? "var(--texto-3)" }} aria-hidden="true" />
-                <span className="linha-tempo__corpo">
-                  <span className="hud" style={{ color: COR_EVENTO[e.evento] ?? "var(--texto-2)" }}>
-                    {NOME_EVENTO[e.evento] ?? e.evento.toUpperCase()}
-                  </span>
-                  <span className="linha-tempo__de-para">
-                    {e.de_coluna ?? "?"} <Icone nome="seta" tamanho={10} /> {e.para_coluna ?? "?"}
-                    {e.movido_por && <span className="linha-tempo__quem"> · por {e.movido_por}</span>}
-                    {e.origem === "atividade" && <span className="linha-tempo__quem"> · amostra do Kanboard</span>}
-                  </span>
+                <span className="linha-tempo__quando num">{dataHora(e.momento)}</span>
+                <span className={`etiqueta etiqueta--${TOM_EVENTO[e.evento] ?? "neutro"}`}>
+                  {NOME_EVENTO[e.evento] ?? e.evento}
+                </span>
+                <span className="linha-tempo__de-para">
+                  {e.de_coluna ?? "?"} <Icone nome="seta" tamanho={12} /> {e.para_coluna ?? "?"}
+                  {e.movido_por && <span className="meta"> · por {e.movido_por}</span>}
+                  {e.origem === "atividade" && <span className="meta"> · amostra do Kanboard</span>}
                 </span>
               </li>
             ))}

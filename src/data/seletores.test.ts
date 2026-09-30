@@ -44,7 +44,7 @@ function dashboard(parcial: Partial<Dashboard> = {}): Dashboard {
       { id: 2, nome: "WEB: B", prefixo: "WEB", ativo: true },
     ],
     fila_qa: [], distribuicao: [], resumo_mensal: [], resumo_mensal_geral: [], cards: [],
-    levantamento_anual: [], levantamento_projeto: [], por_responsavel: [],
+    levantamento_anual: [], levantamento_projeto: [],
     execucoes: [], lacunas: [], eventos: [],
     ...parcial,
   };
@@ -69,13 +69,13 @@ describe("KPIs de hoje", () => {
   ];
 
   it("conta só o dia pedido", () => {
-    expect(contarDia(eventos, "2026-09-28", () => true)).toEqual({ entraram: 1, aprovados: 1, reprovados: 1 });
+    expect(contarDia(eventos, "2026-09-28", () => true)).toEqual({ entraram: 1, aprovados: 1, reprovados: 1, concluidosSemQa: 0 });
   });
 
   it("na segunda compara com a sexta e respeita o filtro", () => {
     const d = dashboard({ eventos });
     const k = kpisHoje(d, new Date("2026-09-28T16:00:00"), { prefixo: "DEV" });
-    expect(k.hoje).toEqual({ entraram: 1, aprovados: 1, reprovados: 0 });
+    expect(k.hoje).toEqual({ entraram: 1, aprovados: 1, reprovados: 0, concluidosSemQa: 0 });
     expect(k.diaComparacao).toBe("2026-09-25");
     expect(k.comparacao.entraram).toBe(1);
   });
@@ -127,26 +127,34 @@ describe("rota na URL", () => {
     const r = { tela: "mensal" as const, filtro: { prefixo: "DEV" as const, projeto: 252 } };
     expect(lerRota(escreverRota(r))).toEqual(r);
   });
-  it("hash desconhecido cai em Hoje sem filtro", () => {
-    expect(lerRota("#/xyz?prefixo=FOO")).toEqual({ tela: "hoje", filtro: {} });
+  it("hash desconhecido (e o antigo #/hoje) cai em Agora sem filtro", () => {
+    expect(lerRota("#/xyz?prefixo=FOO")).toEqual({ tela: "agora", filtro: {} });
+    expect(lerRota("#/hoje").tela).toBe("agora");
+  });
+  it("pessoa, período e inativos vão e voltam", () => {
+    const r = lerRota("#/pessoa?pessoa=96&periodo=2026-09&inativos");
+    expect(r).toEqual({ tela: "pessoa", filtro: {}, pessoa: 96, periodo: { tipo: "mes", mes: "2026-09" }, inativos: true });
+    expect(escreverRota(r)).toBe("#/pessoa?periodo=2026-09&pessoa=96&inativos");
+    expect(lerRota("#/equipe?periodo=7d").periodo).toEqual({ tipo: "7d" });
+    expect(lerRota("#/equipe?periodo=lixo").periodo).toBeUndefined();
   });
 });
 
 describe("modo atração", () => {
   it("?fora sobrevive à ida e volta junto com filtros", () => {
-    const r = lerRota("#/hoje?prefixo=WEB&fora");
+    const r = lerRota("#/agora?prefixo=WEB&fora");
     expect(r.fora).toBe(true);
-    expect(escreverRota(r)).toBe("#/hoje?prefixo=WEB&fora");
+    expect(escreverRota(r)).toBe("#/agora?prefixo=WEB&fora");
   });
   it("?tv liga o modo e sobrevive à ida e volta", () => {
-    const r = lerRota("#/hoje?tv");
+    const r = lerRota("#/agora?tv");
     expect(r.tv).toBe(true);
-    expect(escreverRota(r)).toBe("#/hoje?tv");
+    expect(escreverRota(r)).toBe("#/agora?tv");
   });
-  it("sequência: páginas de Hoje, Mensal e só prefixos com card em QA", () => {
+  it("sequência: Agora, Equipe, Mensal e só prefixos com card em QA", () => {
     const seq = sequenciaAtracao((f) => (f.prefixo === undefined ? 2 : f.prefixo === "DEV" ? 1 : 0));
-    expect(seq.map((q) => `${q.tela}:${q.filtro.prefixo ?? "*"}:${q.pagina}`)).toEqual([
-      "hoje:*:0", "hoje:*:1", "mensal:*:0", "hoje:DEV:0",
+    expect(seq.map((q) => `${q.tela}:${q.filtro.prefixo ?? "*"}`)).toEqual([
+      "agora:*", "equipe:*", "mensal:*", "agora:DEV",
     ]);
   });
 });
