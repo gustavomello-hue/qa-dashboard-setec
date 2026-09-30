@@ -53,7 +53,6 @@ export function Fila({ dados, filtro, abrirCard, soForaDoPainel = false, alterna
               <tr>
                 <th scope="col">Card</th>
                 <th scope="col">Título</th>
-                <th scope="col" className="so-largo">Designado</th>
                 <th scope="col" className="num">Dias</th>
                 <th scope="col" className="num" title="Retornos para correção">Ret.</th>
               </tr>
@@ -68,17 +67,18 @@ export function Fila({ dados, filtro, abrirCard, soForaDoPainel = false, alterna
                       <button className="link-card" onClick={() => abrirCard(c.task_id)} title="Ver a linha do tempo do card">
                         #{c.task_id}
                       </button>
-                      {novo && <span className="marca-novo" title="Novo desde a coleta anterior">novo</span>}
                     </td>
                     <td className="celula-titulo">
                       <a href={c.link} target="_blank" rel="noreferrer" title={c.titulo}>{resto}</a>
+                      {/* Designado e "novo" vão na linha de apoio: a coluna do título fica com a largura. */}
                       <span className="meta">
+                        {novo && <span className="marca-novo" title="Novo desde a coleta anterior">novo</span>}
+                        <span className="meta__pessoa" title={c.designado}>{curto.get(c.designado) ?? c.designado}</span>
                         {c.no_painel === false && <span className="marca-fora" title="Não aparece no painel Teste de QA do Kanboard">fora do painel</span>}
                         {etiquetas && <span>{etiquetas}</span>}
                         <span>{nomeCurto(c.projeto)}</span>
                       </span>
                     </td>
-                    <td className="so-largo celula-pessoa" title={c.designado}>{curto.get(c.designado) ?? c.designado}</td>
                     <td className="num" title={c.entrou_em ? `Entrou em QA em ${dataHora(c.entrou_em)}` : undefined}>
                       {c.dias_em_qa ?? "—"}
                     </td>

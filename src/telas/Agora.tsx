@@ -1,6 +1,6 @@
 import type { Dashboard } from "../data/contrato";
 import { NOME_EVENTO, diaCurto, hora, separarEtiquetas } from "../data/formato";
-import { kpisHoje, indiceTitulos, passaNoFiltro, inicioDaUltimaColeta, type Filtro } from "../data/seletores";
+import { diaLocal, kpisHoje, indiceTitulos, passaNoFiltro, inicioDaUltimaColeta, type Filtro } from "../data/seletores";
 import { cargaPorPessoa, cargaVazia, feedRecente, grupoPrincipal, indicePessoas, pessoasDaCarga, PAPEIS_CARGA, ROTULO_GRUPO } from "../data/pessoas";
 import { Kpi, type Tom } from "../componentes/Kpi";
 import { BarraCarga, LegendaCarga } from "../componentes/BarraCarga";
@@ -19,6 +19,10 @@ interface Props {
 export function Agora({ dados, filtro, abrirCard, abrirPessoa, soForaDoPainel, alternarForaDoPainel }: Props) {
   const k = kpisHoje(dados, new Date(), filtro);
   const ontem = diaCurto(k.diaComparacao);
+  // Na segunda-feira a comparação é com a sexta: "Ontem" ali seria falso.
+  const agora = new Date();
+  const diaDeOntem = diaLocal(new Date(agora.getFullYear(), agora.getMonth(), agora.getDate() - 1));
+  const dicaOntem = k.diaComparacao === diaDeOntem ? "Ontem" : `Último dia útil (${ontem})`;
   const desde = inicioDaUltimaColeta(dados);
   const passa = passaNoFiltro(dados, filtro);
   const novos = desde === null ? 0 : dados.fila_qa.filter((c) => passa(c.project_id) && (c.entrou_em ?? 0) > desde).length;
@@ -27,15 +31,15 @@ export function Agora({ dados, filtro, abrirCard, abrirPessoa, soForaDoPainel, a
     <div className="agora">
       <dl className="kpis" aria-label="Hoje">
         <Kpi rotulo="Em QA agora" valor={k.emQaAgora} tom="entrada" sub={novos > 0 ? `${novos} novo${novos > 1 ? "s" : ""} nesta coleta` : "na coluna Teste/QA"} />
-        <Kpi rotulo="Entraram hoje" valor={k.hoje.entraram} tom="entrada" anterior={k.comparacao.entraram} rotuloAnterior={ontem} />
-        <Kpi rotulo="Aprovados hoje" valor={k.hoje.aprovados} tom="aprovado" anterior={k.comparacao.aprovados} rotuloAnterior={ontem} />
-        <Kpi rotulo="Reprovados hoje" valor={k.hoje.reprovados} tom="reprovado" anterior={k.comparacao.reprovados} rotuloAnterior={ontem} />
+        <Kpi rotulo="Entraram hoje" valor={k.hoje.entraram} tom="entrada" anterior={k.comparacao.entraram} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
+        <Kpi rotulo="Aprovados hoje" valor={k.hoje.aprovados} tom="aprovado" anterior={k.comparacao.aprovados} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
+        <Kpi rotulo="Reprovados hoje" valor={k.hoje.reprovados} tom="reprovado" anterior={k.comparacao.reprovados} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
         <Kpi
           rotulo="Concluídos sem QA hoje"
           valor={k.hoje.concluidosSemQa}
           tom="sem-qa"
           anterior={k.comparacao.concluidosSemQa}
-          rotuloAnterior={ontem}
+          rotuloAnterior={ontem} dicaAnterior={dicaOntem}
           dica="Cards que chegaram em Concluídas sem sair da coluna Teste/QA"
         />
       </dl>
@@ -130,15 +134,15 @@ function Feed({ dados, filtro, abrirCard }: { dados: Dashboard; filtro: Filtro; 
                 {cabecalho && <p className="feed__dia">{cabecalho}</p>}
                 <div className={`feed__item faixa--${TOM_EVENTO[e.evento] ?? "neutro"}${desde !== null && e.momento > desde ? " faixa--nova" : ""}`}>
                   <span className="feed__hora num">{hora(e.momento)}</span>
-                  <span className={`etiqueta etiqueta--${TOM_EVENTO[e.evento] ?? "neutro"}`}>{NOME_EVENTO[e.evento]}</span>
-                  <span className="feed__corpo">
-                    <span className="feed__titulo" title={titulo}>
-                      <button className="link-card" onClick={() => abrirCard(e.task_id)}>#{e.task_id}</button> {titulo}
-                    </span>
+                  <span className="feed__cabeca">
+                    <span className={`etiqueta etiqueta--${TOM_EVENTO[e.evento] ?? "neutro"}`}>{NOME_EVENTO[e.evento]}</span>
                     <span className="meta">
-                      {dono && <span>{dono}</span>}
+                      {dono && <span className="meta__pessoa">{dono}</span>}
                       {e.movido_por && nome(e.movido_por) !== dono && <span>por {nome(e.movido_por)}</span>}
                     </span>
+                  </span>
+                  <span className="feed__titulo" title={titulo}>
+                    <button className="link-card" onClick={() => abrirCard(e.task_id)}>#{e.task_id}</button> {titulo}
                   </span>
                 </div>
               </li>
