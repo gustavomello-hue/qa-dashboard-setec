@@ -43,6 +43,26 @@ function Painel({ dados, erro }: { dados: Dashboard; erro: string | null }) {
     return () => window.clearInterval(id);
   }, [rota.tv, sequencia.length]);
 
+  // Teclado: 1 a 4 trocam de tela; "#" ou "/" vai direto para a busca de card.
+  useEffect(() => {
+    const aoTeclar = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      const alvo = e.target as HTMLElement | null;
+      if (alvo && (alvo.isContentEditable || ["INPUT", "SELECT", "TEXTAREA"].includes(alvo.tagName))) return;
+      const i = ["1", "2", "3", "4"].indexOf(e.key);
+      if (i >= 0) {
+        e.preventDefault();
+        irPara({ ...rota, tela: TELAS[i], tv: false });
+      } else if (e.key === "#" || e.key === "/") {
+        e.preventDefault();
+        irPara({ ...rota, tela: "card", tv: false });
+        window.setTimeout(() => document.getElementById("campo-card")?.focus(), 0);
+      }
+    };
+    window.addEventListener("keydown", aoTeclar);
+    return () => window.removeEventListener("keydown", aoTeclar);
+  }, [rota, irPara]);
+
   const atual = rota.tv ? sequencia[quadro % sequencia.length] : null;
   const tela: Tela = atual ? atual.tela : rota.tela;
   const filtro: Filtro = atual ? atual.filtro : rota.filtro;
@@ -63,16 +83,18 @@ function Painel({ dados, erro }: { dados: Dashboard; erro: string | null }) {
     <div className={`app${rota.tv ? " app--tv" : ""}${tela === "agora" ? " app--cheia" : ""}`}>
       <header className="topo">
         <div className="topo__linha">
-          <p className="marca">QA <span className="marca__sep">·</span> SETEC</p>
+          <p className="marca"><span className="marca__qa">QA</span> SETEC</p>
           <nav aria-label="Telas">
             <ul className="abas">
-              {TELAS.map((t) => (
+              {TELAS.map((t, i) => (
                 <li key={t}>
                   <button
                     className="aba"
                     aria-current={tela === t || (t === "equipe" && tela === "pessoa") ? "page" : undefined}
+                    aria-keyshortcuts={String(i + 1)}
                     onClick={() => ir({ tela: t, tv: false })}
                   >
+                    <kbd className="tecla" aria-hidden="true">{i + 1}</kbd>
                     {NOMES[t]}
                   </button>
                 </li>

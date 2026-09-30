@@ -82,7 +82,7 @@ export function Fila({ dados, filtro, abrirCard, soForaDoPainel = false, alterna
                     <td className="num" title={c.entrou_em ? `Entrou em QA em ${dataHora(c.entrou_em)}` : undefined}>
                       {c.dias_em_qa ?? "—"}
                     </td>
-                    <td className={`num${c.retornos > 0 ? " texto-reprovado" : ""}`}>{c.retornos}</td>
+                    <td className={`num${c.retornos === 0 ? " zero" : ""}`}>{c.retornos}</td>
                   </tr>
                 );
               })}

@@ -2,31 +2,32 @@
 version: 1
 slug: "src-app-tsx"
 primary_target: "src/App.tsx"
-related_targets: ["src/telas/Hoje.tsx","src/telas/Mensal.tsx","src/telas/Card.tsx"]
+related_targets: ["src/telas/Agora.tsx","src/telas/Equipe.tsx","src/telas/Pessoa.tsx","src/telas/Mensal.tsx","src/telas/Card.tsx"]
 ---
 
-# Painel de QA — superfície principal (Hoje, Mensal, Card)
+# Painel de QA v2: superfície principal (Agora, Equipe, Pessoa, Mensal, Card)
 
-Modo: **Operate**. Cenas: aba na mesa, TV da sala (modo atração), reunião.
-Público: analistas de QA, devs, chefia. Tarefa nº 1: saber em segundos o que está parado em QA e o que voltou para correção. Dados reais do dashboard.json; nada inventado.
+Modo: **Operate**. Cenas: aba aberta no monitor da mesa o dia todo; reunião com a gestão. Modo TV secundário.
+Público: equipe de QA e gestão. Tarefa nº 1: ver em segundos o que está parado em QA, o que voltou e quem está sobrecarregado. Dados reais; nada inventado. Régua de acabamento: Linear/GitHub. Não pode ser cansativo, genérico de SaaS nem enfeitado.
 
 ## Direction contract
 
-THESIS: O painel é uma tela de fliperama feita de dados: placar fixo, telas inteiras como fases e um modo atração que roda sozinho na TV. Recusa o admin padrão (barra lateral, cartões brancos de KPI, azul de SaaS) e a gamificação de pessoas.
+THESIS: A tela é o quadro de faixas de quem controla o fluxo de QA: cada card é uma faixa de campos fixos que passa de baia em baia. Recusa o dashboard de cartões de KPI com gráficos soltos e o retrô que acabamos de descartar.
 
-OWN-WORLD: Preto-fósforo com paleta de 16 cores sob lei: ciano = em QA, verde = aprovado, vermelho = reprovado, dourado = novo desde a última coleta, cinza-aço = lacuna/sem sinal; violeta/azul-arcade só em moldura e navegação. Caixa-alta 8×8 para HUD, rótulos e números; face pixelada legível em caixa normal para títulos. Molduras de linha dupla pixelada, cantos em degrau, grade de tiles; linhas de varredura e brilho de fósforo como camadas desligáveis.
+OWN-WORLD: Trilho em cinza-azulado frio, baias rebaixadas, faixas claras de altura fixa. Cinzas só de uma escala de 11 degraus. Filetes de 1px e no máximo três valores de tinta por faixa. A cor mora só no porta-faixa (borda esquerda de 4px, reta) e sempre com o rótulo escrito: azul entrou, verde aprovado, vermelho reprovado, violeta sem QA, ocre devolvido. Face de interface neutra; números e campos em mono tabular. Cantos retos na faixa, 2px no máximo nos controles.
 
-STORY: Quem olha entende de relance quantos cards estão em QA e o que mudou desde o último dia útil, acha o card mais parado no topo da fila, e confia no número porque o que não foi medido aparece riscado como estática.
+STORY: Quem olha lê o quadro como um controlador: a cabeça do quadro diz o placar do dia, as baias dizem onde está cada card e com quem, e cada faixa diz de onde veio, para onde foi e quem moveu. Confia porque o que não foi medido aparece como não medido.
 
-FIRST VIEWPORT: Faixa de HUD no topo com cinco placares (EM QA, ENTRARAM, APROV, REPROV, TAXA MÊS) em numerais grandes, valor do último dia útil abaixo em pequeno, selo de coleta à direita. Abaixo, à esquerda (~2/3), a FILA DE QA paginada em tela cheia; à direita, a distribuição por papel em barras de blocos e o seletor de prefixo (1P DEV…). Seleção de tela (HOJE/MENSAL/CARD) como menu de fase no rodapé do HUD. Assinatura: modo atração com ?tv percorre telas e páginas sozinho.
+FIRST VIEWPORT: Barra fina com marca, abas (1–4), filtros e selo de coleta. Cabeça do quadro: 5 contadores em faixa única. Três baias em altura cheia, cada uma rolando por dentro: Carga (pessoa + barra por coluna), Fila de QA (faixas com #, título, designado, dias, retornos), Movimentações (faixas por hora com porta-faixa do evento). Sem rolar a página em 1280×720+.
 
-FORM: Fliperama CRT (medium-native-crt-arcade-pixel-glow), desafiante adotado pelo usuário no re-roll 1; seed key fc58feb4.
+FORM: Quadro de Faixas (faixas de progresso de voo), candidato 4 da lista, sorteado. Seed key 5a4ed70a. Raises: teclado (teletexto), escala de 11 cinzas (registro de exposição), filetes 1px e 3 tintas (edição de referência), estado nunca só por cor (ciclorama), filtro ativo afunda no trilho (CD-ROM).
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 
 ## Anti-objetivos
-- Pessoas nunca viram jogadores: sem ranking de devs, vidas, GAME OVER, HI-SCORE de pessoa.
-- Sem cor por faixa de dias na fila (decisão do usuário). Sem som, sem piscar contínuo.
+- Pessoas não viram ranking: tabelas abrem em ordem alfabética, sem pódio, sem cor de julgamento sobre pessoa.
+- "Dias em QA" sem cor de alerta. Nada pisca; sem som.
+- Faixa não vira fantasia de aeroporto: sem avião, sem textura de papel, sem canto arredondado.
 
 ## Decisões em aberto
-- Nenhuma de produto. Escolha exata das faces pixeladas fica para o build.
+- Nenhuma de produto.

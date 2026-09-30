@@ -26,7 +26,7 @@ export function Agora({ dados, filtro, abrirCard, abrirPessoa, soForaDoPainel, a
   return (
     <div className="agora">
       <dl className="kpis" aria-label="Hoje">
-        <Kpi rotulo="Em QA agora" valor={k.emQaAgora} tom="entrada" sub={novos > 0 ? `${novos} novo${novos > 1 ? "s" : ""} desde a coleta anterior` : "na coluna Teste/QA"} />
+        <Kpi rotulo="Em QA agora" valor={k.emQaAgora} tom="entrada" sub={novos > 0 ? `${novos} novo${novos > 1 ? "s" : ""} nesta coleta` : "na coluna Teste/QA"} />
         <Kpi rotulo="Entraram hoje" valor={k.hoje.entraram} tom="entrada" anterior={k.comparacao.entraram} rotuloAnterior={ontem} />
         <Kpi rotulo="Aprovados hoje" valor={k.hoje.aprovados} tom="aprovado" anterior={k.comparacao.aprovados} rotuloAnterior={ontem} />
         <Kpi rotulo="Reprovados hoje" valor={k.hoje.reprovados} tom="reprovado" anterior={k.comparacao.reprovados} rotuloAnterior={ontem} />
@@ -102,6 +102,8 @@ const TOM_EVENTO: Record<string, Tom> = {
 
 function Feed({ dados, filtro, abrirCard }: { dados: Dashboard; filtro: Filtro; abrirCard: (id: number) => void }) {
   const eventos = feedRecente(dados, filtro, 40);
+  // O que chegou nesta coleta entra no quadro com o gesto de inserir a faixa.
+  const desde = inicioDaUltimaColeta(dados);
   const titulos = indiceTitulos(dados);
   const pessoas = indicePessoas(dados);
   // O evento traz o nome completo do Kanboard; a tela usa o nome curto da equipe.
@@ -126,11 +128,13 @@ function Feed({ dados, filtro, abrirCard }: { dados: Dashboard; filtro: Filtro; 
             return (
               <li key={`${e.task_id}-${e.momento}-${i}`}>
                 {cabecalho && <p className="feed__dia">{cabecalho}</p>}
-                <div className="feed__item">
+                <div className={`feed__item faixa--${TOM_EVENTO[e.evento] ?? "neutro"}${desde !== null && e.momento > desde ? " faixa--nova" : ""}`}>
                   <span className="feed__hora num">{hora(e.momento)}</span>
                   <span className={`etiqueta etiqueta--${TOM_EVENTO[e.evento] ?? "neutro"}`}>{NOME_EVENTO[e.evento]}</span>
                   <span className="feed__corpo">
-                    <button className="link-card" onClick={() => abrirCard(e.task_id)}>#{e.task_id}</button> {titulo}
+                    <span className="feed__titulo" title={titulo}>
+                      <button className="link-card" onClick={() => abrirCard(e.task_id)}>#{e.task_id}</button> {titulo}
+                    </span>
                     <span className="meta">
                       {dono && <span>{dono}</span>}
                       {e.movido_por && nome(e.movido_por) !== dono && <span>por {nome(e.movido_por)}</span>}

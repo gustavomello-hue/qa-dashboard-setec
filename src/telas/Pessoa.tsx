@@ -46,13 +46,13 @@ export function Pessoa({ dados, filtro, periodo, uid, abrirCard, voltar }: Props
   const opcoes = useMemo<OpcoesGrafico>(() => {
     const series = qa
       ? [
-          { name: "Aprovou", type: "bar" as const, data: serie(["testou_aprovado"]), itemStyle: { color: cor("--aprovado") } },
-          { name: "Reprovou", type: "bar" as const, data: serie(["testou_reprovado"]), itemStyle: { color: cor("--reprovado") } },
+          { name: "Aprovou", type: "bar" as const, barMaxWidth: 28, data: serie(["testou_aprovado"]), itemStyle: { color: cor("--aprovado") } },
+          { name: "Reprovou", type: "bar" as const, barMaxWidth: 28, data: serie(["testou_reprovado"]), itemStyle: { color: cor("--reprovado") } },
         ]
       : [
-          { name: "Entregues", type: "bar" as const, data: serie(["entregue_qa"]), itemStyle: { color: cor("--entrada") } },
-          { name: "Aprovados", type: "bar" as const, data: serie(["aprovado"]), itemStyle: { color: cor("--aprovado") } },
-          { name: "Reprovações", type: "bar" as const, data: serie(["reprovado"]), itemStyle: { color: cor("--reprovado") } },
+          { name: "Entregues", type: "bar" as const, barMaxWidth: 28, data: serie(["entregue_qa"]), itemStyle: { color: cor("--entrada") } },
+          { name: "Aprovados", type: "bar" as const, barMaxWidth: 28, data: serie(["aprovado"]), itemStyle: { color: cor("--aprovado") } },
+          { name: "Reprovações", type: "bar" as const, barMaxWidth: 28, data: serie(["reprovado"]), itemStyle: { color: cor("--reprovado") } },
         ];
     const b = base();
     return { ...b, xAxis: { ...(b.xAxis as object), data: inicios.map((s) => s.slice(8) + "/" + s.slice(5, 7)) }, series };
@@ -117,12 +117,45 @@ export function Pessoa({ dados, filtro, periodo, uid, abrirCard, voltar }: Props
       )}
 
       <div className="pessoa__grade">
-        <section className="bloco" aria-labelledby="t-semanal">
-          <header className="bloco__cabeca">
-            <h2 id="t-semanal" className="bloco__titulo">Por semana · últimas {inicios.length}</h2>
-          </header>
-          <Grafico opcoes={opcoes} altura={240} rotulo={`${pessoa.nome}: contagem semanal`} />
-        </section>
+        {/* Coluna 1 empilha o gráfico com a lista mais curta: nenhuma baia deixa trilho vazio embaixo. */}
+        <div className="pessoa__coluna">
+          <section className="bloco" aria-labelledby="t-semanal">
+            <header className="bloco__cabeca">
+              <h2 id="t-semanal" className="bloco__titulo">Por semana · últimas {inicios.length}</h2>
+            </header>
+            <Grafico opcoes={opcoes} altura={240} rotulo={`${pessoa.nome}: contagem semanal`} />
+          </section>
+          {dev && (
+            <ListaCards
+              titulo="Concluídos sem QA"
+              cards={semQa}
+              vazio="Nenhum card concluído sem passar pelo QA no período."
+              titulos={titulos}
+              projetos={projetos}
+              abrirCard={abrirCard}
+              quem={(c) => (c.por !== null && c.por !== uid ? `movido por ${nomeDe(pessoas, c.por)}` : "")}
+            />
+          )}
+          {qa && (
+            <section className="bloco" aria-labelledby="t-projetos">
+              <header className="bloco__cabeca">
+                <h2 id="t-projetos" className="bloco__titulo">Projetos mais testados</h2>
+              </header>
+              {testadosPorProjeto.length === 0 ? (
+                <p className="vazio">Nenhum teste no período.</p>
+              ) : (
+                <ul className="lista-simples">
+                  {testadosPorProjeto.slice(0, 10).map((p) => (
+                    <li key={p.project_id}>
+                      <span>{nomeCurto(projetos.get(p.project_id) ?? `Projeto ${p.project_id}`)}</span>
+                      <span className="num">{numero(p.testes)}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )}
+        </div>
 
         <section className="bloco" aria-labelledby="t-carga-pessoa">
           <header className="bloco__cabeca">
@@ -142,36 +175,6 @@ export function Pessoa({ dados, filtro, periodo, uid, abrirCard, voltar }: Props
           abrirCard={abrirCard}
           mostrarVezes
         />
-        {dev && (
-          <ListaCards
-            titulo="Concluídos sem QA"
-            cards={semQa}
-            vazio="Nenhum card concluído sem passar pelo QA no período."
-            titulos={titulos}
-            projetos={projetos}
-            abrirCard={abrirCard}
-            quem={(c) => (c.por !== null && c.por !== uid ? `movido por ${nomeDe(pessoas, c.por)}` : "")}
-          />
-        )}
-        {qa && (
-          <section className="bloco" aria-labelledby="t-projetos">
-            <header className="bloco__cabeca">
-              <h2 id="t-projetos" className="bloco__titulo">Projetos mais testados</h2>
-            </header>
-            {testadosPorProjeto.length === 0 ? (
-              <p className="vazio">Nenhum teste no período.</p>
-            ) : (
-              <ul className="lista-simples">
-                {testadosPorProjeto.slice(0, 10).map((p) => (
-                  <li key={p.project_id}>
-                    <span>{nomeCurto(projetos.get(p.project_id) ?? `Projeto ${p.project_id}`)}</span>
-                    <span className="num">{numero(p.testes)}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-        )}
       </div>
     </div>
   );
@@ -209,7 +212,7 @@ function ListaCards({
                   {quem?.(c) && <span>{quem(c)}</span>}
                 </span>
               </span>
-              {mostrarVezes && <span className={`num${c.vezes > 1 ? " texto-reprovado" : ""}`} title="Vezes no período">{c.vezes}×</span>}
+              {mostrarVezes && <span className="num" title="Vezes no período">{c.vezes}×</span>}
             </li>
           ))}
         </ul>
@@ -253,5 +256,5 @@ function ListaAbertos({
 /** Cards parados desde antes do ledger não têm título guardado (o snapshot não traz título). */
 function TituloCard({ titulo }: { titulo?: string }) {
   const resto = titulo ? separarEtiquetas(titulo).resto : "";
-  return resto ? <span>{resto}</span> : <span className="meta">Título não registrado (card anterior ao histórico)</span>;
+  return resto ? <span title={resto}>{resto}</span> : <span className="meta">Título não registrado (card anterior ao histórico)</span>;
 }

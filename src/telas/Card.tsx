@@ -54,7 +54,7 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
         <section className="bloco" aria-labelledby="t-card">
           <header className="bloco__cabeca">
             <h2 id="t-card" className="card-tela__titulo">
-              <span className="num texto-entrada">#{card}</span> {titulo}
+              <span className="num">#{card}</span> {titulo}
             </h2>
             {link && (
               <a className="link-externo" href={link} target="_blank" rel="noreferrer">
@@ -65,7 +65,7 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
           {metricas && (
             <dl className="ficha">
               <div><dt>Entradas em QA</dt><dd className="num">{numero(metricas.entradas_qa)}</dd></div>
-              <div><dt>Retornos p/ correção</dt><dd className={`num${metricas.retornos ? " texto-reprovado" : ""}`}>{numero(metricas.retornos)}</dd></div>
+              <div><dt>Retornos p/ correção</dt><dd className="num">{numero(metricas.retornos)}</dd></div>
               <div><dt>Tempo total em QA</dt><dd className="num">{metricas.horas_qa === null ? "—" : `${metricas.horas_qa.toLocaleString("pt-BR")} h`}</dd></div>
               <div><dt>Projeto</dt><dd>{nomeCurto(metricas.projeto)}</dd></div>
               <div><dt>Criador</dt><dd>{metricas.criador || "—"}</dd></div>
@@ -80,7 +80,7 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
           )}
           <ol className="linha-tempo">
             {historico.map((e, i) => (
-              <li key={i} className="linha-tempo__item">
+              <li key={i} className={`linha-tempo__item faixa--${TOM_EVENTO[e.evento] ?? "neutro"}`}>
                 <span className="linha-tempo__quando num">{dataHora(e.momento)}</span>
                 <span className={`etiqueta etiqueta--${TOM_EVENTO[e.evento] ?? "neutro"}`}>
                   {NOME_EVENTO[e.evento] ?? e.evento}

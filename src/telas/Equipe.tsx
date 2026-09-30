@@ -212,7 +212,7 @@ function TabelaGrupo({
                 {mostrarGrupo && <th scope="col">Grupo</th>}
                 {colunas.map((c) => (
                   <th key={c.id} scope="col" className="num" title={c.dica} aria-sort={ordem?.id === c.id ? (ordem.desc ? "descending" : "ascending") : undefined}>
-                    <button className="ordenar" onClick={() => clicar(c.id)}>
+                    <button className={`ordenar${c.tom ? ` coluna-tom etiqueta--${c.tom}` : ""}`} onClick={() => clicar(c.id)}>
                       {c.rotulo}
                       {ordem?.id === c.id && <Icone nome={ordem.desc ? "baixo" : "cima"} tamanho={12} />}
                     </button>
@@ -238,7 +238,7 @@ function TabelaGrupo({
                       return (
                         <td
                           key={c.id}
-                          className={`num${c.tom && v ? ` texto-${c.tom}` : ""}${!v ? " zero" : ""}`}
+                          className={`num${!v ? " zero" : ""}`}
                           title={va === null ? undefined : `Período anterior: ${formatar(va, c)}`}
                         >
                           {formatar(v, c)}

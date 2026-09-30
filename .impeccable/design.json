@@ -1,581 +1,172 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-29T19:44:45.294Z",
+  "generatedAt": "2026-09-30T12:00:00.000Z",
   "title": "Design System: QA·SETEC",
   "extensions": {
     "colorMeta": {
-      "azul-arcade": {
-        "role": "primary",
-        "displayName": "Azul Arcade",
-        "canonical": "oklch(52.4% 0.265 268.2)",
-        "purpose": "Moldura externa, linhas do placar, fundo de seleção ativa. Só moldura e navegação.",
-        "tonalRamp": [
-          "#0f0058",
-          "#110086",
-          "#1913b7",
-          "#293bea",
-          "#4265ff",
-          "#648fff",
-          "#8dbaff",
-          "#bde8ff"
-        ]
-      },
-      "violeta": {
-        "role": "primary",
-        "displayName": "Violeta de Moldura",
-        "canonical": "oklch(56.3% 0.254 286.4)",
-        "purpose": "Linha interna da moldura, anel de seleção, hover, varredura de troca de tela. Só moldura e navegação.",
-        "tonalRamp": [
-          "#16004d",
-          "#2a0079",
-          "#4200a8",
-          "#5e2dd9",
-          "#7b52ff",
-          "#997eff",
-          "#bcabff",
-          "#e6dbff"
-        ]
-      },
-      "lilas": {
-        "role": "primary",
-        "displayName": "Lilás de Metadado",
-        "canonical": "oklch(78.0% 0.122 291.3)",
-        "purpose": "Metadados sob o título do card e link externo. Apoio da família violeta, nunca estado.",
-        "tonalRamp": [
-          "#0d0522",
-          "#251c43",
-          "#413767",
-          "#5e538d",
-          "#7e71b6",
-          "#9f91e0",
-          "#c5b6ff",
-          "#efe3ff"
-        ]
-      },
-      "ciano": {
-        "role": "secondary",
-        "displayName": "Ciano de QA",
-        "canonical": "oklch(84.6% 0.134 212.0)",
-        "purpose": "Em QA e entradas em QA. Só esse significado.",
-        "tonalRamp": [
-          "#001019",
-          "#002c38",
-          "#004a59",
-          "#006b7d",
-          "#008da2",
-          "#17b1c9",
-          "#39daf5",
-          "#7effff"
-        ]
-      },
-      "verde": {
-        "role": "secondary",
-        "displayName": "Verde Aprovado",
-        "canonical": "oklch(80.3% 0.192 150.6)",
-        "purpose": "Aprovado (QA para Concluídas). Só esse significado.",
-        "tonalRamp": [
-          "#001400",
-          "#003101",
-          "#005116",
-          "#00732e",
-          "#059647",
-          "#2bbc61",
-          "#4fe580",
-          "#91ffb2"
-        ]
-      },
-      "vermelho": {
-        "role": "secondary",
-        "displayName": "Vermelho Reprovado",
-        "canonical": "oklch(68.2% 0.207 20.1)",
-        "purpose": "Reprovado (QA para Correções) e retornos. Só esse significado.",
-        "tonalRamp": [
-          "#2d0000",
-          "#540003",
-          "#7e0019",
-          "#aa1d32",
-          "#d73b4b",
-          "#ff5b67",
-          "#ff8c91",
-          "#ffc0c1"
-        ]
-      },
-      "dourado": {
-        "role": "secondary",
-        "displayName": "Dourado Novo",
-        "canonical": "oklch(86.7% 0.162 88.3)",
-        "purpose": "Somente novo desde a última coleta.",
-        "tonalRamp": [
-          "#170700",
-          "#342000",
-          "#553b00",
-          "#785800",
-          "#9c7800",
-          "#c2980d",
-          "#eebd2e",
-          "#ffe86a"
-        ]
-      },
-      "fosforo": {
-        "role": "neutral",
-        "displayName": "Preto-Fósforo",
-        "canonical": "oklch(13.3% 0.018 283.6)",
-        "purpose": "Fundo da página e do campo de busca.",
-        "tonalRamp": [
-          "#0a0a13",
-          "#23232c",
-          "#3e3f48",
-          "#5c5d65",
-          "#7c7c84",
-          "#9d9ea5",
-          "#c3c3c9",
-          "#eeeef3"
-        ]
-      },
-      "fundo-2": {
-        "role": "neutral",
-        "displayName": "Fundo de Painel",
-        "canonical": "oklch(17.6% 0.045 276.8)",
-        "purpose": "Preenchimento das molduras, chips, tooltip.",
-        "tonalRamp": [
-          "#07081d",
-          "#1f2238",
-          "#3a3e54",
-          "#585c71",
-          "#787c90",
-          "#9a9daf",
-          "#c0c3d3",
-          "#ebeefa"
-        ]
-      },
-      "fundo-3": {
-        "role": "neutral",
-        "displayName": "Fundo de Linha",
-        "canonical": "oklch(22.5% 0.067 275.9)",
-        "purpose": "Divisórias, bordas em repouso, hover de linha.",
-        "tonalRamp": [
-          "#060625",
-          "#1c2043",
-          "#373d5f",
-          "#555b7c",
-          "#757b9a",
-          "#979db9",
-          "#bdc3db",
-          "#e9edff"
-        ]
-      },
-      "texto": {
-        "role": "neutral",
-        "displayName": "Texto",
-        "canonical": "oklch(96.3% 0.019 289.3)",
-        "purpose": "Texto principal e números neutros.",
-        "tonalRamp": [
-          "#0b0b0e",
-          "#242328",
-          "#3f3f45",
-          "#5d5d64",
-          "#7d7c85",
-          "#9e9da7",
-          "#c3c3ce",
-          "#eeedfb"
-        ]
-      },
-      "texto-2": {
-        "role": "neutral",
-        "displayName": "Texto 2",
-        "canonical": "oklch(78.8% 0.058 281.7)",
-        "purpose": "Nomes, detalhes, controles inativos.",
-        "tonalRamp": [
-          "#090917",
-          "#212234",
-          "#3c3d54",
-          "#595b76",
-          "#787a9a",
-          "#989bc0",
-          "#bdc0e9",
-          "#e8ebff"
-        ]
-      },
-      "texto-3": {
-        "role": "neutral",
-        "displayName": "Texto 3",
-        "canonical": "oklch(65.7% 0.064 281.4)",
-        "purpose": "Cabeçalhos de tabela, sub-rótulos, notas.",
-        "tonalRamp": [
-          "#09091b",
-          "#202139",
-          "#3b3d59",
-          "#585a7c",
-          "#7779a1",
-          "#979ac5",
-          "#bdc1e8",
-          "#e8ebff"
-        ]
-      },
-      "aco": {
-        "role": "neutral",
-        "displayName": "Aço",
-        "canonical": "oklch(57.5% 0.049 280.5)",
-        "purpose": "Borda do que não foi medido.",
-        "tonalRamp": [
-          "#090918",
-          "#212236",
-          "#3b3d55",
-          "#585b77",
-          "#777a9a",
-          "#999cba",
-          "#bfc2de",
-          "#eaecff"
-        ]
-      },
-      "aco-escuro": {
-        "role": "neutral",
-        "displayName": "Aço Escuro",
-        "canonical": "oklch(36.5% 0.043 280.5)",
-        "purpose": "Risco da estática e ícone desabilitado.",
-        "tonalRamp": [
-          "#09091a",
-          "#202237",
-          "#3b3d56",
-          "#595b74",
-          "#797b92",
-          "#9a9db2",
-          "#c0c3d6",
-          "#ebedfe"
-        ]
-      }
+      "n0": { "role": "neutral", "displayName": "Faixa Branca", "canonical": "#ffffff", "dark": "#0d1013", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#e3e6ea", "#ffffff"] },
+      "n1": { "role": "neutral", "displayName": "Faixa Realce", "canonical": "#f7f8fa", "dark": "#12161a", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#e3e6ea", "#f7f8fa"] },
+      "n2": { "role": "neutral", "displayName": "Trilho", "canonical": "#eef0f3", "dark": "#171b20", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#e3e6ea", "#eef0f3"] },
+      "n3": { "role": "neutral", "displayName": "Baia", "canonical": "#e3e6ea", "dark": "#1c2126", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#d3d8de", "#e3e6ea"] },
+      "n4": { "role": "neutral", "displayName": "Filete", "canonical": "#d3d8de", "dark": "#2a3037", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#d3d8de", "#eef0f3"] },
+      "n5": { "role": "neutral", "displayName": "Cinza Borda de Controle", "canonical": "#b6bdc6", "dark": "#3a414a", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#d3d8de", "#eef0f3"] },
+      "n6": { "role": "neutral", "displayName": "Cinza Médio", "canonical": "#8f98a3", "dark": "#56606b", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#d3d8de", "#eef0f3"] },
+      "n7": { "role": "neutral", "displayName": "Tinta 3", "canonical": "#69727e", "dark": "#88919c", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#d3d8de", "#eef0f3"] },
+      "n8": { "role": "neutral", "displayName": "Tinta 2", "canonical": "#4b535e", "dark": "#a6aeb8", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#d3d8de", "#eef0f3"] },
+      "n9": { "role": "neutral", "displayName": "Grafite", "canonical": "#313740", "dark": "#c8ced5", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#d3d8de", "#eef0f3"] },
+      "n10": { "role": "neutral", "displayName": "Tinta 1", "canonical": "#1b1f25", "dark": "#e6e9ed", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#d3d8de", "#eef0f3"] },
+      "entrada": { "role": "primary", "displayName": "Azul Entrada", "canonical": "#2f5fc4", "dark": "#6f9cf0", "tonalRamp": ["oklch(15% 0.05 262)", "oklch(27% 0.09 262)", "oklch(39% 0.13 262)", "oklch(51% 0.16 262)", "oklch(63% 0.14 262)", "oklch(75% 0.10 262)", "oklch(85% 0.06 262)", "oklch(95% 0.02 262)"] },
+      "aprovado": { "role": "secondary", "displayName": "Verde Aprovado", "canonical": "#1f7f55", "dark": "#4cb784", "tonalRamp": ["oklch(15% 0.04 160)", "oklch(27% 0.07 160)", "oklch(39% 0.09 160)", "oklch(51% 0.11 160)", "oklch(63% 0.12 160)", "oklch(75% 0.10 160)", "oklch(85% 0.06 160)", "oklch(95% 0.02 160)"] },
+      "reprovado": { "role": "secondary", "displayName": "Vermelho Reprovado", "canonical": "#bf3a33", "dark": "#ec6d65", "tonalRamp": ["oklch(15% 0.05 27)", "oklch(27% 0.09 27)", "oklch(39% 0.13 27)", "oklch(51% 0.17 27)", "oklch(63% 0.16 27)", "oklch(75% 0.11 27)", "oklch(85% 0.06 27)", "oklch(95% 0.02 27)"] },
+      "sem-qa": { "role": "tertiary", "displayName": "Violeta Sem QA", "canonical": "#7550ad", "dark": "#ae8ae6", "tonalRamp": ["oklch(15% 0.05 300)", "oklch(27% 0.09 300)", "oklch(39% 0.12 300)", "oklch(51% 0.15 300)", "oklch(63% 0.13 300)", "oklch(75% 0.10 300)", "oklch(85% 0.06 300)", "oklch(95% 0.02 300)"] },
+      "devolvido": { "role": "tertiary", "displayName": "Ocre Devolvido", "canonical": "#9c6c10", "dark": "#d5a444", "tonalRamp": ["oklch(15% 0.04 75)", "oklch(27% 0.07 75)", "oklch(39% 0.10 75)", "oklch(51% 0.12 75)", "oklch(63% 0.12 75)", "oklch(75% 0.10 75)", "oklch(85% 0.06 75)", "oklch(95% 0.02 75)"] },
+      "correcao-carga": { "role": "secondary", "displayName": "Vermelho Correção", "canonical": "color-mix(in srgb, #bf3a33 78%, #ffffff)", "dark": "color-mix(in srgb, #ec6d65 78%, #0d1013)", "tonalRamp": ["oklch(15% 0.05 27)", "oklch(27% 0.09 27)", "oklch(39% 0.12 27)", "oklch(51% 0.14 27)", "oklch(63% 0.13 27)", "oklch(75% 0.10 27)", "oklch(85% 0.06 27)", "oklch(95% 0.02 27)"] }
+    },
+    "roles": {
+      "light": { "--trilho": "n2", "--baia": "n3", "--faixa": "n0", "--faixa-realce": "n1", "--filete": "n4", "--tinta-1": "n10", "--tinta-2": "n8", "--tinta-3": "n7" },
+      "dark": { "--trilho": "n2", "--baia": "n1", "--faixa": "n3", "--faixa-realce": "n4", "--filete": "n4", "--tinta-1": "n10", "--tinta-2": "n8", "--tinta-3": "n7" },
+      "grupos": { "--grupo-dev": "n9", "--grupo-est-dev": "n6", "--grupo-qa": "n8", "--grupo-est-qa": "n5", "--grupo-gestao": "n7", "--grupo-outros": "n4" },
+      "papeis-carga": { "--papel-a_iniciar": "n5 (escuro n6)", "--papel-andamento": "n8", "--papel-qa": "entrada", "--papel-correcao": "correcao-carga" }
     },
     "typographyMeta": {
-      "label": {
-        "displayName": "Rótulo HUD",
-        "purpose": "Silkscreen 400 12px: todo rótulo de mesa, controles, botão, eixos do gráfico."
-      },
-      "nav": {
-        "displayName": "Navegação",
-        "purpose": "Silkscreen 400 16px: menu de fases, rótulo da busca, selo SEM SINAL; rótulos menores na TV."
-      },
-      "title": {
-        "displayName": "Título de painel",
-        "purpose": "Silkscreen 700 16px."
-      },
-      "numeral-sm": {
-        "displayName": "Numeral pequeno",
-        "purpose": "Silkscreen 16px: número do card, distribuição, tabela mensal."
-      },
-      "body": {
-        "displayName": "Texto corrido",
-        "purpose": "Jersey 15 18px: nomes, detalhes, select, tooltip do gráfico."
-      },
-      "body-md": {
-        "displayName": "Texto médio",
-        "purpose": "Jersey 15 20px: ficha do card, linha do tempo."
-      },
-      "label-tv": {
-        "displayName": "Rótulo TV",
-        "purpose": "Silkscreen 20px: rótulos do placar, selo, paginação e rodapé na TV."
-      },
-      "body-lg": {
-        "displayName": "Título na fila",
-        "purpose": "Jersey 15 22px: título do card na fila; designado e lacuna na TV."
-      },
-      "numeral": {
-        "displayName": "Numeral",
-        "purpose": "Silkscreen 700 24px: dias em QA, ficha, marca."
-      },
-      "title-tv": {
-        "displayName": "Título de painel TV",
-        "purpose": "Silkscreen 700 24px na cena TV."
-      },
-      "field": {
-        "displayName": "Campo",
-        "purpose": "Jersey 15 24px na busca de card."
-      },
-      "headline": {
-        "displayName": "Título do card",
-        "purpose": "Jersey 15 32px: tela CARD e título da fila na TV."
-      },
-      "numeral-tv": {
-        "displayName": "Numeral TV",
-        "purpose": "Silkscreen 700 40px: dias em QA na TV."
-      },
-      "display-24": {
-        "displayName": "Placar 24",
-        "purpose": "Degrau de 24px do numeral do placar, escolhido por container query."
-      },
-      "display-32": {
-        "displayName": "Placar 32",
-        "purpose": "Degrau de 32px do numeral do placar, escolhido por container query."
-      },
-      "display-40": {
-        "displayName": "Placar 40",
-        "purpose": "Degrau de 40px do numeral do placar, escolhido por container query."
-      },
-      "display-48": {
-        "displayName": "Placar 48",
-        "purpose": "Degrau de 48px do numeral do placar, escolhido por container query."
-      },
-      "display-56": {
-        "displayName": "Placar 56",
-        "purpose": "Degrau de 56px do numeral do placar, escolhido por container query."
-      },
-      "display-64": {
-        "displayName": "Placar 64",
-        "purpose": "Degrau de 64px do numeral do placar, escolhido por container query."
-      },
-      "display-80": {
-        "displayName": "Placar 80",
-        "purpose": "Degrau de 80px do numeral do placar, escolhido por container query."
-      },
-      "display-96": {
-        "displayName": "Placar 96",
-        "purpose": "Degrau de 96px do numeral do placar, escolhido por container query."
-      },
-      "display-112": {
-        "displayName": "Placar 112",
-        "purpose": "Degrau de 112px do numeral do placar, escolhido por container query."
-      }
+      "numeral": { "displayName": "Numeral", "purpose": "Valor do contador na cabeça do quadro; 24px abaixo de 700px." },
+      "headline": { "displayName": "Headline", "purpose": "Nome da pessoa na tela Pessoa." },
+      "title": { "displayName": "Title", "purpose": "Título do card na tela Card." },
+      "body": { "displayName": "Body", "purpose": "Base do documento e abas." },
+      "body-sm": { "displayName": "Body pequeno", "purpose": "Conteúdo das faixas, controles, campos e botões." },
+      "label": { "displayName": "Label", "purpose": "Título de baia, rótulo de KPI e da busca, em caixa alta; cabeçalho de tabela e rótulo de ficha no degrau 11px/0.05em." },
+      "label-sm": { "displayName": "Label pequeno", "purpose": "Nome do estado ao lado do marcador, título de grupo, dia no feed; caixa alta." },
+      "dado": { "displayName": "Dado", "purpose": "Números, #card, horários, dias em QA, períodos e eixos de gráfico, em mono tabular." }
     },
     "shadows": [
-      {
-        "name": "brilho-fosforo",
-        "value": "0 0 6px color-mix(in srgb, currentColor 55%, transparent), 0 0 18px color-mix(in srgb, currentColor 22%, transparent)",
-        "purpose": "text-shadow de numerais do placar e da marca; só com CRT ligado."
-      },
-      {
-        "name": "anel-selecao",
-        "value": "0 0 0 2px var(--fosforo), 0 0 0 4px var(--violeta)",
-        "purpose": "Fase atual, prefixo marcado, botão primário."
-      },
-      {
-        "name": "anel-selecao-crt",
-        "value": "0 0 0 2px var(--fosforo), 0 0 0 4px var(--violeta), 0 0 16px rgb(116 70 255 / 0.55)",
-        "purpose": "Anel de seleção com CRT ligado."
-      },
-      {
-        "name": "varredura",
-        "value": "repeating-linear-gradient(to bottom, rgb(0 0 0 / 0) 0, rgb(0 0 0 / 0) 2px, rgb(0 0 0 / 0.22) 3px, rgb(0 0 0 / 0) 4px)",
-        "purpose": "Camada fixa de linhas de varredura; só com CRT ligado."
-      },
-      {
-        "name": "grade-tiles",
-        "value": "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' shape-rendering='crispEdges'%3E%3Crect width='1' height='1' fill='%233149ff' fill-opacity='0.22'/%3E%3C/svg%3E\") / 8px 8px",
-        "purpose": "Padrão SVG: um pixel azul-arcade (fill-opacity 0.22) no canto de cada tile 8×8, no fundo das molduras; só com CRT ligado."
-      },
-      {
-        "name": "estatica",
-        "value": "repeating-linear-gradient(135deg, var(--aco-escuro) 0 4px, transparent 4px 8px)",
-        "purpose": "Hachura do que não foi medido."
-      }
+      { "name": "sombra-baia", "value": "inset 0 1px 2px rgb(27 31 37 / 0.08)", "dark": "inset 0 1px 2px rgb(0 0 0 / 0.4)", "purpose": "Baia rebaixada no trilho; trilho da barra de carga; caixa do segmentado." },
+      { "name": "sombra-afundado", "value": "inset 0 1px 2px rgb(27 31 37 / 0.14)", "dark": "inset 0 1px 3px rgb(0 0 0 / 0.55)", "purpose": "Aba atual, botão e chip pressionados afundam no trilho." },
+      { "name": "porta-faixa", "value": "inset 4px 0 0 var(--porta-cor, var(--n4))", "purpose": "Borda esquerda de estado da faixa; neutra em n4 sem estado." },
+      { "name": "relevo-segmentado", "value": "0 1px 0 var(--filete)", "purpose": "Opções inativas do segmentado, um fio acima da caixa." },
+      { "name": "sombra-eixo", "value": "rgb(27 31 37 / 0.05)", "dark": "rgb(255 255 255 / 0.04)", "purpose": "Ponteiro de eixo dos gráficos." }
     ],
     "motion": [
-      {
-        "name": "varre-fase",
-        "value": "420ms steps(10, end)",
-        "purpose": "Faixa de varredura violeta de 48px que desce na troca de tela; o conteúdo nunca começa escondido."
-      },
-      {
-        "name": "contagem-placar",
-        "value": "8 degraus × 45ms",
-        "purpose": "Numeral do placar conta de 0 ao valor na primeira aparição; desligado com movimento reduzido."
-      },
-      {
-        "name": "tempo-quadro",
-        "value": "12s steps(24, end)",
-        "purpose": "Barra de blocos do modo atração; um quadro a cada 12s."
-      },
-      {
-        "name": "grafico-sem-animacao",
-        "value": "animation: false",
-        "purpose": "O gráfico mensal aparece inteiro, sem crescimento suave."
-      },
-      {
-        "name": "movimento-reduzido",
-        "value": "0.01ms",
-        "purpose": "prefers-reduced-motion zera animações e transições."
-      }
+      { "name": "insercao", "value": "560ms cubic-bezier(0.16, 1, 0.3, 1) both; from translateX(-10px) e fundo --faixa-realce", "purpose": "Faixa que chegou na última coleta entra uma vez." },
+      { "name": "reduzido", "value": "prefers-reduced-motion: reduce desliga toda transição e animação", "purpose": "Respeito ao movimento reduzido." },
+      { "name": "graficos", "value": "animation: false", "purpose": "Gráficos não animam." }
     ],
     "breakpoints": [
-      {
-        "name": "coluna-unica",
-        "value": "1100px"
-      },
-      {
-        "name": "estreito",
-        "value": "760px"
-      },
-      {
-        "name": "placar-degraus",
-        "value": "container 128/154/205/256/308/358px"
-      },
-      {
-        "name": "largura-maxima",
-        "value": "1680px"
-      }
+      { "name": "estreito", "value": "max-width: 700px" },
+      { "name": "mensal-uma-coluna", "value": "max-width: 800px" },
+      { "name": "agora-tres-baias", "value": "min-width: 1100px" }
+    ],
+    "keyboard": [
+      { "keys": "1-4", "action": "Troca entre Agora, Equipe, Mensal e Card." },
+      { "keys": "# ou /", "action": "Vai direto para a busca de card." }
     ]
   },
   "components": [
     {
-      "name": "Painel com moldura",
-      "kind": "card",
-      "refersTo": "painel",
-      "description": "Moldura 9-slice de linha dupla, cantos em degrau; contêiner de todo painel.",
-      "html": "<section class=\"ds-painel\"><h2 class=\"ds-painel__titulo\">SINAL · 7 DIAS</h2><p class=\"ds-painel__texto\">8 h de expediente sem coleta</p></section>",
-      "css": ".ds-painel{border:8px solid transparent;border-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' shape-rendering='crispEdges'%3E%3Cpath fill='%233149ff' d='M4 0h16v2H4zM4 22h16v2H4zM0 4h2v16H0zM22 4h2v16h-2zM2 2h2v2H2zM20 2h2v2h-2zM2 20h2v2H2zM20 20h2v2h-2z'/%3E%3Cpath fill='%237446ff' d='M6 4h12v2H6zM6 18h12v2H6zM4 6h2v12H4zM18 6h2v12h-2z'/%3E%3C/svg%3E\") 8 / 8px stretch;background-color:color-mix(in srgb,var(--fundo-2) 88%,transparent);background-clip:padding-box;padding:16px 22px 18px;color:var(--texto);max-width:360px}.ds-painel__titulo{margin:0 0 12px;font-family:var(--face-hud);font-size:16px;font-weight:700;letter-spacing:.04em}.ds-painel__texto{margin:0;font-family:var(--face-texto);font-size:18px;color:var(--texto-2)}"
-    },
-    {
-      "name": "Menu de fases",
-      "kind": "nav",
-      "refersTo": "fase",
-      "description": "HOJE / MENSAL / CARD; a fase atual ganha fundo azul-arcade, anel e cursor bitmap.",
-      "html": "<nav class=\"ds-fases\"><button class=\"ds-fase\" aria-current=\"page\"><span class=\"ds-fase__cursor\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 7 7\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M0 0h1v7H0zM1 1h2v5H1zM3 2h2v3H3zM5 3h2v1H5z\"/></svg></span>HOJE</button><button class=\"ds-fase\"><span class=\"ds-fase__cursor\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 7 7\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M0 0h1v7H0zM1 1h2v5H1zM3 2h2v3H3zM5 3h2v1H5z\"/></svg></span>MENSAL</button><button class=\"ds-fase\"><span class=\"ds-fase__cursor\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 7 7\" shape-rendering=\"crispEdges\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M0 0h1v7H0zM1 1h2v5H1zM3 2h2v3H3zM5 3h2v1H5z\"/></svg></span>CARD</button></nav>",
-      "css": ".ds-fases{display:flex;gap:4px;background:var(--fosforo);padding:8px}.ds-fase{display:inline-flex;align-items:center;gap:8px;padding:8px 14px 8px 10px;border:2px solid transparent;background:none;color:var(--texto-2);font-family:var(--face-hud);font-size:16px;cursor:pointer}.ds-fase__cursor{visibility:hidden;display:inline-flex}.ds-fase:hover{color:var(--texto)}.ds-fase[aria-current=page]{color:var(--texto);background:var(--azul-arcade);border-color:var(--azul-arcade);box-shadow:0 0 0 2px var(--fosforo),0 0 0 4px var(--violeta);}.ds-fase[aria-current=page] .ds-fase__cursor{visibility:visible}.ds-fase:focus-visible{outline:2px dashed var(--texto);outline-offset:3px}"
-    },
-    {
-      "name": "Seletor de prefixo",
-      "kind": "chip",
-      "refersTo": "seletor-prefixo",
-      "description": "TODOS, 1P DEV…4P DEMANDAS; radio que recorta o HUD e as telas.",
-      "html": "<div class=\"ds-prefixos\" role=\"radiogroup\"><button class=\"ds-prefixo\" role=\"radio\" aria-checked=\"true\">TODOS</button><button class=\"ds-prefixo\" role=\"radio\" aria-checked=\"false\"><span class=\"ds-prefixo__num\">1P</span>DEV</button><button class=\"ds-prefixo\" role=\"radio\" aria-checked=\"false\"><span class=\"ds-prefixo__num\">2P</span>WEB</button></div>",
-      "css": ".ds-prefixos{display:flex;gap:4px;background:var(--fosforo);padding:8px}.ds-prefixo{display:inline-flex;align-items:baseline;gap:6px;padding:6px 10px;border:2px solid var(--fundo-3);background:var(--fundo-2);color:var(--texto-2);font-family:var(--face-hud);font-size:12px;letter-spacing:.04em;cursor:pointer}.ds-prefixo__num{font-size:12px;color:var(--texto-3)}.ds-prefixo:hover{border-color:var(--violeta);color:var(--texto)}.ds-prefixo[aria-checked=true]{color:var(--texto);background:var(--azul-arcade);border-color:var(--azul-arcade);box-shadow:0 0 0 2px var(--fosforo),0 0 0 4px var(--violeta);}.ds-prefixo[aria-checked=true] .ds-prefixo__num{color:var(--texto)}.ds-prefixo:focus-visible{outline:2px dashed var(--texto);outline-offset:3px}"
-    },
-    {
-      "name": "Botão primário",
+      "name": "Botão",
       "kind": "button",
       "refersTo": "botao",
-      "description": "Ação principal (abrir card); azul-arcade com anel, violeta no hover.",
-      "html": "<button class=\"ds-botao\">ABRIR CARD</button>",
-      "css": ".ds-botao{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:2px solid var(--azul-arcade);background:var(--azul-arcade);color:var(--texto);font-family:var(--face-hud);font-size:12px;cursor:pointer;box-shadow:0 0 0 2px var(--fosforo),0 0 0 4px var(--violeta);}.ds-botao:hover{background:var(--violeta);border-color:var(--violeta)}.ds-botao:focus-visible{outline:2px dashed var(--texto);outline-offset:6px}"
+      "description": "Controle quieto de borda fina; pressionado afunda no trilho.",
+      "html": "<div style=\"display:flex;gap:8px\"><button class=\"ds-botao\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 6h18v11H3zM8 21h8M12 17v4\"/></svg>Modo TV</button><button class=\"ds-botao\" aria-pressed=\"true\">Ligado</button></div>",
+      "css": ".ds-botao { display:inline-flex; align-items:center; gap:6px; height:28px; border:1px solid var(--n5, #b6bdc6); border-radius:2px; background:var(--faixa, #ffffff); color:var(--tinta-1, #1b1f25); padding:0 12px; font:500 13px 'Public Sans', system-ui, sans-serif; cursor:pointer; } .ds-botao:hover { background:var(--faixa-realce, #f7f8fa); } .ds-botao:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; } .ds-botao[aria-pressed='true'] { background:var(--trilho, #eef0f3); box-shadow:inset 0 1px 2px rgb(27 31 37 / 0.14); }"
     },
     {
-      "name": "Controle",
-      "kind": "button",
-      "refersTo": "controle",
-      "description": "CRT ON/OFF e MODO TV; discreto, borda azul-arcade quando pressionado.",
-      "html": "<button class=\"ds-controle\" aria-pressed=\"true\">CRT ON</button> <button class=\"ds-controle\" aria-pressed=\"false\">MODO TV</button>",
-      "css": ".ds-controle{padding:6px 10px;border:2px solid var(--fundo-3);background:none;color:var(--texto-3);font-family:var(--face-hud);font-size:12px;letter-spacing:.04em;cursor:pointer}.ds-controle:hover,.ds-controle[aria-pressed=true]{color:var(--texto);border-color:var(--azul-arcade)}.ds-controle:focus-visible{outline:2px dashed var(--texto);outline-offset:3px}"
+      "name": "Filtro segmentado",
+      "kind": "chip",
+      "refersTo": "segmentado-opcao",
+      "description": "Opções em relevo numa caixa rebaixada; a ativa perde o relevo e afunda.",
+      "html": "<div class=\"ds-seg\" role=\"radiogroup\"><button class=\"ds-seg__op\" role=\"radio\" aria-checked=\"true\">Todos</button><button class=\"ds-seg__op\" role=\"radio\" aria-checked=\"false\">DEV</button><button class=\"ds-seg__op\" role=\"radio\" aria-checked=\"false\">WEB</button><button class=\"ds-seg__op\" role=\"radio\" aria-checked=\"false\">MOB</button></div>",
+      "css": ".ds-seg { display:inline-flex; padding:2px; gap:2px; border-radius:2px; background:var(--baia, #e3e6ea); box-shadow:inset 0 1px 2px rgb(27 31 37 / 0.08); } .ds-seg__op { border:0; border-radius:2px; background:var(--faixa, #ffffff); padding:3px 10px; color:var(--tinta-2, #4b535e); font:400 13px 'Public Sans', system-ui, sans-serif; box-shadow:0 1px 0 var(--filete, #d3d8de); cursor:pointer; } .ds-seg__op:hover { color:var(--tinta-1, #1b1f25); } .ds-seg__op:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; } .ds-seg__op[aria-checked='true'] { background:transparent; box-shadow:none; color:var(--tinta-1, #1b1f25); font-weight:600; }"
     },
     {
-      "name": "Campo de busca de card",
+      "name": "Barra do topo e abas",
+      "kind": "nav",
+      "refersTo": "aba",
+      "description": "Marca, abas com tecla de atalho, aba atual afundada no trilho.",
+      "html": "<nav class=\"ds-topo\"><span class=\"ds-marca\"><span class=\"ds-marca__qa\">QA</span>SETEC</span><button class=\"ds-aba\" aria-current=\"page\"><kbd class=\"ds-tecla\">1</kbd>Agora</button><button class=\"ds-aba\"><kbd class=\"ds-tecla\">2</kbd>Equipe</button><button class=\"ds-aba\"><kbd class=\"ds-tecla\">3</kbd>Mensal</button><button class=\"ds-aba\"><kbd class=\"ds-tecla\">4</kbd>Card</button></nav>",
+      "css": ".ds-topo { display:flex; align-items:center; gap:4px; min-height:44px; padding:0 16px; background:var(--faixa, #ffffff); border-bottom:1px solid var(--filete, #d3d8de); font:400 14px 'Public Sans', system-ui, sans-serif; } .ds-marca { display:inline-flex; align-items:center; gap:6px; margin-right:16px; font-size:12.5px; font-weight:600; letter-spacing:0.06em; color:var(--tinta-2, #4b535e); } .ds-marca__qa { background:var(--tinta-1, #1b1f25); color:var(--faixa, #ffffff); padding:1px 5px; border-radius:2px; } .ds-aba { display:inline-flex; align-items:center; gap:7px; height:30px; border:0; border-radius:2px; background:none; padding:0 10px 0 7px; color:var(--tinta-2, #4b535e); font:500 14px 'Public Sans', system-ui, sans-serif; cursor:pointer; } .ds-aba:hover { color:var(--tinta-1, #1b1f25); background:var(--faixa-realce, #f7f8fa); } .ds-aba:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; } .ds-aba[aria-current='page'] { color:var(--tinta-1, #1b1f25); background:var(--trilho, #eef0f3); box-shadow:inset 0 1px 2px rgb(27 31 37 / 0.14); } .ds-tecla { font:400 10px/14px 'JetBrains Mono', ui-monospace, monospace; min-width:16px; text-align:center; padding:0 3px; border:1px solid var(--filete, #d3d8de); border-radius:2px; color:var(--tinta-3, #69727e); background:var(--faixa, #ffffff); }"
+    },
+    {
+      "name": "Campo",
       "kind": "input",
-      "refersTo": "campo-busca",
-      "description": "Número do card na tela CARD; borda azul-arcade, cursor ciano.",
-      "html": "<label class=\"ds-busca\"><span class=\"ds-busca__rotulo\">CARD #</span><input class=\"ds-busca__campo\" placeholder=\"10588\"></label>",
-      "css": ".ds-busca{display:flex;align-items:center;gap:12px;background:var(--fosforo);padding:8px}.ds-busca__rotulo{font-family:var(--face-hud);font-size:16px;color:var(--ciano)}.ds-busca__campo{width:10ch;padding:8px 10px;border:2px solid var(--azul-arcade);background:var(--fosforo);color:var(--texto);font-family:var(--face-texto);font-size:24px;caret-color:var(--ciano)}.ds-busca__campo::placeholder{color:var(--texto-3)}.ds-busca__campo:focus-visible{outline:2px dashed var(--texto);outline-offset:3px}"
+      "refersTo": "campo",
+      "description": "Campo de 28px com filete, foco em contorno azul.",
+      "html": "<label class=\"ds-busca\"><span class=\"ds-busca__rotulo\">Card</span><input class=\"ds-campo\" placeholder=\"#11805\" /></label>",
+      "css": ".ds-busca { display:flex; align-items:center; gap:8px; } .ds-busca__rotulo { font:600 11.5px 'Public Sans', system-ui, sans-serif; letter-spacing:0.06em; text-transform:uppercase; color:var(--tinta-2, #4b535e); } .ds-campo { height:28px; width:12ch; border:1px solid var(--filete, #d3d8de); border-radius:2px; background:var(--faixa, #ffffff); color:var(--tinta-1, #1b1f25); padding:0 8px; font:400 13px 'Public Sans', system-ui, sans-serif; caret-color:var(--entrada, #2f5fc4); } .ds-campo:hover { border-color:var(--n5, #b6bdc6); } .ds-campo:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; }"
     },
     {
-      "name": "Item de placar",
-      "kind": "custom",
-      "refersTo": "display",
-      "description": "Rótulo, numeral com zeros à esquerda na cor de estado e comparação com o último dia útil.",
-      "html": "<dl class=\"ds-placar\"><div class=\"ds-placar__item\"><dt class=\"ds-placar__rotulo\">EM QA</dt><dd class=\"ds-placar__valor\"><span class=\"ds-placar__num\">059</span><span class=\"ds-placar__sub\">AGORA</span></dd></div><div class=\"ds-placar__item ds-placar__item--reprov\"><dt class=\"ds-placar__rotulo\">REPROVADOS</dt><dd class=\"ds-placar__valor\"><span class=\"ds-placar__num\">004</span><span class=\"ds-placar__sub\">SEG 28: 001</span></dd></div></dl>",
-      "css": ".ds-placar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:0;padding:14px 0 16px;border-top:2px solid var(--azul-arcade);border-bottom:2px solid var(--azul-arcade);background:var(--fosforo)}.ds-placar__item{display:grid;gap:6px;padding:0 16px;color:var(--ciano)}.ds-placar__item--reprov{color:var(--vermelho)}.ds-placar__item+.ds-placar__item{border-left:2px dotted var(--fundo-3)}.ds-placar__rotulo{font-family:var(--face-hud);font-size:12px;letter-spacing:.04em}.ds-placar__valor{margin:0;display:grid;gap:4px}.ds-placar__num{font-family:var(--face-hud);font-variant-numeric:tabular-nums;font-size:48px;font-weight:700;line-height:.95;text-shadow:var(--brilho)}.ds-placar__sub{font-family:var(--face-hud);font-size:12px;color:var(--texto-3)}"
+      "name": "Contador",
+      "kind": "card",
+      "refersTo": "kpi",
+      "description": "Faixa de contadores com porta-faixa na cor do que o número é.",
+      "html": "<dl class=\"ds-kpis\"><div class=\"ds-kpi\" style=\"--porta-cor:#2f5fc4\"><dt class=\"ds-kpi__rotulo\">Em QA agora</dt><dd class=\"ds-kpi__valor\">59</dd><dd class=\"ds-kpi__sub\">1 novo nesta coleta</dd></div><div class=\"ds-kpi\" style=\"--porta-cor:#1f7f55\"><dt class=\"ds-kpi__rotulo\">Aprovados hoje</dt><dd class=\"ds-kpi__valor\">8</dd><dd class=\"ds-kpi__sub\">ter 29/09: <span class=\"ds-kpi__ant\">14</span></dd></div></dl>",
+      "css": ".ds-kpis { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:1px; margin:0; background:var(--filete, #d3d8de); border:1px solid var(--filete, #d3d8de); } .ds-kpi { background:var(--faixa, #ffffff); padding:9px 14px 10px 16px; box-shadow:inset 4px 0 0 var(--porta-cor, #d3d8de); display:grid; grid-template-columns:1fr auto; grid-template-areas:'rotulo rotulo' 'valor sub'; align-items:end; gap:2px 10px; } .ds-kpi dd { margin:0; } .ds-kpi__rotulo { grid-area:rotulo; font:600 11.5px 'Public Sans', system-ui, sans-serif; letter-spacing:0.06em; text-transform:uppercase; color:var(--tinta-2, #4b535e); } .ds-kpi__valor { grid-area:valor; font:500 28px/1.1 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums; letter-spacing:-0.02em; color:var(--tinta-1, #1b1f25); } .ds-kpi__sub { grid-area:sub; font:400 12px 'Public Sans', system-ui, sans-serif; color:var(--tinta-3, #69727e); text-align:right; padding-bottom:3px; } .ds-kpi__ant { font-family:'JetBrains Mono', ui-monospace, monospace; color:var(--tinta-2, #4b535e); }"
     },
     {
-      "name": "Barra de blocos",
+      "name": "Baia com faixas",
       "kind": "custom",
-      "refersTo": "numeral",
-      "description": "Distribuição por papel: blocos de 8px em currentColor; só papéis de estado têm cor.",
-      "html": "<ul class=\"ds-dist\"><li class=\"ds-dist__linha ds-dist__linha--correcao\"><span class=\"ds-dist__nome\">CORREÇÕES</span><span class=\"ds-dist__barra\" style=\"width:70%\"></span><span class=\"ds-dist__valor\">108</span></li><li class=\"ds-dist__linha ds-dist__linha--qa\"><span class=\"ds-dist__nome\">TESTE/QA</span><span class=\"ds-dist__barra\" style=\"width:38%\"></span><span class=\"ds-dist__valor\">059</span></li><li class=\"ds-dist__linha\"><span class=\"ds-dist__nome\">ANDAMENTO</span><span class=\"ds-dist__barra\" style=\"width:10%\"></span><span class=\"ds-dist__valor\">017</span></li></ul>",
-      "css": ".ds-dist{display:grid;gap:10px;margin:0;padding:12px;list-style:none;background:var(--fundo-2);color:var(--texto)}.ds-dist__linha--correcao{color:var(--vermelho)}.ds-dist__linha--qa{color:var(--ciano)}.ds-dist__linha{display:grid;grid-template-columns:112px minmax(0,1fr) auto;align-items:center;gap:10px}.ds-dist__nome{font-family:var(--face-hud);font-size:12px;color:var(--texto-2)}.ds-dist__barra{height:14px;min-width:10px;background:repeating-linear-gradient(90deg,currentColor 0 8px,transparent 8px 11px)}.ds-dist__valor{font-family:var(--face-hud);font-size:16px;min-width:3ch;text-align:right}"
+      "refersTo": "faixa",
+      "description": "Assinatura do sistema: baia rebaixada com pilha de faixas retas, porta-faixa de estado e rótulo escrito.",
+      "html": "<section class=\"ds-baia\"><h2 class=\"ds-baia__titulo\">Movimentações recentes</h2><ul class=\"ds-pilha\"><li class=\"ds-faixa\" style=\"--porta-cor:#1f7f55;--cor-etiqueta:#1f7f55\"><span class=\"ds-faixa__hora\">12:58</span><span class=\"ds-etiqueta\">Aprovado</span><span class=\"ds-faixa__corpo\"><a class=\"ds-card\" href=\"#\">#11781</a> Visualização de documentos</span></li><li class=\"ds-faixa\" style=\"--porta-cor:#bf3a33;--cor-etiqueta:#bf3a33\"><span class=\"ds-faixa__hora\">11:37</span><span class=\"ds-etiqueta\">Reprovado</span><span class=\"ds-faixa__corpo\"><a class=\"ds-card\" href=\"#\">#11784</a> Listas auxiliares</span></li><li class=\"ds-faixa\"><span class=\"ds-faixa__hora\">10:58</span><span class=\"ds-etiqueta\">Criado</span><span class=\"ds-faixa__corpo\"><a class=\"ds-card\" href=\"#\">#11802</a> Ajustar marcação visual</span></li></ul></section>",
+      "css": ".ds-baia { background:var(--baia, #e3e6ea); box-shadow:inset 0 1px 2px rgb(27 31 37 / 0.08); padding-bottom:6px; font:400 13px/1.45 'Public Sans', system-ui, sans-serif; color:var(--tinta-1, #1b1f25); } .ds-baia__titulo { margin:0; padding:9px 10px 8px; font-size:11.5px; font-weight:600; letter-spacing:0.07em; text-transform:uppercase; color:var(--tinta-2, #4b535e); } .ds-pilha { list-style:none; margin:0; padding:0 6px; display:grid; gap:1px; } .ds-faixa { display:grid; grid-template-columns:42px minmax(0, 1fr); grid-template-areas:'hora etiqueta' 'hora corpo'; gap:2px 8px; padding:6px 10px 7px 14px; background:var(--faixa, #ffffff); box-shadow:inset 4px 0 0 var(--porta-cor, var(--n4, #d3d8de)); animation:ds-insercao 560ms cubic-bezier(0.16, 1, 0.3, 1) both; } .ds-faixa:hover { background:var(--faixa-realce, #f7f8fa); } .ds-faixa__hora { grid-area:hora; font:400 12px 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums; color:var(--tinta-3, #69727e); padding-top:1px; } .ds-etiqueta { grid-area:etiqueta; display:inline-flex; align-items:center; gap:6px; font-size:10.5px; font-weight:600; letter-spacing:0.07em; text-transform:uppercase; color:var(--tinta-2, #4b535e); } .ds-etiqueta::before { content:''; width:7px; height:7px; background:var(--cor-etiqueta, var(--n5, #b6bdc6)); } .ds-faixa__corpo { grid-area:corpo; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .ds-card { font:500 12.5px 'JetBrains Mono', ui-monospace, monospace; color:var(--tinta-1, #1b1f25); text-decoration:underline; text-decoration-color:var(--n5, #b6bdc6); text-underline-offset:3px; } .ds-card:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; } @keyframes ds-insercao { from { transform:translateX(-10px); background:var(--faixa-realce, #f7f8fa); } } @media (prefers-reduced-motion: reduce) { .ds-faixa { animation:none; } }"
     },
     {
-      "name": "Estática (não medido)",
+      "name": "Barra de carga",
       "kind": "custom",
-      "refersTo": "selo-medicao",
-      "description": "Hachura aço para lacuna de coleta e medição parcial.",
-      "html": "<div class=\"ds-lacuna\"><span class=\"ds-lacuna__faixa\"></span><span class=\"ds-lacuna__texto\">24/09 12:24 ATÉ 25/09 12:21</span></div><span class=\"ds-medicao\">PARCIAL</span>",
-      "css": ".ds-lacuna{display:grid;grid-template-columns:36px minmax(0,1fr);gap:10px;align-items:center;background:var(--fundo-2);padding:10px}.ds-lacuna__faixa{height:28px;border:2px solid var(--aco);background:repeating-linear-gradient(135deg,var(--aco-escuro) 0 4px,transparent 4px 8px)}.ds-lacuna__texto{font-family:var(--face-hud);font-size:12px;color:var(--texto)}.ds-medicao{display:inline-block;margin-top:8px;padding:3px 8px;border:2px solid var(--aco);background:repeating-linear-gradient(135deg,var(--aco-escuro) 0 4px,transparent 4px 8px);font-family:var(--face-hud);font-size:12px;color:var(--texto)}"
+      "refersTo": "faixa",
+      "description": "Linha de carga por pessoa: nome, trilho rebaixado com segmentos por coluna, total em mono.",
+      "html": "<div class=\"ds-carga-linha\"><span class=\"ds-carga-nome\">Matheus</span><div class=\"ds-carga\"><div class=\"ds-carga__trilho\" style=\"width:60%\"><span style=\"flex-grow:2;background:#b6bdc6\"></span><span style=\"flex-grow:1;background:#4b535e\"></span><span style=\"flex-grow:6;background:#2f5fc4\"></span><span style=\"flex-grow:4;background:color-mix(in srgb, #bf3a33 78%, #ffffff)\"></span></div></div><span class=\"ds-carga-total\">33</span></div>",
+      "css": ".ds-carga-linha { display:grid; grid-template-columns:116px 1fr 30px; align-items:center; gap:10px; padding:5px 10px 5px 14px; background:var(--faixa, #ffffff); box-shadow:inset 4px 0 0 var(--n4, #d3d8de); font:500 13px 'Public Sans', system-ui, sans-serif; color:var(--tinta-1, #1b1f25); } .ds-carga { height:10px; background:var(--trilho, #eef0f3); box-shadow:inset 0 1px 2px rgb(27 31 37 / 0.08); } .ds-carga__trilho { display:flex; height:100%; gap:1px; } .ds-carga__trilho > span { min-width:3px; } .ds-carga-total { font:400 13px 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums; text-align:right; }"
+    },
+    {
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Filtro pequeno de filete; pressionado afunda.",
+      "html": "<div style=\"display:flex;gap:6px\"><button class=\"ds-chip\" aria-pressed=\"true\">DEV</button><button class=\"ds-chip\" aria-pressed=\"false\">QA</button></div>",
+      "css": ".ds-chip { border:1px solid var(--filete, #d3d8de); background:var(--faixa, #ffffff); border-radius:2px; padding:1px 8px; font:400 12px 'Public Sans', system-ui, sans-serif; color:var(--tinta-2, #4b535e); cursor:pointer; } .ds-chip:hover { color:var(--tinta-1, #1b1f25); } .ds-chip:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; } .ds-chip[aria-pressed='true'] { background:var(--trilho, #eef0f3); box-shadow:inset 0 1px 2px rgb(27 31 37 / 0.14); color:var(--tinta-1, #1b1f25); }"
     }
   ],
   "narrative": {
-    "northStar": "O Gabinete de Fliperama dos Dados",
-    "overview": "O painel é uma tela de fliperama CRT: preto-fósforo, um placar fixo no topo, telas inteiras tratadas como fases e um modo atração que roda sozinho na TV da sala. Tudo é desenhado no grão do pixel: fontes bitmap, molduras de linha dupla com cantos em degrau, barras feitas de blocos, ícones desenhados em grade 7×7. Nenhuma curva, nenhum gradiente decorativo, nenhum raio de canto.\n\nA densidade é de HUD: muitos números, pouco texto, e cada cor carrega exatamente um significado. A atmosfera CRT (linhas de varredura, brilho de fósforo, grade de tiles 8×8) é uma camada que se liga e desliga e fica gravada por navegador; o painel continua inteiro e legível sem ela. O que não foi medido nunca some: aparece riscado como estática.\n\nO mundo recusa o admin padrão (barra lateral, cartões brancos de KPI, azul de SaaS) e recusa transformar pessoas em jogadores. O vocabulário de fliperama vale para telas, filtros e dados, nunca para quem trabalha.",
+    "northStar": "O Quadro de Faixas",
+    "overview": "O painel é o quadro de quem controla o fluxo de QA, como um controlador de voo lê suas faixas de progresso: um trilho cinza-azulado frio ao fundo, baias rebaixadas que agrupam o trabalho, e dentro delas faixas claras de altura fixa, uma por card, pessoa ou evento. Cada faixa tem campos em posições fixas e passa de baia em baia. A leitura é de cima para baixo: a cabeça do quadro dá o placar do dia, as baias dizem onde está cada card e com quem, e cada faixa diz de onde veio, para onde foi e quem moveu.\n\nA densidade é alta e calma. O quadro é feito de cinzas de uma única escala de 11 degraus, filetes de 1px e três valores de tinta; a cor aparece só onde tem significado de estado (entrou, aprovado, reprovado, sem QA, devolvido) e sempre com o nome escrito ao lado. A profundidade é de encaixe, não de elevação: baias e controles ativos afundam no trilho com sombra interna; nada flutua. Cantos retos em tudo que é faixa, 2px no máximo nos controles.\n\nO mundo substituiu o \"Fliperama CRT\", que foi descartado por inteiro: nenhum brilho de fósforo, nenhuma textura, nenhum retrô. Também recusa o dashboard genérico de cartões de KPI com gráficos soltos e sombras flutuantes, e recusa a fantasia literal de aeroporto (sem avião, sem textura de papel, sem canto arredondado).",
     "keyCharacteristics": [
-      "Paleta de 15 cores em uso, sob lei: cor de estado = um significado só.",
-      "Duas faces pixeladas escolhidas por teste de leitura em 1:1: Silkscreen para rótulos e números, Jersey 15 para texto corrido, numa escala de degraus inteiros (12, 16, 18, 20, 22, 24, 32, 40, 48, 56, 64, 80, 96, 112px).",
-      "Numerais de placar com zeros à esquerda (059, 002) e tamanho por container query.",
-      "Molduras 9-slice de linha dupla (azul-arcade fora, violeta dentro), cantos em degrau, zero raio.",
-      "Movimento em degraus (`steps()`), nunca contínuo; conteúdo nunca começa escondido.",
-      "Camada CRT desligável e persistente."
+      "Trilho, baia rebaixada e faixa reta: três planos, sem elevação para fora.",
+      "Cinzas só da escala --n0..--n10; tema claro e escuro trocam a escala, não os papéis.",
+      "Cor de estado só no porta-faixa de 4px e nos marcadores quadrados de 7px, sempre com rótulo escrito.",
+      "Interface em Public Sans; todo número, código de card e horário em JetBrains Mono tabular.",
+      "Filtro ou aba ativa afunda no trilho em vez de ganhar cor.",
+      "Teclado de primeira classe: 1–4 trocam de tela, # ou / vai para a busca de card."
     ],
     "rules": [
-      {
-        "name": "The Color Is Law Rule",
-        "body": "Ciano = em QA/entradas, verde = aprovado, vermelho = reprovado e retornos, dourado = novo desde a última coleta, aço/estática = não medido, lacuna, sem sinal. Nenhuma dessas cores aparece como enfeite. Azul-arcade e violeta são só moldura e navegação.",
-        "section": "colors"
-      },
-      {
-        "name": "The Uncolored Queue Rule",
-        "body": "A coluna \"dias em QA\" da fila é sempre na cor de texto. Nunca colorir por faixa de dias (decisão do usuário).",
-        "section": "colors"
-      },
-      {
-        "name": "The Static Rule",
-        "body": "O que não foi medido fica riscado como estática (hachura 135° em aco-escuro, borda em aço). Nunca esconder uma lacuna nem pintá-la com uma cor de estado.",
-        "section": "colors"
-      },
-      {
-        "name": "The One Legend Rule",
-        "body": "A lei das cores é explicada no próprio painel (painel LEGENDA na coluna direita da mesa; legenda em linha no gráfico mensal). Uma cor nova de estado exige entrada na legenda.",
-        "section": "colors"
-      },
-      {
-        "name": "The Two Voices Rule",
-        "body": "Silkscreen só para rótulos e números; Jersey 15 para todo texto corrido. Nunca inverter: Silkscreen em frase longa vira ruído, Jersey em rótulo de HUD perde o fliperama.",
-        "section": "typography"
-      },
-      {
-        "name": "The Legibility Floor Rule",
-        "body": "Rótulo em Silkscreen nunca abaixo de 12px e nunca em negrito abaixo de 16px. Texto corrido em Jersey 15 nunca abaixo de 18px na mesa.",
-        "section": "typography"
-      },
-      {
-        "name": "The Literal Step Rule",
-        "body": "Todo tamanho de fonte é um degrau literal da escala (12, 16, 18, 20, 22, 24, 32, 40, 48, 56, 64, 80, 96, 112px). Nada de `clamp()`, `em` ou valores intermediários como 13px ou 14px: o pixel da fonte precisa cair em múltiplo inteiro.",
-        "section": "typography"
-      },
-      {
-        "name": "The Bitmap Percent Rule",
-        "body": "O \"%\" nunca é o glifo da fonte (na Silkscreen lê como Z, na Jersey pequena como ×): é o ícone bitmap \"porcento\", a 0.62em do número.",
-        "section": "typography"
-      },
-      {
-        "name": "The Scoreboard Padding Rule",
-        "body": "Contadores do placar e das tabelas saem com zeros à esquerda (059, 002, 013), como placar de fliperama.",
-        "section": "typography"
-      },
-      {
-        "name": "The Scoreboard Step Rule",
-        "body": "Numerais do placar crescem por container query em degraus fixos, com limiares em 128, 154, 205, 256, 308 e 358px de largura do item: contadores 32 → 40 → 48 → 64 → 80 → 96 → 112px, taxa 24 → 24 → 32 → 40 → 48 → 56 → 64px. Nunca `clamp()` contínuo.",
-        "section": "layout"
-      },
-      {
-        "name": "The Switchable Atmosphere Rule",
-        "body": "Varredura, brilho e grade de tiles são uma camada desligável (controle CRT ON/OFF, gravado no navegador). Nenhuma informação pode depender dela.",
-        "section": "elevation"
-      }
+      { "name": "A Regra do Porta-Faixa", "body": "A cor de estado mora no porta-faixa (borda esquerda de 4px, reta, feita com sombra interna) e nos marcadores quadrados de 7px dos rótulos e cabeçalhos; barras de carga e séries de gráfico são as únicas outras superfícies coloridas, e sempre com legenda. Texto, fundo de faixa e número não recebem cor de estado.", "section": "colors" },
+      { "name": "A Regra da Cor Escrita", "body": "Nenhuma cor aparece sozinha: todo porta-faixa colorido tem o nome do estado escrito na mesma faixa ou na coluna, todo quadradinho tem rótulo ao lado, toda série tem legenda.", "section": "colors" },
+      { "name": "A Regra dos Onze Cinzas", "body": "Nenhum cinza existe fora de --n0..--n10. Um cinza novo é um degrau errado da escala, não um token novo.", "section": "colors" },
+      { "name": "A Regra do Grupo Neutro", "body": "Grupos de pessoas (DEV, QA, estagiários, gestão) são tons da escala neutra, nunca matizes de estado: grupo não é acontecimento.", "section": "colors" },
+      { "name": "A Regra da Impressão", "body": "Mono só para dado: números, códigos de card, horários, datas e períodos. Cabeçalhos, rótulos, nomes e frases ficam em Public Sans, inclusive o cabeçalho das colunas numéricas.", "section": "typography" },
+      { "name": "A Regra do Afundar", "body": "O que está selecionado desce para o trilho (fundo --trilho mais sombra afundada, texto em tinta 1); não ganha cor, contorno colorido nem elevação.", "section": "elevation" }
     ],
     "dos": [
-      "Do usar cada cor de estado só para o seu significado (ciano em QA/entradas, verde aprovado, vermelho reprovado/retornos, dourado novo desde a última coleta, aço/estática não medido).",
-      "Do manter azul-arcade e violeta restritos a moldura, navegação e seleção.",
-      "Do riscar como estática (hachura 135° aco-escuro, borda aço) tudo que não foi medido.",
-      "Do usar Silkscreen 400 a partir de 12px para rótulos e números, e Jersey 15 a partir de 18px para texto corrido.",
-      "Do escolher todo tamanho de fonte entre os degraus literais da escala (12, 16, 18, 20, 22, 24, 32, 40, 48, 56, 64, 80, 96, 112px).",
-      "Do desenhar o \"%\" com o ícone bitmap \"porcento\" e novos ícones como bitmaps 7×7 com `crispEdges`.",
-      "Do fazer numerais de placar crescerem por container query em degraus fixos.",
-      "Do animar em degraus (`steps()`) e deixar o conteúdo visível desde o primeiro quadro.",
-      "Do manter a camada CRT desligável e o painel inteiro legível com ela desligada.",
-      "Do manter a lei das cores explicada na tela (painel LEGENDA na mesa)."
+      "Do tirar todo cinza da escala --n0..--n10 e usar os papéis (--trilho, --baia, --faixa, --faixa-realce, --filete, --tinta-1..3) em vez do degrau cru quando o papel existe.",
+      "Do marcar estado com o porta-faixa de 4px (inset 4px 0 0) ou com o quadrado de 7px, e escrever o nome do estado ao lado.",
+      "Do usar cada matiz só no seu significado: azul entrou/em QA, verde aprovado, vermelho reprovado, violeta sem QA, ocre devolvido.",
+      "Do abrir toda tabela de pessoas em ordem alfabética; ordenar por coluna é escolha de quem olha.",
+      "Do colocar a cor de estado de uma coluna só no quadradinho do cabeçalho e manter os números da coluna em tinta.",
+      "Do representar grupos (DEV, QA, estagiários, gestão) com degraus da escala neutra, alternando claro e escuro, com legenda escrita.",
+      "Do escrever números, #card, horários e períodos em JetBrains Mono tabular; cabeçalhos, rótulos e frases em Public Sans.",
+      "Do mostrar o selecionado afundando no trilho (fundo --trilho + sombra afundada).",
+      "Do manter faixas com altura fixa: uma linha por campo, reticências, texto completo no title.",
+      "Do mostrar o que não foi medido como não medido (\"—\", lacunas de coleta, saídas sem autor)."
     ],
     "donts": [
-      "Don't colorir \"dias em QA\" por faixa de dias.",
-      "Don't transformar pessoas em jogadores: sem ranking de devs, vidas, GAME OVER ou HI-SCORE de pessoa. O \"1P…4P\" nomeia prefixos, nunca pessoas.",
-      "Don't usar dourado, verde, vermelho ou ciano como enfeite, fundo de seção ou destaque genérico.",
-      "Don't pôr Silkscreen em negrito abaixo de 16px nem abaixo de 12px em qualquer peso.",
-      "Don't usar o glifo \"%\" das fontes nem ícones de glifo unicode ou de biblioteca vetorial.",
-      "Don't arredondar cantos, usar sombra de elevação ou gradiente decorativo.",
-      "Don't começar uma tela escondida à espera de animação, nem usar piscar contínuo, crescimento suave ou som.",
-      "Don't voltar ao admin padrão: barra lateral, cartões brancos de KPI, azul de SaaS."
+      "Don't criar ranking de pessoas: sem pódio, sem destaque do \"melhor\" ou \"pior\", sem cor de julgamento sobre nome de pessoa ou sobre número.",
+      "Don't colorir \"dias em QA\" com cor de alerta, nem fazer nada piscar ou tocar som.",
+      "Don't usar matiz de estado para grupo de pessoas ou para qualquer coisa que não seja o estado.",
+      "Don't deixar uma cor sozinha, sem rótulo, legenda ou nome escrito.",
+      "Don't arredondar faixas, baias ou KPIs, nem passar de 2px de canto em controle.",
+      "Don't usar sombra projetada ou elevação para fora; a profundidade só afunda.",
+      "Don't usar mono em cabeçalho, rótulo ou frase.",
+      "Don't trazer de volta o fliperama CRT (brilho, fósforo, textura, retrô) nem virar fantasia de aeroporto (avião, papel, cantos redondos).",
+      "Don't montar o dashboard genérico de cartões de KPI flutuantes com gráficos soltos."
     ]
   }
 }

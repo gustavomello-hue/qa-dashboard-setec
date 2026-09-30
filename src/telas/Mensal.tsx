@@ -39,9 +39,9 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
       ...b,
       xAxis: { ...(b.xAxis as object), data: meses },
       series: [
-        { name: "Entraram", type: "bar", data: linhas.map((l) => l.entradas), itemStyle: { color: cor("--entrada") } },
-        { name: "Aprovados", type: "bar", data: linhas.map((l) => l.aprovados), itemStyle: { color: cor("--aprovado") } },
-        { name: "Reprovados", type: "bar", data: linhas.map((l) => l.reprovados), itemStyle: { color: cor("--reprovado") } },
+        { name: "Entraram", type: "bar", barMaxWidth: 28, data: linhas.map((l) => l.entradas), itemStyle: { color: cor("--entrada") } },
+        { name: "Aprovados", type: "bar", barMaxWidth: 28, data: linhas.map((l) => l.aprovados), itemStyle: { color: cor("--aprovado") } },
+        { name: "Reprovados", type: "bar", barMaxWidth: 28, data: linhas.map((l) => l.reprovados), itemStyle: { color: cor("--reprovado") } },
       ],
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,7 +52,7 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
     return {
       ...b,
       xAxis: { ...(b.xAxis as object), data: meses },
-      yAxis: { ...(b.yAxis as object), max: 100, axisLabel: { color: cor("--texto-2"), formatter: "{value}%" } },
+      yAxis: { ...(b.yAxis as object), max: 100, axisLabel: { color: cor("--tinta-3"), formatter: "{value}%" } },
       series: [
         {
           name: "% reprovação",
@@ -95,7 +95,7 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
       xAxis: { ...(b.xAxis as object), data: composicao.map((c) => mesCurto(c.ano_mes)) },
       series: presentes.map((g) => ({
         name: ROTULO_GRUPO[g],
-        type: "bar" as const,
+        type: "bar" as const, barMaxWidth: 28,
         stack: "total",
         data: composicao.map((c) => c.entregues[g]),
         itemStyle: { color: cor(COR_GRUPO[g]) },
@@ -108,12 +108,46 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
 
   return (
     <div className="mensal">
+      <section className="bloco mensal__largo" aria-labelledby="t-tabela-mes">
+        <h2 id="t-tabela-mes" className="bloco__titulo">Resumo</h2>
+        <div className="rolavel-x">
+          <table className="tabela">
+            <thead>
+              <tr>
+                <th scope="col">Mês</th>
+                <th scope="col" className="num"><span className="coluna-tom etiqueta--entrada">Entraram</span></th>
+                <th scope="col" className="num"><span className="coluna-tom etiqueta--aprovado">Aprovados</span></th>
+                <th scope="col" className="num"><span className="coluna-tom etiqueta--reprovado">Reprovados</span></th>
+                <th scope="col" className="num">% reprov.</th>
+                <th scope="col" className="num">Tempo médio em QA</th>
+                <th scope="col" className="num" title="Cards criados por quem está no grupo Gestão do equipe.json">Criados pela gestão</th>
+                <th scope="col">Medição</th>
+              </tr>
+            </thead>
+            <tbody>
+              {linhas.slice().reverse().map((l) => (
+                <tr key={l.ano_mes}>
+                  <th scope="row">{mesCurto(l.ano_mes)}</th>
+                  <td className="num">{numero(l.entradas)}</td>
+                  <td className="num">{numero(l.aprovados)}</td>
+                  <td className="num">{numero(l.reprovados)}</td>
+                  <td className="num">{porcento(reprovacao(l.taxa_aprovacao))}</td>
+                  <td className="num">{l.tempo_medio_qa_h === null ? "—" : `${l.tempo_medio_qa_h.toLocaleString("pt-BR")} h`}</td>
+                  <td className="num">{numero(composicao.find((c) => c.ano_mes === l.ano_mes)?.criadosGestao ?? 0)}</td>
+                  <td><span className="meta">{MEDICAO[l.completude] ?? l.completude}</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <section className="bloco mensal__largo" aria-labelledby="t-volume">
         <header className="bloco__cabeca">
           <h2 id="t-volume" className="bloco__titulo">Volume de QA por mês</h2>
           <p className="nota">Desde {desde}: antes disso só há amostra incompleta.</p>
         </header>
-        <Grafico opcoes={volume} altura={280} rotulo={`Entradas, aprovados e reprovados por mês desde ${desde}`} />
+        <Grafico opcoes={volume} altura={220} rotulo={`Entradas, aprovados e reprovados por mês desde ${desde}`} />
       </section>
 
       <section className="bloco" aria-labelledby="t-reprov">
@@ -140,43 +174,10 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
         {composicao.length === 0 ? (
           <p className="vazio">Sem métricas por pessoa neste dashboard.json.</p>
         ) : (
-          <Grafico opcoes={grupos} altura={240} rotulo="Entregas para QA por mês, empilhadas por grupo" />
+          <Grafico opcoes={grupos} altura={200} rotulo="Entregas para QA por mês, empilhadas por grupo" />
         )}
       </section>
 
-      <section className="bloco mensal__largo" aria-labelledby="t-tabela-mes">
-        <h2 id="t-tabela-mes" className="bloco__titulo">Resumo</h2>
-        <div className="rolavel-x">
-          <table className="tabela">
-            <thead>
-              <tr>
-                <th scope="col">Mês</th>
-                <th scope="col" className="num">Entraram</th>
-                <th scope="col" className="num">Aprovados</th>
-                <th scope="col" className="num">Reprovados</th>
-                <th scope="col" className="num">% reprov.</th>
-                <th scope="col" className="num">Tempo médio em QA</th>
-                <th scope="col" className="num" title="Cards criados por quem está no grupo Gestão do equipe.json">Criados pela gestão</th>
-                <th scope="col">Medição</th>
-              </tr>
-            </thead>
-            <tbody>
-              {linhas.slice().reverse().map((l) => (
-                <tr key={l.ano_mes}>
-                  <th scope="row">{mesCurto(l.ano_mes)}</th>
-                  <td className="num texto-entrada">{numero(l.entradas)}</td>
-                  <td className="num texto-aprovado">{numero(l.aprovados)}</td>
-                  <td className="num texto-reprovado">{numero(l.reprovados)}</td>
-                  <td className="num">{porcento(reprovacao(l.taxa_aprovacao))}</td>
-                  <td className="num">{l.tempo_medio_qa_h === null ? "—" : `${l.tempo_medio_qa_h.toLocaleString("pt-BR")} h`}</td>
-                  <td className="num">{numero(composicao.find((c) => c.ano_mes === l.ano_mes)?.criadosGestao ?? 0)}</td>
-                  <td><span className="meta">{MEDICAO[l.completude] ?? l.completude}</span></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
     </div>
   );
 }

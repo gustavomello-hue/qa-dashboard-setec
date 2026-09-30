@@ -1,411 +1,315 @@
 ---
 name: QA·SETEC
-description: Painel de métricas de QA do Kanboard da SETEC como tela de fliperama CRT feita de dados.
+description: Painel de métricas de QA do Kanboard da SETEC como quadro de faixas de controle de fluxo.
 colors:
-  fosforo: "#07070f"
-  fundo-2: "#0c0e24"
-  fundo-3: "#14173a"
-  azul-arcade: "#3149ff"
-  violeta: "#7446ff"
-  lilas: "#b8a9ff"
-  texto: "#f2f1ff"
-  texto-2: "#b3b6df"
-  texto-3: "#8a8db8"
-  ciano: "#3fe3ff"
-  verde: "#45e07a"
-  vermelho: "#ff5361"
-  dourado: "#ffcc38"
-  aco: "#737696"
-  aco-escuro: "#3a3c55"
+  n0: "#ffffff"
+  n1: "#f7f8fa"
+  n2: "#eef0f3"
+  n3: "#e3e6ea"
+  n4: "#d3d8de"
+  n5: "#b6bdc6"
+  n6: "#8f98a3"
+  n7: "#69727e"
+  n8: "#4b535e"
+  n9: "#313740"
+  n10: "#1b1f25"
+  entrada: "#2f5fc4"
+  aprovado: "#1f7f55"
+  reprovado: "#bf3a33"
+  sem-qa: "#7550ad"
+  devolvido: "#9c6c10"
+  correcao-carga: "color-mix(in srgb, #bf3a33 78%, #ffffff)"
 typography:
-  label:
-    fontFamily: "Silkscreen, ui-monospace, monospace"
-    fontSize: "12px"
-    fontWeight: 400
-    letterSpacing: "0.04em"
-    fontFeature: "tnum"
-  nav:
-    fontFamily: "Silkscreen, ui-monospace, monospace"
-    fontSize: "16px"
-    fontWeight: 400
-    letterSpacing: "0.04em"
-    fontFeature: "tnum"
-  title:
-    fontFamily: "Silkscreen, ui-monospace, monospace"
-    fontSize: "16px"
-    fontWeight: 700
-    letterSpacing: "0.04em"
-  numeral-sm:
-    fontFamily: "Silkscreen, ui-monospace, monospace"
-    fontSize: "16px"
-    fontWeight: 400
-    letterSpacing: "0"
-    fontFeature: "tnum"
-  body:
-    fontFamily: "Jersey 15, ui-sans-serif, sans-serif"
-    fontSize: "18px"
-    fontWeight: 400
-    lineHeight: 1.3
-  body-md:
-    fontFamily: "Jersey 15, ui-sans-serif, sans-serif"
-    fontSize: "20px"
-    fontWeight: 400
-    lineHeight: 1.15
-  label-tv:
-    fontFamily: "Silkscreen, ui-monospace, monospace"
-    fontSize: "20px"
-    fontWeight: 400
-    letterSpacing: "0.04em"
-    fontFeature: "tnum"
-  body-lg:
-    fontFamily: "Jersey 15, ui-sans-serif, sans-serif"
-    fontSize: "22px"
-    fontWeight: 400
-    lineHeight: 1.1
   numeral:
-    fontFamily: "Silkscreen, ui-monospace, monospace"
-    fontSize: "24px"
-    fontWeight: 700
-    letterSpacing: "0"
-    fontFeature: "tnum"
-  title-tv:
-    fontFamily: "Silkscreen, ui-monospace, monospace"
-    fontSize: "24px"
-    fontWeight: 700
-    letterSpacing: "0.04em"
-  field:
-    fontFamily: "Jersey 15, ui-sans-serif, sans-serif"
-    fontSize: "24px"
-    fontWeight: 400
+    fontFamily: "JetBrains Mono, ui-monospace, Cascadia Mono, Consolas, monospace"
+    fontSize: "28px"
+    fontWeight: 500
+    lineHeight: 1.1
+    letterSpacing: "-0.02em"
+    fontFeature: "\"tnum\""
   headline:
-    fontFamily: "Jersey 15, ui-sans-serif, sans-serif"
-    fontSize: "32px"
+    fontFamily: "Public Sans, system-ui, Segoe UI, sans-serif"
+    fontSize: "22px"
+    fontWeight: 600
+    lineHeight: 1.2
+    letterSpacing: "-0.01em"
+  title:
+    fontFamily: "Public Sans, system-ui, Segoe UI, sans-serif"
+    fontSize: "16px"
+    fontWeight: 600
+    lineHeight: 1.45
+  body:
+    fontFamily: "Public Sans, system-ui, Segoe UI, sans-serif"
+    fontSize: "14px"
     fontWeight: 400
-    lineHeight: 1.05
-  numeral-tv:
-    fontFamily: "Silkscreen, ui-monospace, monospace"
-    fontSize: "40px"
-    fontWeight: 700
-    letterSpacing: "0"
-    fontFeature: "tnum"
-  display-24:
-    fontFamily: "Silkscreen, ui-monospace, monospace"
-    fontSize: "24px"
-    fontWeight: 700
-    lineHeight: 0.95
-    letterSpacing: "0"
-    fontFeature: "tnum"
-  display-32:
-    fontFamily: "Silkscreen, ui-monospace, monospace"
-    fontSize: "32px"
-    fontWeight: 700
-    lineHeight: 0.95
-    letterSpacing: "0"
-    fontFeature: "tnum"
-  display-40:
-    fontFamily: "Silkscreen, ui-monospace, monospace"
-    fontSize: "40px"
-    fontWeight: 700
-    lineHeight: 0.95
-    letterSpacing: "0"
-    fontFeature: "tnum"
-  display-48:
-    fontFamily: "Silkscreen, ui-monospace, monospace"
-    fontSize: "48px"
-    fontWeight: 700
-    lineHeight: 0.95
-    letterSpacing: "0"
-    fontFeature: "tnum"
-  display-56:
-    fontFamily: "Silkscreen, ui-monospace, monospace"
-    fontSize: "56px"
-    fontWeight: 700
-    lineHeight: 0.95
-    letterSpacing: "0"
-    fontFeature: "tnum"
-  display-64:
-    fontFamily: "Silkscreen, ui-monospace, monospace"
-    fontSize: "64px"
-    fontWeight: 700
-    lineHeight: 0.95
-    letterSpacing: "0"
-    fontFeature: "tnum"
-  display-80:
-    fontFamily: "Silkscreen, ui-monospace, monospace"
-    fontSize: "80px"
-    fontWeight: 700
-    lineHeight: 0.95
-    letterSpacing: "0"
-    fontFeature: "tnum"
-  display-96:
-    fontFamily: "Silkscreen, ui-monospace, monospace"
-    fontSize: "96px"
-    fontWeight: 700
-    lineHeight: 0.95
-    letterSpacing: "0"
-    fontFeature: "tnum"
-  display-112:
-    fontFamily: "Silkscreen, ui-monospace, monospace"
-    fontSize: "112px"
-    fontWeight: 700
-    lineHeight: 0.95
-    letterSpacing: "0"
-    fontFeature: "tnum"
+    lineHeight: 1.45
+  body-sm:
+    fontFamily: "Public Sans, system-ui, Segoe UI, sans-serif"
+    fontSize: "13px"
+    fontWeight: 400
+    lineHeight: 1.45
+  label:
+    fontFamily: "Public Sans, system-ui, Segoe UI, sans-serif"
+    fontSize: "11.5px"
+    fontWeight: 600
+    lineHeight: 1.45
+    letterSpacing: "0.07em"
+  label-sm:
+    fontFamily: "Public Sans, system-ui, Segoe UI, sans-serif"
+    fontSize: "10.5px"
+    fontWeight: 600
+    lineHeight: 1.45
+    letterSpacing: "0.07em"
+  dado:
+    fontFamily: "JetBrains Mono, ui-monospace, Cascadia Mono, Consolas, monospace"
+    fontSize: "12.5px"
+    fontWeight: 400
+    lineHeight: 1.45
+    fontFeature: "\"tnum\""
 rounded:
-  none: "0px"
+  faixa: "0px"
+  controle: "2px"
 spacing:
-  pixel: "4px"
-  xs: "6px"
-  sm: "8px"
-  md: "12px"
-  lg: "16px"
-  xl: "20px"
+  fio: "1px"
+  xs: "2px"
+  sm: "6px"
+  md: "10px"
+  porta-folga: "14px"
+  lg: "12px"
+  xl: "16px"
 components:
-  fase:
-    textColor: "{colors.texto-2}"
-    typography: "{typography.nav}"
-    rounded: "{rounded.none}"
-    padding: "8px 14px 8px 10px"
-  fase-ativa:
-    backgroundColor: "{colors.azul-arcade}"
-    textColor: "{colors.texto}"
-    rounded: "{rounded.none}"
-    padding: "8px 14px 8px 10px"
-  seletor-prefixo:
-    backgroundColor: "{colors.fundo-2}"
-    textColor: "{colors.texto-2}"
-    typography: "{typography.label}"
-    rounded: "{rounded.none}"
-    padding: "6px 10px"
-  seletor-prefixo-ativo:
-    backgroundColor: "{colors.azul-arcade}"
-    textColor: "{colors.texto}"
-    rounded: "{rounded.none}"
-    padding: "6px 10px"
-  controle:
-    textColor: "{colors.texto-3}"
-    typography: "{typography.label}"
-    rounded: "{rounded.none}"
-    padding: "6px 10px"
   botao:
-    backgroundColor: "{colors.azul-arcade}"
-    textColor: "{colors.texto}"
-    typography: "{typography.label}"
-    rounded: "{rounded.none}"
-    padding: "10px 16px"
+    backgroundColor: "{colors.n0}"
+    textColor: "{colors.n10}"
+    typography: "{typography.body-sm}"
+    rounded: "{rounded.controle}"
+    padding: "0 12px"
+    height: "28px"
   botao-hover:
-    backgroundColor: "{colors.violeta}"
-  botao-icone:
-    backgroundColor: "{colors.fundo-2}"
-    textColor: "{colors.texto}"
-    rounded: "{rounded.none}"
-    size: "30px"
-  campo-busca:
-    backgroundColor: "{colors.fosforo}"
-    textColor: "{colors.texto}"
-    typography: "{typography.field}"
-    rounded: "{rounded.none}"
-    padding: "8px 10px"
-  painel:
-    backgroundColor: "{colors.fundo-2}"
-    rounded: "{rounded.none}"
-    padding: "16px 22px 18px"
-  selo-medicao:
-    textColor: "{colors.texto-2}"
-    typography: "{typography.label}"
-    rounded: "{rounded.none}"
-    padding: "3px 8px"
+    backgroundColor: "{colors.n1}"
+  botao-pressionado:
+    backgroundColor: "{colors.n2}"
+    textColor: "{colors.n10}"
+  aba:
+    textColor: "{colors.n8}"
+    typography: "{typography.body}"
+    rounded: "{rounded.controle}"
+    padding: "0 10px 0 7px"
+    height: "30px"
+  aba-atual:
+    backgroundColor: "{colors.n2}"
+    textColor: "{colors.n10}"
+  segmentado-opcao:
+    backgroundColor: "{colors.n0}"
+    textColor: "{colors.n8}"
+    typography: "{typography.body-sm}"
+    rounded: "{rounded.controle}"
+    padding: "3px 10px"
+  segmentado-opcao-ativa:
+    textColor: "{colors.n10}"
+  campo:
+    backgroundColor: "{colors.n0}"
+    textColor: "{colors.n10}"
+    typography: "{typography.body-sm}"
+    rounded: "{rounded.controle}"
+    padding: "0 8px"
+    height: "28px"
+  chip:
+    backgroundColor: "{colors.n0}"
+    textColor: "{colors.n8}"
+    rounded: "{rounded.controle}"
+    padding: "1px 8px"
+  baia:
+    backgroundColor: "{colors.n3}"
+    rounded: "{rounded.faixa}"
+    padding: "0 6px 6px"
+  faixa:
+    backgroundColor: "{colors.n0}"
+    textColor: "{colors.n10}"
+    typography: "{typography.body-sm}"
+    rounded: "{rounded.faixa}"
+    padding: "6px 10px 7px 14px"
+  faixa-hover:
+    backgroundColor: "{colors.n1}"
+  kpi:
+    backgroundColor: "{colors.n0}"
+    textColor: "{colors.n10}"
+    typography: "{typography.numeral}"
+    rounded: "{rounded.faixa}"
+    padding: "9px 14px 10px 16px"
+  tecla:
+    backgroundColor: "{colors.n0}"
+    textColor: "{colors.n7}"
+    rounded: "{rounded.controle}"
+    padding: "0 3px"
 ---
 
 # Design System: QA·SETEC
 
 ## Overview
 
-**Creative North Star: "O Gabinete de Fliperama dos Dados"**
+**Creative North Star: "O Quadro de Faixas"**
 
-O painel é uma tela de fliperama CRT: preto-fósforo, um placar fixo no topo, telas inteiras tratadas como fases e um modo atração que roda sozinho na TV da sala. Tudo é desenhado no grão do pixel: fontes bitmap, molduras de linha dupla com cantos em degrau, barras feitas de blocos, ícones desenhados em grade 7×7. Nenhuma curva, nenhum gradiente decorativo, nenhum raio de canto.
+O painel é o quadro de quem controla o fluxo de QA, como um controlador de voo lê suas faixas de progresso: um trilho cinza-azulado frio ao fundo, baias rebaixadas que agrupam o trabalho, e dentro delas faixas claras de altura fixa, uma por card, pessoa ou evento. Cada faixa tem campos em posições fixas e passa de baia em baia. A leitura é de cima para baixo: a cabeça do quadro dá o placar do dia, as baias dizem onde está cada card e com quem, e cada faixa diz de onde veio, para onde foi e quem moveu.
 
-A densidade é de HUD: muitos números, pouco texto, e cada cor carrega exatamente um significado. A atmosfera CRT (linhas de varredura, brilho de fósforo, grade de tiles 8×8) é uma camada que se liga e desliga e fica gravada por navegador; o painel continua inteiro e legível sem ela. O que não foi medido nunca some: aparece riscado como estática.
+A densidade é alta e calma. O quadro é feito de cinzas de uma única escala de 11 degraus, filetes de 1px e três valores de tinta; a cor aparece só onde tem significado de estado (entrou, aprovado, reprovado, sem QA, devolvido) e sempre com o nome escrito ao lado. A profundidade é de encaixe, não de elevação: baias e controles ativos afundam no trilho com sombra interna; nada flutua. Cantos retos em tudo que é faixa, 2px no máximo nos controles.
 
-O mundo recusa o admin padrão (barra lateral, cartões brancos de KPI, azul de SaaS) e recusa transformar pessoas em jogadores. O vocabulário de fliperama vale para telas, filtros e dados, nunca para quem trabalha.
+O mundo substituiu o "Fliperama CRT", que foi descartado por inteiro: nenhum brilho de fósforo, nenhuma textura, nenhum retrô. Também recusa o dashboard genérico de cartões de KPI com gráficos soltos e sombras flutuantes, e recusa a fantasia literal de aeroporto (sem avião, sem textura de papel, sem canto arredondado).
 
 **Key Characteristics:**
-- Paleta de 15 cores em uso, sob lei: cor de estado = um significado só.
-- Duas faces pixeladas escolhidas por teste de leitura em 1:1: Silkscreen para rótulos e números, Jersey 15 para texto corrido, numa escala de degraus inteiros (12, 16, 18, 20, 22, 24, 32, 40, 48, 56, 64, 80, 96, 112px).
-- Numerais de placar com zeros à esquerda (059, 002) e tamanho por container query.
-- Molduras 9-slice de linha dupla (azul-arcade fora, violeta dentro), cantos em degrau, zero raio.
-- Movimento em degraus (`steps()`), nunca contínuo; conteúdo nunca começa escondido.
-- Camada CRT desligável e persistente.
+- Trilho, baia rebaixada e faixa reta: três planos, sem elevação para fora.
+- Cinzas só da escala --n0..--n10; tema claro e escuro trocam a escala, não os papéis.
+- Cor de estado só no porta-faixa de 4px e nos marcadores quadrados de 7px, sempre com rótulo escrito.
+- Interface em Public Sans; todo número, código de card e horário em JetBrains Mono tabular.
+- Filtro ou aba ativa afunda no trilho em vez de ganhar cor.
+- Teclado de primeira classe: 1–4 trocam de tela, # ou / vai para a busca de card.
 
 ## Colors
 
-Preto-fósforo azulado com cores de estado saturadas de fliperama, cada uma presa a um único significado.
+Uma escala fria de 11 cinzas faz todo o quadro; cinco matizes de estado, de saturação média, só marcam o que aconteceu com o card.
 
 ### Primary
-- **Azul Arcade** (azul-arcade): moldura externa dos painéis, linhas do placar, fundo de seleção ativa (fase, prefixo, botão), borda do campo de busca, eixo do gráfico, barra de rolagem. Só moldura e navegação.
-- **Violeta de Moldura** (violeta): linha interna da moldura, anel do estado ativo, hover de controles, ponto da marca, barra de tempo do modo atração, faixa da varredura de troca de tela. Só moldura e navegação.
-- **Lilás de Metadado** (lilas): etiquetas e projeto sob o título do card na fila, link externo do card. Tom de apoio da família violeta, nunca estado.
+- **Azul Entrada** (entrada): o card entrou ou está em QA. Porta-faixa da Fila de QA e de eventos de entrada, marcador do rótulo "Entrou", segmento Teste/QA da barra de carga, série "Entraram" dos gráficos. Também é a cor do foco de teclado, do cursor de texto e da seleção (24% sobre transparente). No escuro sobe para #6f9cf0.
 
-### Secondary (cores de estado)
-- **Ciano de QA** (ciano): em QA e entradas em QA. Placar EM QA e ENTRARAM, contagem da fila, número do card (#10588), barra TESTE/QA, série "Entraram", cursor de texto.
-- **Verde Aprovado** (verde): aprovado, QA para Concluídas. Placar, tabela mensal, série do gráfico, linha do tempo do card.
-- **Vermelho Reprovado** (vermelho): reprovado, QA para Correções, e retornos para correção. Placar, barra CORREÇÕES, série do gráfico, retornos no celular.
-- **Dourado Novo** (dourado): somente "novo desde a última coleta". Ícone ao lado do número do card e o sub-rótulo "NN NOVOS" do placar.
+### Secondary
+- **Verde Aprovado** (aprovado): QA → Concluídas. Porta-faixa, marcador e série de aprovados. No escuro #4cb784.
+- **Vermelho Reprovado** (reprovado): QA → Correções. Porta-faixa, marcador, série de reprovados. No escuro #ec6d65. Na barra de carga o segmento "Correções" usa a versão lavada **Vermelho Correção** (correcao-carga, 78% do vermelho sobre --n0) para não gritar numa barra comprida.
+
+### Tertiary
+- **Violeta Sem QA** (sem-qa): chegou em Concluídas sem passar por QA. No escuro #ae8ae6.
+- **Ocre Devolvido** (devolvido): QA → outra coluna que não Concluídas nem Correções. No escuro #d5a444.
 
 ### Neutral
-- **Preto-Fósforo** (fosforo): fundo da página, campo de busca, rodapé do modo atração, anel interno do estado ativo.
-- **Fundo de Painel** (fundo-2): preenchimento das molduras (88% de opacidade), botões de prefixo e de ícone, tooltip do gráfico. O corpo usa um gradiente radial de fundo-2 para fosforo a partir do topo.
-- **Fundo de Linha** (fundo-3): divisórias de tabela (2px), bordas de controles em repouso, hover de linha, separadores pontilhados.
-- **Texto** (texto): números neutros, títulos, texto principal.
-- **Texto 2** (texto-2): nomes, detalhes, controles inativos, rótulos de eixo.
-- **Texto 3** (texto-3): cabeçalhos de tabela, sub-rótulos do placar, notas, placeholder.
-- **Aço** (aco): borda do que não foi medido (lacuna, medição parcial), marca de "movimentação perdida" na linha do tempo.
-- **Aço Escuro** (aco-escuro): o risco da estática (hachura 135°, 4px cheio / 4px vazio) e ícone desabilitado.
+A escala --n0..--n10 é a única fonte de cinza. No tema escuro os mesmos degraus são redefinidos (--n0 #0d1013 até --n10 #e6e9ed) e os papéis abaixo passam a apontar para eles:
+- **Trilho** (--trilho → n2): fundo da página, barra de filtros, controle ativo afundado.
+- **Baia** (--baia → n3; no escuro n1): bloco rebaixado que agrupa faixas e rola por dentro; também o fundo do cabeçalho fixo das tabelas.
+- **Faixa** (--faixa → n0; no escuro n3): a faixa, a barra do topo, KPIs, campos e botões. No escuro a baia afunda para o preto e a faixa acende um degrau.
+- **Faixa realce** (--faixa-realce → n1; no escuro n4): hover de faixa e de botão, fundo inicial da faixa recém-inserida.
+- **Filete** (--filete → n4): toda linha de 1px, porta-faixa neutro, grade e eixo dos gráficos.
+- **Tinta 1 / 2 / 3** (n10 / n8 / n7): texto principal; rótulos e texto secundário; meta, horários, zeros e inativos. Nunca mais que três tintas numa faixa.
+- **Grupos** (DEV n9, estagiários DEV n6, QA n8, estagiários QA n5, gestão n7, outros n4): séries dos gráficos por grupo, alternando claro e escuro, sempre com legenda escrita.
+- **Papéis de carga**: A iniciar n5 (escuro n6), Em andamento n8.
 
 ### Named Rules
-**The Color Is Law Rule.** Ciano = em QA/entradas, verde = aprovado, vermelho = reprovado e retornos, dourado = novo desde a última coleta, aço/estática = não medido, lacuna, sem sinal. Nenhuma dessas cores aparece como enfeite. Azul-arcade e violeta são só moldura e navegação.
+**A Regra do Porta-Faixa.** A cor de estado mora no porta-faixa (borda esquerda de 4px, reta, feita com sombra interna) e nos marcadores quadrados de 7px dos rótulos e cabeçalhos; barras de carga e séries de gráfico são as únicas outras superfícies coloridas, e sempre com legenda. Texto, fundo de faixa e número não recebem cor de estado.
 
-**The Uncolored Queue Rule.** A coluna "dias em QA" da fila é sempre na cor de texto. Nunca colorir por faixa de dias (decisão do usuário).
+**A Regra da Cor Escrita.** Nenhuma cor aparece sozinha: todo porta-faixa colorido tem o nome do estado escrito na mesma faixa ou na coluna, todo quadradinho tem rótulo ao lado, toda série tem legenda.
 
-**The Static Rule.** O que não foi medido fica riscado como estática (hachura 135° em aco-escuro, borda em aço). Nunca esconder uma lacuna nem pintá-la com uma cor de estado.
+**A Regra dos Onze Cinzas.** Nenhum cinza existe fora de --n0..--n10. Um cinza novo é um degrau errado da escala, não um token novo.
 
-**The One Legend Rule.** A lei das cores é explicada no próprio painel (painel LEGENDA na coluna direita da mesa; legenda em linha no gráfico mensal). Uma cor nova de estado exige entrada na legenda.
+**A Regra do Grupo Neutro.** Grupos de pessoas (DEV, QA, estagiários, gestão) são tons da escala neutra, nunca matizes de estado: grupo não é acontecimento.
 
 ## Typography
 
-**Display Font:** Silkscreen (com ui-monospace, monospace)
-**Body Font:** Jersey 15 (com ui-sans-serif, sans-serif)
-**Label/Mono Font:** Silkscreen
+**Display Font:** nenhuma; o número grande do KPI é o único destaque e sai em mono.
+**Body Font:** Public Sans (com system-ui, Segoe UI, sans-serif), pesos 400/500/600/700 via @fontsource.
+**Label/Mono Font:** JetBrains Mono (com ui-monospace, Cascadia Mono, Consolas), pesos 400/500, sempre com algarismos tabulares.
 
-**Character:** Silkscreen é a voz do HUD, caixa-alta bitmap de 8×8 para rótulos e números tabulares; Jersey 15 é a voz legível, pixelada mas proporcional, com minúsculas e acentos para títulos de card, nomes e detalhes. As duas foram escolhidas por teste de leitura em 1:1: a letra que denuncia é o C, que nas faces de abertura de 1 pixel fecha em O. Pixelify Sans foi testada e removida. Suavização de fonte desligada (`-webkit-font-smoothing: none`).
+**Character:** Uma face de interface neutra, de repartição bem feita, para tudo que é nome, rótulo e frase; uma mono de terminal para tudo que é impresso na faixa: número, #card, horário, período. A troca de face é a troca entre ler e conferir.
 
 ### Hierarchy
-Cada tamanho é um degrau literal da escala; não há tamanhos fora dela.
-
-- **Label** (Silkscreen 400, 12px, 0.04em, caixa-alta): todo rótulo de mesa. Rótulos do placar, sub-rótulos, cabeçalhos de tabela, metadados da fila, prefixos e o número 1P…4P, controles, botão primário, selo de coleta, paginação, notas, legenda, selo de medição, rodapé da TV na mesa, e os eixos do gráfico.
-- **Nav** (Silkscreen 400, 16px, 0.04em): menu de fases, rótulo da busca, selo SEM SINAL; na TV, sub-rótulos do placar, legendas de linha e metadados sobem para este degrau.
-- **Title** (Silkscreen 700, 16px, 0.04em): títulos de painel (FILA DE QA, ONDE ESTÁ AGORA, SINAL · 7 DIAS, LEGENDA).
-- **Numeral pequeno** (Silkscreen 400, 16px, tabular): número do card na fila, valores da distribuição, células da tabela mensal.
-- **Body** (Jersey 15 400, 18px, 1.3): texto corrido, nomes, detalhes de lacuna, select de projeto, tooltip do gráfico.
-- **Body médio** (Jersey 15 400, 20px, 1.15): valores da ficha do card e transição "de → para" da linha do tempo.
-- **Label TV** (Silkscreen 400, 20px): rótulos do placar, selo, paginação e rodapé do modo atração na cena TV.
-- **Body grande** (Jersey 15 400, 22px, 1.1, até 2 linhas na mesa e 3 no celular): título do card na fila; na TV, nome do designado e detalhe da lacuna.
-- **Numeral** (Silkscreen 700, 24px, tabular): "dias em QA" na fila e números da ficha; na TV, número do card e valores da distribuição (400). A marca QA·SETEC usa Silkscreen 700 a 24px.
-- **Title TV** (Silkscreen 700, 24px): títulos de painel na cena TV.
-- **Campo** (Jersey 15 400, 24px): número digitado na busca de card.
-- **Headline** (Jersey 15 400, 32px, 1.05, até 60ch, `text-wrap: balance`): título do card na tela CARD; na TV, título do card na fila. O texto da tela inicial (SEM SINAL, CARREGANDO…) usa Silkscreen a 32px.
-- **Numeral TV** (Silkscreen 700, 40px): "dias em QA" na cena TV.
-- **Display** (Silkscreen 700, 0.95, degraus 24 · 32 · 40 · 48 · 56 · 64 · 80 · 96 · 112px): numerais do placar, escolhidos por container query. Contadores: 32, 40, 48, 64, 80, 96, 112px. Taxa (mais caracteres): 24, 32, 40, 48, 56, 64px.
+- **Numeral** (JetBrains Mono 500, 28px, 1.1, -0.02em; 24px abaixo de 700px): o valor do contador na cabeça do quadro.
+- **Headline** (600, 22px, 1.2, -0.01em): nome da pessoa na tela Pessoa.
+- **Title** (600, 16px): título do card na tela Card.
+- **Body** (400, 14px, 1.45): base do documento, abas.
+- **Body-sm** (400, 13px): conteúdo das faixas, controles, campos, botões, números das tabelas.
+- **Label** (600, 11.5px, 0.06–0.07em, caixa alta, tinta 2): título de baia, rótulo de KPI, rótulo da busca. Cabeçalho de tabela e rótulo de ficha usam o degrau 11px com 0.05em.
+- **Label-sm** (600, 10.5px, 0.07–0.08em, caixa alta): nome do estado ao lado do marcador, título de grupo na carga, dia no feed.
+- **Dado** (JetBrains Mono 400/500, 12–13px, tabular): #card (500, sublinhado em n5), horários, dias em QA, contagens, período, rodapé do modo TV, rótulos de eixo dos gráficos (11px).
 
 ### Named Rules
-**The Two Voices Rule.** Silkscreen só para rótulos e números; Jersey 15 para todo texto corrido. Nunca inverter: Silkscreen em frase longa vira ruído, Jersey em rótulo de HUD perde o fliperama.
-
-**The Legibility Floor Rule.** Rótulo em Silkscreen nunca abaixo de 12px e nunca em negrito abaixo de 16px. Texto corrido em Jersey 15 nunca abaixo de 18px na mesa.
-
-**The Literal Step Rule.** Todo tamanho de fonte é um degrau literal da escala (12, 16, 18, 20, 22, 24, 32, 40, 48, 56, 64, 80, 96, 112px). Nada de `clamp()`, `em` ou valores intermediários como 13px ou 14px: o pixel da fonte precisa cair em múltiplo inteiro.
-
-**The Bitmap Percent Rule.** O "%" nunca é o glifo da fonte (na Silkscreen lê como Z, na Jersey pequena como ×): é o ícone bitmap "porcento", a 0.62em do número.
-
-**The Scoreboard Padding Rule.** Contadores do placar e das tabelas saem com zeros à esquerda (059, 002, 013), como placar de fliperama.
+**A Regra da Impressão.** Mono só para dado: números, códigos de card, horários, datas e períodos. Cabeçalhos, rótulos, nomes e frases ficam em Public Sans, inclusive o cabeçalho das colunas numéricas.
 
 ## Layout
 
-Largura máxima de 1680px centrada, com respiro fluido (`clamp(12px, 2vw, 28px)` no topo, `clamp(12px, 2.4vw, 36px)` nas laterais, 64px embaixo). O cabeçalho empilha três faixas: marca e selo de coleta; o placar de cinco colunas entre duas linhas azul-arcade de 2px, com divisórias pontilhadas em fundo-3; e a linha de navegação.
+A página é a casca: barra do topo (faixa, 44px de altura mínima, com marca, abas, selo de coleta), barra de filtros no trilho, e a tela com respiro de 12px no topo e 16px nas laterais (10/12px abaixo de 700px). Entre baias o espaço é 12px; entre faixas, 1px de trilho ou baia (a pilha de faixas é separada por fio, não por margem). Dentro da baia as faixas ficam a 6px das bordas; dentro da faixa o texto começa 14px à esquerda (4px de porta-faixa mais folga) e 10px à direita.
 
-A linha de navegação carrega o menu de fases (HOJE / MENSAL / CARD), o seletor de prefixo (TODOS, 1P DEV, 2P WEB, 3P MOB, 4P DEMANDAS) com o select de projeto, e os controles CRT e MODO TV à direita. O seletor de prefixo mora nessa linha porque recorta o HUD e todas as telas (Hoje e Mensal), não só uma coluna; some na tela CARD.
+Na tela Agora, a partir de 1100px, o quadro é uma grade de três baias (carga 0.95fr, fila 1.55fr, movimentações 1fr) sob a faixa única de cinco contadores, ocupando exatamente a altura da janela: a página não rola, cada baia rola por dentro. Abaixo disso as baias empilham. A tela Pessoa usa grade auto-fit de colunas de 380px, com baias que crescem até a altura útil e só então rolam. A Mensal é de duas colunas e vira uma abaixo de 800px. A Card limita-se a 1200px.
 
-Tela HOJE: grade de duas colunas (2,1fr para a FILA DE QA paginada, 10 linhas por página; coluna direita de no mínimo 300px com ONDE ESTÁ AGORA, SINAL · 7 DIAS e, fechando a coluna, LEGENDA). MENSAL e CARD são uma coluna só. Espaço entre painéis: 20px. Ritmo interno em múltiplos pequenos (4, 6, 8, 10, 12, 16px); o pixel da grade é 4px.
-
-**Responsivo.** Abaixo de 1100px a tela HOJE vira uma coluna. Abaixo de 760px o placar vira 2 colunas com a taxa ocupando a linha inteira, as colunas DESIGNADO e RETORNOS saem da fila (os retornos passam a aparecer em vermelho sob o título), o título do card vai até 3 linhas, a linha do tempo perde a coluna de data, e tabelas largas rolam dentro do painel, nunca a página.
-
-**Cena TV (`?tv`).** Modo atração: troca de quadro a cada 12s (Hoje em todas as páginas, Mensal, depois Hoje de cada prefixo com cards). Controles de mesa somem, exceto SAIR DA TV; seletor de prefixo some; LEGENDA some. Rótulos sobem para 16px ou 20px, títulos de painel para 24px, títulos de card para 32px, "dias em QA" para 40px, o rodapé do modo atração para 20px; a fila mostra 6 linhas por página; a coluna principal cresce para 2,5fr. Um rodapé fixo mostra MODO ATRAÇÃO, o quadro atual e uma barra de tempo em blocos violeta que enche em 24 degraus.
-
-### Named Rules
-**The Scoreboard Step Rule.** Numerais do placar crescem por container query em degraus fixos, com limiares em 128, 154, 205, 256, 308 e 358px de largura do item: contadores 32 → 40 → 48 → 64 → 80 → 96 → 112px, taxa 24 → 24 → 32 → 40 → 48 → 56 → 64px. Nunca `clamp()` contínuo.
+Abaixo de 700px: some o que é só de tela larga (teclas de atalho, colunas secundárias, botão Modo TV), o selo de coleta desce para linha própria, os contadores ficam em duas colunas (o último ímpar ocupa a linha), e a linha do tempo do card vira uma coluna.
 
 ## Elevation & Depth
 
-Plano. Não há sombra de elevação: a profundidade vem da moldura dupla, do preenchimento fundo-2 sobre o gradiente fosforo e da luz. Quando a camada CRT está ligada, o fósforo brilha: números e marca ganham um halo da própria cor, os estados ativos ganham um halo violeta, a página ganha linhas de varredura e os painéis uma grade de tiles 8×8: um único pixel azul-arcade (opacidade de preenchimento 0,22) no canto de cada tile, desenhado como padrão SVG com `crispEdges`.
+O sistema não tem elevação para fora. A profundidade é de encaixe: o trilho é o plano de referência, a baia é rebaixada nele com uma sombra interna curta, e o controle ativo afunda no trilho. As faixas são planas, separadas por fio de 1px. O tooltip dos gráficos é a única superfície que se sobrepõe, e é uma faixa com filete, sem sombra.
 
 ### Shadow Vocabulary
-- **Brilho de fósforo** (`text-shadow: 0 0 6px color-mix(in srgb, currentColor 55%, transparent), 0 0 18px color-mix(in srgb, currentColor 22%, transparent)`): numerais do placar, marca e texto da tela inicial; só com CRT ligado.
-- **Anel de seleção** (`box-shadow: 0 0 0 2px var(--fosforo), 0 0 0 4px var(--violeta)`): fase atual, prefixo marcado, botão primário. Com CRT, soma `0 0 16px rgb(116 70 255 / 0.55)`.
-- **Linhas de varredura** (gradiente repetido de 4px, faixa preta a 22%, camada fixa sobre tudo, sem capturar o ponteiro): só com CRT ligado.
-- **Grade de tiles** (padrão SVG de 8×8px com um retângulo de 1×1px em azul-arcade, `fill-opacity` 0,22, repetido no fundo das molduras): só com CRT ligado. É um ponto por tile, nunca linhas cruzadas.
+- **Baia** (`box-shadow: inset 0 1px 2px rgb(27 31 37 / 0.08)`; escuro `inset 0 1px 2px rgb(0 0 0 / 0.4)`): baias, trilho da barra de carga, caixa do controle segmentado.
+- **Afundado** (`box-shadow: inset 0 1px 2px rgb(27 31 37 / 0.14)`; escuro `inset 0 1px 3px rgb(0 0 0 / 0.55)`): aba atual, botão e chip pressionados.
+- **Porta-faixa** (`box-shadow: inset 4px 0 0 <cor>`): a borda esquerda de estado; neutra em n4 quando não há estado.
+- **Relevo do segmentado** (`box-shadow: 0 1px 0 var(--filete)`): as opções inativas do segmentado ficam um fio acima da caixa.
 
 ### Named Rules
-**The Switchable Atmosphere Rule.** Varredura, brilho e grade de tiles são uma camada desligável (controle CRT ON/OFF, gravado no navegador). Nenhuma informação pode depender dela.
+**A Regra do Afundar.** O que está selecionado desce para o trilho (fundo --trilho mais sombra afundada, texto em tinta 1); não ganha cor, contorno colorido nem elevação.
 
 ## Shapes
 
-Zero raio em tudo. As bordas são de 2px sólidas ou pontilhadas; a moldura de painel é um 9-slice de 8px desenhado em SVG com `crispEdges`: linha externa azul-arcade, um pixel de folga, linha interna violeta, cantos em degrau (a variante fina usa 4px). Barras de dados são feitas de blocos (8px cheio, 3px vazio), a barra de tempo da TV também (10px e 3px). Ícones são bitmaps 7×7 desenhados como retângulos inteiros (cursor, anterior, próximo, seta, tv, novo, porcento), no mesmo traço da tipografia. Marcadores de linha do tempo e amostras de legenda são quadrados e retângulos cheios.
+Faixas, baias, KPIs, tabelas e fichas têm cantos retos (0). Controles (abas, botões, campos, segmentado, chips, teclas, a marca "QA", tooltip) têm 2px no máximo. Marcadores de estado e o ponto do selo são quadrados de 7px, legendas 9px, nunca círculos. As barras de rolagem são finas (8px), de polegar reto em n5. Linhas são sempre de 1px; a única borda grossa do sistema é o porta-faixa de 4px. Ícones são de traço 2px em 24×24, currentColor, desenhados à mão e só os usados.
 
 ## Components
 
 ### Buttons
-Blocos de fliperama: retos, borda de 2px, seleção por preenchimento azul-arcade com anel duplo.
-- **Shape:** sem raio (0px), borda de 2px.
-- **Primário (botao):** fundo azul-arcade, texto claro, 10px 16px, Silkscreen 12px, com anel de seleção. Hover troca o fundo e a borda para violeta.
-- **Controle (CRT, MODO TV):** transparente, borda fundo-3, texto-3, 12px. Hover ou pressionado: texto claro e borda azul-arcade.
-- **Botão de ícone (paginação):** 30×30px, fundo-2, borda fundo-3; hover borda violeta; desabilitado com ícone em aço-escuro.
-- **Foco:** contorno tracejado de 2px em texto, afastado 3px, em todo elemento focável.
+Controles quietos, de borda fina, que afundam quando ligados.
+- **Shape:** quase reto (2px), 28px de altura.
+- **Primary:** fundo de faixa, borda de 1px em n5, 13px/500, padding 0 12px, ícone de 16px com 6px de vão.
+- **Hover / Focus:** hover passa para faixa realce; foco é contorno de 2px em Azul Entrada com 1px de afastamento (global).
+- **Leve:** borda em filete e texto em tinta 2.
+- **Pressionado** (aria-pressed): fundo de trilho com sombra afundada, texto em tinta 1.
 
-### Chips (seletor de prefixo)
-- **Style:** fundo-2, borda fundo-3 de 2px, texto-2, Silkscreen 12px; o número do jogador (1P…4P), também a 12px, vem antes em texto-3.
-- **State:** hover com borda violeta; marcado (radio) com fundo azul-arcade e anel de seleção; desabilitado no modo TV.
+### Chips
+- **Style:** faixa com filete de 1px, 2px de canto, 12px em tinta 2, padding 1px 8px.
+- **State:** pressionado afunda no trilho como o botão.
 
-### Cards / Containers (painel)
-- **Corner Style:** degrau pixelado da moldura 9-slice, sem raio.
-- **Background:** fundo-2 a 88%, recortado na área interna; com CRT, o ponto azul-arcade no canto de cada tile 8×8.
-- **Shadow Strategy:** nenhuma (ver Elevation & Depth).
-- **Border:** moldura dupla azul-arcade / violeta de 8px.
-- **Internal Padding:** 16px no topo, `clamp(12px, 1.6vw, 22px)` nas laterais, 18px embaixo. Cabeça com título à esquerda e controles (paginação, legenda) à direita.
+### Cards / Containers
+- **Baia:** fundo --baia, cantos retos, sombra de baia, cabeça com título em Label e contagem em mono tinta 1; rola por dentro.
+- **Faixa:** fundo --faixa, cantos retos, porta-faixa de 4px à esquerda, padding 6–7px por 10px com 14px à esquerda, hover em faixa realce. Título e meta numa linha cada, cortados com reticências; o texto completo fica no title.
+- **Ficha** (detalhe do card): grade auto-fit de campos de 140px sobre fundo de faixa, separados por filetes de 1px, rótulo em Label 11px e valor numérico em mono 18px.
 
 ### Inputs / Fields
-- **Busca de card:** fundo fosforo, borda azul-arcade de 2px, Jersey 24px, largura de 10ch, cursor ciano; rótulo em Silkscreen ciano.
-- **Select de projeto:** fundo-2, borda fundo-3, Jersey 18px, 280px; hover com borda violeta.
+- **Style:** 28px de altura, borda de 1px em filete, 2px de canto, fundo de faixa, 13px; select nativo com o mesmo tratamento; cursor de texto em Azul Entrada.
+- **Focus:** contorno global de 2px em Azul Entrada. Hover escurece a borda para n5.
+- **Checkbox:** accent-color em tinta 1.
 
-### Navigation (menu de fases)
-- Silkscreen 16px em texto-2, sem borda em repouso; hover em texto claro. A fase atual ganha fundo azul-arcade, anel de seleção e o cursor bitmap ▶ à esquerda (o cursor ocupa lugar sempre, só fica visível na fase atual).
+### Navigation
+- **Barra do topo:** faixa com filete inferior; marca "QA" em bloco tinta 1 invertido de 2px de canto seguida de "SETEC" em Label; abas de 30px com a tecla do atalho (mono 10px, caixa de filete, 2px) antes do nome. Aba atual afunda no trilho; hover vai para faixa realce. Abaixo de 700px as teclas somem.
+- **Filtros:** segmentado (Todos/DEV/WEB/MOB/Demandas) numa caixa de baia com opções em relevo; a ativa perde o relevo, fica no fundo da caixa e vai a 600. Selects de projeto e mês ao lado; Modo TV à direita.
+- **Selo de coleta:** quadrado de 7px em n7 (atrasado: n6 com contorno em tinta 2), horário da coleta e idade em tinta 3. Falha de atualização aparece escrita.
 
-### Placar (HUD)
-Cinco itens (EM QA, ENTRARAM, APROVADOS, REPROVADOS, APROVAÇÃO MÊS): rótulo em Silkscreen 12px na cor de estado, numeral grande na mesma cor com brilho, sub-rótulo de 12px em texto-3 com o valor do último dia útil ("SEG 28: 013"). A taxa é neutra (texto) e leva o "%" bitmap. Na primeira aparição, o número conta de 0 até o valor em 8 degraus de 45ms (sem contagem com movimento reduzido).
+### Contador (KPI)
+Faixa única de cinco contadores em grade auto-fit (mín. 160px), separados por fio de 1px em filete. Cada contador tem porta-faixa na cor do que o número é (não de se é bom ou ruim), rótulo em Label, valor em Numeral e comparação à direita em 12px tinta 3 com o valor anterior em mono tinta 2.
 
-### Fila de QA
-Tabela paginada: número do card em Silkscreen ciano (abre a linha do tempo), ícone dourado de novo, título em Jersey 22px (link para o Kanboard) com metadados em lilás, designado em Jersey 18px, dias em QA em Silkscreen 24px negrito na cor de texto, retornos. Linhas separadas por 2px fundo-3, hover fundo-3.
+### Tabela como pilha de faixas
+Linhas separadas por 1px (border-spacing), cada linha é uma faixa com porta-faixa na primeira célula, hover em faixa realce. Cabeçalho fixo no fundo da baia, em Label 11px sans. Colunas de estado levam o quadradinho de 7px da cor no cabeçalho; os números da coluna ficam em tinta. Zeros e pessoas inativas em tinta 3. Rodapé de total em 600 sobre fundo transparente.
 
-### Gráfico mensal
-Barras de blocos (pictorialBar) nas três cores de estado, eixo azul-arcade de 2px, linhas de grade fundo-3, rótulos de eixo em Silkscreen 12px, tooltip em fundo-2 com borda azul-arcade e Jersey 15 18px. Sem animação: as barras aparecem inteiras, nunca crescem suavemente.
+### Barra de carga
+Trilho rebaixado de 10px com segmentos de no mínimo 3px separados por 1px: A iniciar, Em andamento (neutros), Teste/QA (Azul Entrada), Correções (Vermelho Correção). Largura proporcional ao maior total; legenda escrita acima. Linha de carga: nome (116px) · barra · total em mono.
 
-### Distribuição em blocos
-Uma linha por papel: nome em Silkscreen 12px, barra de blocos (1 bloco = 8 cards) em `currentColor`, valor à direita. Só TESTE/QA (ciano) e CORREÇÕES (vermelho) têm cor; o resto é neutro.
+### Feed de movimentações e linha do tempo
+Faixas agrupadas por dia (Label-sm), com horário em mono tinta 3 à esquerda, rótulo do evento com marcador quadrado, #card e título, e "pessoa · por quem moveu" em meta. A faixa que chegou na última coleta entra uma vez deslizando 10px da esquerda a partir de faixa realce (560ms, cubic-bezier(0.16, 1, 0.3, 1)); com movimento reduzido, nada anima.
 
-### Estática (lacuna e medição parcial)
-Hachura 135° aco-escuro com borda em aço. Faixa de 36×28px no painel SINAL; selo de MEDIÇÃO parcial na tabela mensal; selo SEM SINAL no topo quando a coleta atrasa (Silkscreen 400 a 16px, sem negrito).
-
-### Troca de tela
-Uma faixa de 48px de linhas violeta desce sobre a tela nova em 420ms, em 10 degraus, e some. O conteúdo nunca começa escondido: se a animação não rodar, a tela já está inteira.
+### Gráficos
+ECharts em canvas, lendo as cores dos tokens em tempo de execução e redesenhando quando o tema do sistema muda. Sem animação, legenda de quadrados 10×10 no topo, eixos e grade em filete, rótulos de eixo em mono 11px tinta 3, tooltip de faixa com filete e 2px de canto, ponteiro de eixo em sombra leve. Barras com no máximo 28px. Desenhados sobre uma faixa larga dentro da baia.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** usar cada cor de estado só para o seu significado (ciano em QA/entradas, verde aprovado, vermelho reprovado/retornos, dourado novo desde a última coleta, aço/estática não medido).
-- **Do** manter azul-arcade e violeta restritos a moldura, navegação e seleção.
-- **Do** riscar como estática (hachura 135° aco-escuro, borda aço) tudo que não foi medido.
-- **Do** usar Silkscreen 400 a partir de 12px para rótulos e números, e Jersey 15 a partir de 18px para texto corrido.
-- **Do** escolher todo tamanho de fonte entre os degraus literais da escala (12, 16, 18, 20, 22, 24, 32, 40, 48, 56, 64, 80, 96, 112px).
-- **Do** desenhar o "%" com o ícone bitmap "porcento" e novos ícones como bitmaps 7×7 com `crispEdges`.
-- **Do** fazer numerais de placar crescerem por container query em degraus fixos.
-- **Do** animar em degraus (`steps()`) e deixar o conteúdo visível desde o primeiro quadro.
-- **Do** manter a camada CRT desligável e o painel inteiro legível com ela desligada.
-- **Do** manter a lei das cores explicada na tela (painel LEGENDA na mesa).
+- **Do** tirar todo cinza da escala --n0..--n10 e usar os papéis (--trilho, --baia, --faixa, --faixa-realce, --filete, --tinta-1..3) em vez do degrau cru quando o papel existe.
+- **Do** marcar estado com o porta-faixa de 4px (inset 4px 0 0) ou com o quadrado de 7px, e escrever o nome do estado ao lado.
+- **Do** usar cada matiz só no seu significado: azul entrou/em QA, verde aprovado, vermelho reprovado, violeta sem QA, ocre devolvido.
+- **Do** abrir toda tabela de pessoas em ordem alfabética; ordenar por coluna é escolha de quem olha.
+- **Do** colocar a cor de estado de uma coluna só no quadradinho do cabeçalho e manter os números da coluna em tinta.
+- **Do** representar grupos (DEV, QA, estagiários, gestão) com degraus da escala neutra, alternando claro e escuro, com legenda escrita.
+- **Do** escrever números, #card, horários e períodos em JetBrains Mono tabular; cabeçalhos, rótulos e frases em Public Sans.
+- **Do** mostrar o selecionado afundando no trilho (fundo --trilho + sombra afundada).
+- **Do** manter faixas com altura fixa: uma linha por campo, reticências, texto completo no title.
+- **Do** mostrar o que não foi medido como não medido ("—", lacunas de coleta, saídas sem autor).
 
 ### Don't:
-- **Don't** colorir "dias em QA" por faixa de dias.
-- **Don't** transformar pessoas em jogadores: sem ranking de devs, vidas, GAME OVER ou HI-SCORE de pessoa. O "1P…4P" nomeia prefixos, nunca pessoas.
-- **Don't** usar dourado, verde, vermelho ou ciano como enfeite, fundo de seção ou destaque genérico.
-- **Don't** pôr Silkscreen em negrito abaixo de 16px nem abaixo de 12px em qualquer peso.
-- **Don't** usar o glifo "%" das fontes nem ícones de glifo unicode ou de biblioteca vetorial.
-- **Don't** arredondar cantos, usar sombra de elevação ou gradiente decorativo.
-- **Don't** começar uma tela escondida à espera de animação, nem usar piscar contínuo, crescimento suave ou som.
-- **Don't** voltar ao admin padrão: barra lateral, cartões brancos de KPI, azul de SaaS.
+- **Don't** criar ranking de pessoas: sem pódio, sem destaque do "melhor" ou "pior", sem cor de julgamento sobre nome de pessoa ou sobre número.
+- **Don't** colorir "dias em QA" com cor de alerta, nem fazer nada piscar ou tocar som.
+- **Don't** usar matiz de estado para grupo de pessoas ou para qualquer coisa que não seja o estado.
+- **Don't** deixar uma cor sozinha, sem rótulo, legenda ou nome escrito.
+- **Don't** arredondar faixas, baias ou KPIs, nem passar de 2px de canto em controle.
+- **Don't** usar sombra projetada ou elevação para fora; a profundidade só afunda.
+- **Don't** usar mono em cabeçalho, rótulo ou frase.
+- **Don't** trazer de volta o fliperama CRT (brilho, fósforo, textura, retrô) nem virar fantasia de aeroporto (avião, papel, cantos redondos).
+- **Don't** montar o dashboard genérico de cartões de KPI flutuantes com gráficos soltos.

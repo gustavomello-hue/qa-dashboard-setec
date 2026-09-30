@@ -1,83 +1,107 @@
+@import "@fontsource/public-sans/latin-400.css";
+@import "@fontsource/public-sans/latin-500.css";
+@import "@fontsource/public-sans/latin-600.css";
+@import "@fontsource/public-sans/latin-700.css";
+@import "@fontsource/jetbrains-mono/latin-400.css";
+@import "@fontsource/jetbrains-mono/latin-500.css";
+
 /*
- * Base PROVISÓRIA da v2: neutra, legível, clara/escura pelo sistema. A
- * identidade visual de verdade é a etapa 3 (/impeccable) e deve substituir
- * estes valores - os nomes dos tokens podem ficar.
- *
- * Cor só com significado:
- *   --entrada   = entrou em QA / volume
- *   --aprovado  = QA -> Concluídas
- *   --reprovado = QA -> Correções
- *   --sem-qa    = concluído sem passar pelo QA
- *   --devolvido = saiu de QA para outra coluna
- * Todo o resto é tom de cinza.
+ * Quadro de Faixas. Os cinzas vêm de UMA escala de 11 degraus (--n0..--n10)
+ * e nenhum cinza existe fora dela. A cor mora só no porta-faixa, sempre com
+ * o rótulo escrito ao lado, e cada cor tem um significado:
+ *   --entrada   entrou em QA / está em QA
+ *   --aprovado  QA -> Concluídas
+ *   --reprovado QA -> Correções
+ *   --sem-qa    chegou em Concluídas sem sair de QA
+ *   --devolvido QA -> outra coluna
  */
 :root {
-  --fundo: #f6f7f9;
-  --superficie: #ffffff;
-  --superficie-2: #f0f2f5;
-  --linha: #e1e4e9;
-  --linha-forte: #c9ced6;
-  --texto: #1b1f24;
-  --texto-2: #5b6470;
-  --texto-3: #8a929c;
-  --foco: #2f6fdb;
-  --sombra-eixo: rgba(20, 30, 50, 0.06);
+  --n0: #ffffff;
+  --n1: #f7f8fa;
+  --n2: #eef0f3;
+  --n3: #e3e6ea;
+  --n4: #d3d8de;
+  --n5: #b6bdc6;
+  --n6: #8f98a3;
+  --n7: #69727e;
+  --n8: #4b535e;
+  --n9: #313740;
+  --n10: #1b1f25;
 
-  --entrada: #2f6fdb;
-  --aprovado: #1f8a4c;
-  --reprovado: #c93a3a;
-  --sem-qa: #8a5cc7;
-  --devolvido: #b07a12;
+  /* Papéis do quadro, apontando para a escala. */
+  --trilho: var(--n2);
+  --baia: var(--n3);
+  --faixa: var(--n0);
+  --faixa-realce: var(--n1);
+  --filete: var(--n4);
+  --tinta-1: var(--n10);
+  --tinta-2: var(--n8);
+  --tinta-3: var(--n7);
+  --sombra-baia: inset 0 1px 2px rgb(27 31 37 / 0.08);
+  --sombra-afundado: inset 0 1px 2px rgb(27 31 37 / 0.14);
+  --sombra-eixo: rgb(27 31 37 / 0.05);
 
-  --papel-a_iniciar: #b8c0cc;
-  --papel-andamento: #6f93d6;
-  --papel-qa: #2f6fdb;
-  --papel-correcao: #d9745f;
+  --entrada: #2f5fc4;
+  --aprovado: #1f7f55;
+  --reprovado: #bf3a33;
+  --sem-qa: #7550ad;
+  --devolvido: #9c6c10;
 
-  --grupo-dev: #2f6fdb;
-  --grupo-est-dev: #8fb1ec;
-  --grupo-qa: #1f8a4c;
-  --grupo-est-qa: #86c6a0;
-  --grupo-gestao: #8a5cc7;
-  --grupo-outros: #b8c0cc;
+  --papel-a_iniciar: var(--n5);
+  --papel-andamento: var(--n8);
+  --papel-qa: var(--entrada);
+  --papel-correcao: color-mix(in srgb, var(--reprovado) 78%, var(--n0));
 
-  --raio: 8px;
-  --espaco: 16px;
-  --fonte: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* Grupos não são estados: tons da escala, alternando claro/escuro, com legenda escrita. */
+  --grupo-dev: var(--n9);
+  --grupo-est-dev: var(--n6);
+  --grupo-qa: var(--n8);
+  --grupo-est-qa: var(--n5);
+  --grupo-gestao: var(--n7);
+  --grupo-outros: var(--n4);
+
+  --foco: var(--entrada);
+
+  --porta: 4px;
+  --face: "Public Sans", system-ui, "Segoe UI", sans-serif;
+  --face-dado: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
 
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --fundo: #121417;
-    --superficie: #1a1d21;
-    --superficie-2: #22262b;
-    --linha: #2c3137;
-    --linha-forte: #3a4047;
-    --texto: #e6e8eb;
-    --texto-2: #a3abb5;
-    --texto-3: #767f8a;
-    --foco: #6ea0f0;
-    --sombra-eixo: rgba(255, 255, 255, 0.05);
+    --n0: #0d1013;
+    --n1: #12161a;
+    --n2: #171b20;
+    --n3: #1c2126;
+    --n4: #2a3037;
+    --n5: #3a414a;
+    --n6: #56606b;
+    --n7: #88919c;
+    --n8: #a6aeb8;
+    --n9: #c8ced5;
+    --n10: #e6e9ed;
 
-    --entrada: #6ea0f0;
-    --aprovado: #4cbb7a;
-    --reprovado: #ea6b6b;
-    --sem-qa: #b28ee6;
-    --devolvido: #d9a53f;
+    /* No escuro a baia afunda para o preto e a faixa acende um degrau. */
+    --trilho: var(--n2);
+    --baia: var(--n1);
+    --faixa: var(--n3);
+    --faixa-realce: var(--n4);
+    --filete: var(--n4);
+    --sombra-baia: inset 0 1px 2px rgb(0 0 0 / 0.4);
+    --sombra-afundado: inset 0 1px 3px rgb(0 0 0 / 0.55);
+    --sombra-eixo: rgb(255 255 255 / 0.04);
 
-    --papel-a_iniciar: #56606c;
-    --papel-andamento: #4a6fae;
-    --papel-qa: #6ea0f0;
-    --papel-correcao: #c8705c;
+    --entrada: #6f9cf0;
+    --aprovado: #4cb784;
+    --reprovado: #ec6d65;
+    --sem-qa: #ae8ae6;
+    --devolvido: #d5a444;
 
-    --grupo-dev: #6ea0f0;
-    --grupo-est-dev: #3f5f95;
-    --grupo-qa: #4cbb7a;
-    --grupo-est-qa: #2f7049;
-    --grupo-gestao: #b28ee6;
-    --grupo-outros: #56606c;
+    --papel-a_iniciar: var(--n6);
+    --papel-andamento: var(--n8);
+    --papel-correcao: color-mix(in srgb, var(--reprovado) 78%, var(--n0));
 
     color-scheme: dark;
   }
@@ -92,12 +116,13 @@
 html,
 body {
   margin: 0;
-  background: var(--fundo);
-  color: var(--texto);
-  font-family: var(--fonte);
+  background: var(--trilho);
+  color: var(--tinta-1);
+  font-family: var(--face);
   font-size: 14px;
   line-height: 1.45;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 button,
@@ -113,16 +138,27 @@ button {
 
 button:disabled {
   cursor: default;
-  opacity: 0.55;
+  opacity: 0.5;
 }
 
 :focus-visible {
   outline: 2px solid var(--foco);
-  outline-offset: 2px;
+  outline-offset: 1px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--entrada) 24%, transparent);
+  color: var(--tinta-1);
+}
+
+input {
+  caret-color: var(--entrada);
 }
 
 a {
   color: inherit;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 }
 
 h1,
@@ -130,6 +166,28 @@ h2,
 h3,
 p {
   margin: 0;
+}
+
+/* Barras de rolagem finas, da cor do filete: as baias rolam por dentro. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--n5) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--n5);
+  border-radius: 0;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .sr {
@@ -141,8 +199,15 @@ p {
   white-space: nowrap;
 }
 
-.num {
+/* Todo número e campo de dado sai em mono tabular: é a impressão da faixa. */
+.num,
+.dado {
+  font-family: var(--face-dado);
   font-variant-numeric: tabular-nums;
+  font-feature-settings: "zero" 0;
+}
+
+.num {
   text-align: right;
 }
 
