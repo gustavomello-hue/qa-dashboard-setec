@@ -162,7 +162,7 @@ O mundo substituiu o "Fliperama CRT", que foi descartado por inteiro: nenhum bri
 - Cor de estado só no porta-faixa de 4px e nos marcadores quadrados de 7px, sempre com rótulo escrito.
 - Interface em Public Sans; todo número, código de card e horário em JetBrains Mono tabular.
 - Filtro ou aba ativa afunda no trilho em vez de ganhar cor.
-- Teclado de primeira classe: 1–4 trocam de tela, # ou / vai para a busca de card.
+- Teclado de primeira classe: 1–5 trocam de tela (a 5ª é Reunião), # ou / vai para a busca de card; na apresentação, setas, espaço, Home/End, F e Esc.
 
 ## Colors
 
@@ -225,7 +225,7 @@ A escala --n0..--n10 é a única fonte de cinza. No tema escuro os mesmos degrau
 
 A página é a casca: barra do topo (faixa, 44px de altura mínima, com marca, abas, selo de coleta), barra de filtros no trilho, e a tela com respiro de 12px no topo e 16px nas laterais (10/12px abaixo de 700px). Entre baias o espaço é 12px; entre faixas, 1px de trilho ou baia (a pilha de faixas é separada por fio, não por margem). Dentro da baia as faixas ficam a 6px das bordas; dentro da faixa o texto começa 14px à esquerda (4px de porta-faixa mais folga) e 10px à direita.
 
-Na tela Agora, a partir de 1100px, o quadro é uma grade de três baias (carga 0.95fr, fila 1.55fr, movimentações 1fr) sob a faixa única de cinco contadores, ocupando exatamente a altura da janela: a página não rola, cada baia rola por dentro. Abaixo disso as baias empilham. A tela Pessoa usa grade auto-fit de colunas de 380px, com baias que crescem até a altura útil e só então rolam. A Mensal é de duas colunas e vira uma abaixo de 800px. A Card limita-se a 1200px.
+Na tela Agora, a partir de 1100px, o quadro é uma grade de três baias (carga minmax(270px, 0.8fr), fila minmax(0, 1.7fr), movimentações minmax(300px, 1fr)) sob a faixa única de cinco contadores, ocupando exatamente a altura da janela: a página não rola, cada baia rola por dentro. Abaixo disso as baias empilham. A tela Pessoa usa grade auto-fit de colunas de 380px, com baias que crescem até a altura útil e só então rolam. A Mensal é de duas colunas e vira uma abaixo de 800px. A Card ocupa a largura toda: a partir de 1300px, linha do tempo à esquerda e ficha em painel lateral de 320px.
 
 Abaixo de 700px: some o que é só de tela larga (teclas de atalho, colunas secundárias, botão Modo TV), o selo de coleta desce para linha própria, os contadores ficam em duas colunas (o último ímpar ocupa a linha), e a linha do tempo do card vira uma coluna.
 
@@ -244,14 +244,16 @@ O sistema não tem elevação para fora. A profundidade é de encaixe: o trilho 
 
 ## Shapes
 
-Faixas, baias, KPIs, tabelas e fichas têm cantos retos (0). Controles (abas, botões, campos, segmentado, chips, teclas, a marca "QA", tooltip) têm 2px no máximo. Marcadores de estado e o ponto do selo são quadrados de 7px, legendas 9px, nunca círculos. As barras de rolagem são finas (8px), de polegar reto em n5. Linhas são sempre de 1px; a única borda grossa do sistema é o porta-faixa de 4px. Ícones são de traço 2px em 24×24, currentColor, desenhados à mão e só os usados.
+Faixas, baias, KPIs, tabelas e fichas têm cantos retos (0). Controles (abas, botões, campos, segmentado, chips, teclas, a marca "QA", tooltip) têm 2px no máximo. Marcadores de estado, o ponto do selo e o marcador do aviso de coleta são quadrados de 7px, legendas 9px, nunca círculos. As barras de rolagem são finas (8px), de polegar reto em n5. Linhas são sempre de 1px; as únicas bordas grossas são o porta-faixa (4px; 6px nos números grandes projetados do modo Reunião). Ícones são de traço 2px em 24×24, currentColor, desenhados à mão e só os usados.
 
 ## Components
 
 ### Buttons
 Controles quietos, de borda fina, que afundam quando ligados.
 - **Shape:** quase reto (2px), 28px de altura.
-- **Primary:** fundo de faixa, borda de 1px em n5, 13px/500, padding 0 12px, ícone de 16px com 6px de vão.
+- **Padrão:** fundo de faixa, borda de 1px em n5, 13px/500, padding 0 12px, ícone de 16px com 6px de vão.
+- **Primário** (só "Começar a apresentação"): cheio em tinta 1 com texto na cor da faixa, 34px de altura, 600; hover em n9. É o único botão cheio do sistema.
+- **Mini** (tentar de novo no selo): 22px de altura, 12px.
 - **Hover / Focus:** hover passa para faixa realce; foco é contorno de 2px em Azul Entrada com 1px de afastamento (global).
 - **Leve:** borda em filete e texto em tinta 2.
 - **Pressionado** (aria-pressed): fundo de trilho com sombra afundada, texto em tinta 1.
@@ -263,7 +265,7 @@ Controles quietos, de borda fina, que afundam quando ligados.
 ### Cards / Containers
 - **Baia:** fundo --baia, cantos retos, sombra de baia; rola por dentro. A cabeça é uma placa: título em Label tinta 1, a contagem num campo próprio (caixa de filete, fundo de faixa, mono 12px, 2px de canto) e um filete de 1px separando a placa do conteúdo.
 - **Faixa:** fundo --faixa, cantos retos, porta-faixa de 4px à esquerda, padding 6–7px por 10px com 14px à esquerda, hover em faixa realce. Título e meta numa linha cada, cortados com reticências; o texto completo fica no title.
-- **Ficha** (detalhe do card): grade auto-fit de campos de 140px sobre fundo de faixa, separados por filetes de 1px, rótulo em Label 11px e valor numérico em mono 16px.
+- **Ficha** (detalhe do card): campos sobre fundo de faixa separados por filetes de 1px, rótulo em Label 11px e valor numérico em mono 16px. A partir de 1300px vira painel lateral de 320px (um campo por linha) e a linha do tempo ocupa o resto da largura; abaixo disso, grade auto-fit de 140px acima da linha do tempo. A tela do Card não tem largura máxima.
 
 ### Inputs / Fields
 - **Style:** 28px de altura, borda de 1px em filete, 2px de canto, fundo de faixa, 13px; select nativo com o mesmo tratamento; cursor de texto em Azul Entrada.
@@ -271,7 +273,7 @@ Controles quietos, de borda fina, que afundam quando ligados.
 - **Checkbox:** accent-color em tinta 1.
 
 ### Navigation
-- **Barra do topo:** faixa com filete inferior; marca "QA" em bloco tinta 1 invertido de 2px de canto seguida de "SETEC" em Label; abas de 30px com a tecla do atalho (mono 10px, caixa de filete, 2px) antes do nome. Aba atual afunda no trilho; hover vai para faixa realce. Abaixo de 700px as teclas somem.
+- **Barra do topo:** faixa com filete inferior; marca "QA" em bloco tinta 1 invertido de 2px de canto seguida de "SETEC" em Label; abas de 30px com a tecla do atalho (mono 11px, caixa de filete, 2px) antes do nome. Aba atual afunda no trilho; hover vai para faixa realce. Abaixo de 700px as teclas somem.
 - **Filtros:** segmentado (Todos/DEV/WEB/MOB/Demandas) numa caixa de baia com opções em relevo; a ativa perde o relevo, fica no fundo da caixa e vai a 600. Selects de projeto e mês ao lado; Modo TV à direita.
 - **Selo de coleta:** quadrado de 7px em n7 (atrasado: n6 com contorno em tinta 2), horário da coleta e idade em tinta 3. Falha de atualização aparece escrita.
 
@@ -289,6 +291,17 @@ Faixas agrupadas por dia (Label-sm), com horário em mono tinta 3 à esquerda, r
 
 ### Gráficos
 ECharts em canvas, lendo as cores dos tokens em tempo de execução e redesenhando quando o tema do sistema muda. Sem animação, legenda de quadrados 10×10 no topo, eixos e grade em filete, rótulos de eixo em mono 11px tinta 3, tooltip de faixa com filete e 2px de canto, ponteiro de eixo em sombra leve. Barras com no máximo 28px. Desenhados sobre uma faixa larga dentro da baia. Linha de tendência só com 4 meses ou mais; antes disso, % e tempo médio aparecem como mini-barras neutras (4px, n6 sobre o trilho) dentro do Resumo. O mês corrente leva "*" no eixo e na tabela.
+
+### Estados do painel
+- **Aviso de coleta:** faixa inteira entre a barra e o quadro, com porta-faixa n6 e marcador quadrado vazado; coleta parada no expediente escurece para tinta 1 (porta e marcador cheios), sem vermelho. Texto diz há quanto tempo, até que horas valem os números e o que conferir. Os contadores do dia passam a "até HH:MM" (ou o dia da coleta) em tinta 2.
+- **Carga inicial:** o contorno do quadro parado (faixa de contadores e três baias vazias), sem animação.
+- **Falha:** cartão em faixa com porta-faixa tinta 1, título, a mensagem em português do que falhou e "Tentar de novo".
+- **Glossário:** "Como ler estes números" em `<details>`, lista de definições sobre faixa, vindo de `src/data/glossario.ts`.
+
+### Modo reunião (aba Reunião)
+Preparo dentro do quadro (tipo de reunião, mês, pessoa, frente) e apresentação em tela inteira, sem barra nem filtros: cabeça com o contexto em Label ("Reunião mensal · set/26") e o título da lâmina, corpo de uma ideia por lâmina, rodapé com "Esc · sair", dica de teclas e contador "3/7". A escala é a de projeção (`--r-*`, em vh: numeral 48–96px, título 26–44px, subtítulo 17–26px, dado 16–24px, rótulo 13–18px), lida a ~3 m. Números grandes são faixas com porta-faixa e o valor anterior embaixo; unidade ("h") em 0,45em. Tabelas por pessoa se dividem em lâminas de tamanho parecido pela altura da tela. Avança com → / espaço / PageDown / clique na metade direita; volta com ← / clique na esquerda; Home/End; F tela cheia; Esc volta ao preparo. A conversa individual nunca mostra outra pessoa nem média da equipe. Durante a apresentação os atalhos globais (1–5, /, #) ficam desligados, e o leitor de tela anuncia só "Lâmina N de M: título". Lâminas de números grandes centralizam o bloco na altura; cada número traz a comparação com sinal ("ago/26: 364 (−35)"). Nas tabelas projetadas a variação fica ao lado do número, uma linha por pessoa. Barras levam o valor escrito (ninguém passa o mouse num projetor). Listas cortadas dizem "e mais N"; títulos usam até duas linhas. Para quem desenvolve, "abertos há mais tempo" exclui cards parados em Teste/QA (espera do QA, não do dev).
+
+**Base parcial.** Um mês com medição parcial (reconstruído) nunca é base de comparação cheia: em toda tela o rótulo vira "ago/26 (parcial)", o sinal de variação some e uma nota diz "serve de referência, não de comparação"; nos gráficos o mês aparece como "ago/26 (parcial)". Nos 5 primeiros dias do mês, Equipe e Pessoa abrem no último mês fechado e dizem isso.
 
 ## Do's and Don'ts
 

@@ -18,7 +18,6 @@ export function Sparkline({ valores, rotulo, parcial = false }: { valores: numbe
             y={20 - h}
             width={4}
             height={h}
-            rx={1}
             className={
               i === valores.length - 1
                 ? parcial ? "sparkline__parcial" : "sparkline__atual"

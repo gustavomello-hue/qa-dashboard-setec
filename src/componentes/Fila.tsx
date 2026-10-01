@@ -70,7 +70,10 @@ export function Fila({ dados, filtro, hrefCard, soForaDoPainel = false, alternar
                       </a>
                     </td>
                     <td className="celula-titulo">
-                      <a href={c.link} target="_blank" rel="noreferrer" title={c.titulo}>{resto}</a>
+                      <a href={c.link} target="_blank" rel="noreferrer" title={`${c.titulo} (abre no Kanboard)`}>
+                        {resto}
+                        <span className="sr"> (abre no Kanboard, em nova aba)</span>
+                      </a>
                       {/* Designado e "novo" vão na linha de apoio: a coluna do título fica com a largura. */}
                       <span className="meta">
                         {novo && <span className="marca-novo" title="Novo desde a coleta anterior">novo</span>}

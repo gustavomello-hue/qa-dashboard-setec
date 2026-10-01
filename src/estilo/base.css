@@ -78,6 +78,13 @@
   --t-titulo-baia: 12px;
   --t-rotulo: 11px;
 
+  /* Escala da apresentação (modo reunião): lida a ~3 m, acompanha a altura da tela. */
+  --r-numeral: clamp(48px, 9vh, 96px);
+  --r-titulo: clamp(26px, 4.2vh, 44px);
+  --r-sub: clamp(17px, 2.4vh, 26px);
+  --r-dado: clamp(16px, 2.2vh, 24px);
+  --r-rotulo: clamp(13px, 1.7vh, 18px);
+
   --porta: 4px;
   --face: "Public Sans", system-ui, "Segoe UI", sans-serif;
   --face-dado: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;

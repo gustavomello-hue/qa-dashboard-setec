@@ -1,63 +1,586 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-30T12:00:00.000Z",
+  "generatedAt": "2026-10-01T12:00:00.000Z",
   "title": "Design System: QA·SETEC",
   "extensions": {
     "colorMeta": {
-      "n0": { "role": "neutral", "displayName": "Faixa Branca", "canonical": "#ffffff", "dark": "#0d1013", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#e3e6ea", "#ffffff"] },
-      "n1": { "role": "neutral", "displayName": "Faixa Realce", "canonical": "#f7f8fa", "dark": "#12161a", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#e3e6ea", "#f7f8fa"] },
-      "n2": { "role": "neutral", "displayName": "Trilho", "canonical": "#eef0f3", "dark": "#171b20", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#e3e6ea", "#eef0f3"] },
-      "n3": { "role": "neutral", "displayName": "Baia", "canonical": "#e3e6ea", "dark": "#1c2126", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#d3d8de", "#e3e6ea"] },
-      "n4": { "role": "neutral", "displayName": "Filete", "canonical": "#d3d8de", "dark": "#2a3037", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#d3d8de", "#eef0f3"] },
-      "n5": { "role": "neutral", "displayName": "Cinza Borda de Controle", "canonical": "#b6bdc6", "dark": "#3a414a", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#d3d8de", "#eef0f3"] },
-      "n6": { "role": "neutral", "displayName": "Cinza Médio", "canonical": "#8f98a3", "dark": "#56606b", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#d3d8de", "#eef0f3"] },
-      "n7": { "role": "neutral", "displayName": "Tinta 3", "canonical": "#69727e", "dark": "#88919c", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#d3d8de", "#eef0f3"] },
-      "n8": { "role": "neutral", "displayName": "Tinta 2", "canonical": "#4b535e", "dark": "#a6aeb8", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#d3d8de", "#eef0f3"] },
-      "n9": { "role": "neutral", "displayName": "Grafite", "canonical": "#313740", "dark": "#c8ced5", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#d3d8de", "#eef0f3"] },
-      "n10": { "role": "neutral", "displayName": "Tinta 1", "canonical": "#1b1f25", "dark": "#e6e9ed", "tonalRamp": ["#1b1f25", "#313740", "#4b535e", "#69727e", "#8f98a3", "#b6bdc6", "#d3d8de", "#eef0f3"] },
-      "entrada": { "role": "primary", "displayName": "Azul Entrada", "canonical": "#2f5fc4", "dark": "#6f9cf0", "tonalRamp": ["oklch(15% 0.05 262)", "oklch(27% 0.09 262)", "oklch(39% 0.13 262)", "oklch(51% 0.16 262)", "oklch(63% 0.14 262)", "oklch(75% 0.10 262)", "oklch(85% 0.06 262)", "oklch(95% 0.02 262)"] },
-      "aprovado": { "role": "secondary", "displayName": "Verde Aprovado", "canonical": "#1f7f55", "dark": "#4cb784", "tonalRamp": ["oklch(15% 0.04 160)", "oklch(27% 0.07 160)", "oklch(39% 0.09 160)", "oklch(51% 0.11 160)", "oklch(63% 0.12 160)", "oklch(75% 0.10 160)", "oklch(85% 0.06 160)", "oklch(95% 0.02 160)"] },
-      "reprovado": { "role": "secondary", "displayName": "Vermelho Reprovado", "canonical": "#bf3a33", "dark": "#ec6d65", "tonalRamp": ["oklch(15% 0.05 27)", "oklch(27% 0.09 27)", "oklch(39% 0.13 27)", "oklch(51% 0.17 27)", "oklch(63% 0.16 27)", "oklch(75% 0.11 27)", "oklch(85% 0.06 27)", "oklch(95% 0.02 27)"] },
-      "sem-qa": { "role": "tertiary", "displayName": "Violeta Sem QA", "canonical": "#7550ad", "dark": "#ae8ae6", "tonalRamp": ["oklch(15% 0.05 300)", "oklch(27% 0.09 300)", "oklch(39% 0.12 300)", "oklch(51% 0.15 300)", "oklch(63% 0.13 300)", "oklch(75% 0.10 300)", "oklch(85% 0.06 300)", "oklch(95% 0.02 300)"] },
-      "devolvido": { "role": "tertiary", "displayName": "Ocre Devolvido", "canonical": "#9c6c10", "dark": "#d5a444", "tonalRamp": ["oklch(15% 0.04 75)", "oklch(27% 0.07 75)", "oklch(39% 0.10 75)", "oklch(51% 0.12 75)", "oklch(63% 0.12 75)", "oklch(75% 0.10 75)", "oklch(85% 0.06 75)", "oklch(95% 0.02 75)"] },
-      "correcao-carga": { "role": "secondary", "displayName": "Vermelho Correção", "canonical": "color-mix(in srgb, #bf3a33 78%, #ffffff)", "dark": "color-mix(in srgb, #ec6d65 78%, #0d1013)", "tonalRamp": ["oklch(15% 0.05 27)", "oklch(27% 0.09 27)", "oklch(39% 0.12 27)", "oklch(51% 0.14 27)", "oklch(63% 0.13 27)", "oklch(75% 0.10 27)", "oklch(85% 0.06 27)", "oklch(95% 0.02 27)"] }
+      "n0": {
+        "role": "neutral",
+        "displayName": "Faixa Branca",
+        "canonical": "#ffffff",
+        "dark": "#0d1013",
+        "tonalRamp": [
+          "#1b1f25",
+          "#313740",
+          "#4b535e",
+          "#69727e",
+          "#8f98a3",
+          "#b6bdc6",
+          "#e3e6ea",
+          "#ffffff"
+        ]
+      },
+      "n1": {
+        "role": "neutral",
+        "displayName": "Faixa Realce",
+        "canonical": "#f7f8fa",
+        "dark": "#12161a",
+        "tonalRamp": [
+          "#1b1f25",
+          "#313740",
+          "#4b535e",
+          "#69727e",
+          "#8f98a3",
+          "#b6bdc6",
+          "#e3e6ea",
+          "#f7f8fa"
+        ]
+      },
+      "n2": {
+        "role": "neutral",
+        "displayName": "Trilho",
+        "canonical": "#eef0f3",
+        "dark": "#171b20",
+        "tonalRamp": [
+          "#1b1f25",
+          "#313740",
+          "#4b535e",
+          "#69727e",
+          "#8f98a3",
+          "#b6bdc6",
+          "#e3e6ea",
+          "#eef0f3"
+        ]
+      },
+      "n3": {
+        "role": "neutral",
+        "displayName": "Baia",
+        "canonical": "#e3e6ea",
+        "dark": "#1c2126",
+        "tonalRamp": [
+          "#1b1f25",
+          "#313740",
+          "#4b535e",
+          "#69727e",
+          "#8f98a3",
+          "#b6bdc6",
+          "#d3d8de",
+          "#e3e6ea"
+        ]
+      },
+      "n4": {
+        "role": "neutral",
+        "displayName": "Filete",
+        "canonical": "#d3d8de",
+        "dark": "#2a3037",
+        "tonalRamp": [
+          "#1b1f25",
+          "#313740",
+          "#4b535e",
+          "#69727e",
+          "#8f98a3",
+          "#b6bdc6",
+          "#d3d8de",
+          "#eef0f3"
+        ]
+      },
+      "n5": {
+        "role": "neutral",
+        "displayName": "Cinza Borda de Controle",
+        "canonical": "#b6bdc6",
+        "dark": "#3a414a",
+        "tonalRamp": [
+          "#1b1f25",
+          "#313740",
+          "#4b535e",
+          "#69727e",
+          "#8f98a3",
+          "#b6bdc6",
+          "#d3d8de",
+          "#eef0f3"
+        ]
+      },
+      "n6": {
+        "role": "neutral",
+        "displayName": "Cinza Médio",
+        "canonical": "#8f98a3",
+        "dark": "#56606b",
+        "tonalRamp": [
+          "#1b1f25",
+          "#313740",
+          "#4b535e",
+          "#69727e",
+          "#8f98a3",
+          "#b6bdc6",
+          "#d3d8de",
+          "#eef0f3"
+        ]
+      },
+      "n7": {
+        "role": "neutral",
+        "displayName": "Tinta 3",
+        "canonical": "#69727e",
+        "dark": "#88919c",
+        "tonalRamp": [
+          "#1b1f25",
+          "#313740",
+          "#4b535e",
+          "#69727e",
+          "#8f98a3",
+          "#b6bdc6",
+          "#d3d8de",
+          "#eef0f3"
+        ]
+      },
+      "n8": {
+        "role": "neutral",
+        "displayName": "Tinta 2",
+        "canonical": "#4b535e",
+        "dark": "#a6aeb8",
+        "tonalRamp": [
+          "#1b1f25",
+          "#313740",
+          "#4b535e",
+          "#69727e",
+          "#8f98a3",
+          "#b6bdc6",
+          "#d3d8de",
+          "#eef0f3"
+        ]
+      },
+      "n9": {
+        "role": "neutral",
+        "displayName": "Grafite",
+        "canonical": "#313740",
+        "dark": "#c8ced5",
+        "tonalRamp": [
+          "#1b1f25",
+          "#313740",
+          "#4b535e",
+          "#69727e",
+          "#8f98a3",
+          "#b6bdc6",
+          "#d3d8de",
+          "#eef0f3"
+        ]
+      },
+      "n10": {
+        "role": "neutral",
+        "displayName": "Tinta 1",
+        "canonical": "#1b1f25",
+        "dark": "#e6e9ed",
+        "tonalRamp": [
+          "#1b1f25",
+          "#313740",
+          "#4b535e",
+          "#69727e",
+          "#8f98a3",
+          "#b6bdc6",
+          "#d3d8de",
+          "#eef0f3"
+        ]
+      },
+      "entrada": {
+        "role": "primary",
+        "displayName": "Azul Entrada",
+        "canonical": "#2f5fc4",
+        "dark": "#6f9cf0",
+        "tonalRamp": [
+          "oklch(15% 0.05 262)",
+          "oklch(27% 0.09 262)",
+          "oklch(39% 0.13 262)",
+          "oklch(51% 0.16 262)",
+          "oklch(63% 0.14 262)",
+          "oklch(75% 0.10 262)",
+          "oklch(85% 0.06 262)",
+          "oklch(95% 0.02 262)"
+        ]
+      },
+      "aprovado": {
+        "role": "secondary",
+        "displayName": "Verde Aprovado",
+        "canonical": "#1f7f55",
+        "dark": "#4cb784",
+        "tonalRamp": [
+          "oklch(15% 0.04 160)",
+          "oklch(27% 0.07 160)",
+          "oklch(39% 0.09 160)",
+          "oklch(51% 0.11 160)",
+          "oklch(63% 0.12 160)",
+          "oklch(75% 0.10 160)",
+          "oklch(85% 0.06 160)",
+          "oklch(95% 0.02 160)"
+        ]
+      },
+      "reprovado": {
+        "role": "secondary",
+        "displayName": "Vermelho Reprovado",
+        "canonical": "#bf3a33",
+        "dark": "#ec6d65",
+        "tonalRamp": [
+          "oklch(15% 0.05 27)",
+          "oklch(27% 0.09 27)",
+          "oklch(39% 0.13 27)",
+          "oklch(51% 0.17 27)",
+          "oklch(63% 0.16 27)",
+          "oklch(75% 0.11 27)",
+          "oklch(85% 0.06 27)",
+          "oklch(95% 0.02 27)"
+        ]
+      },
+      "sem-qa": {
+        "role": "tertiary",
+        "displayName": "Violeta Sem QA",
+        "canonical": "#7550ad",
+        "dark": "#ae8ae6",
+        "tonalRamp": [
+          "oklch(15% 0.05 300)",
+          "oklch(27% 0.09 300)",
+          "oklch(39% 0.12 300)",
+          "oklch(51% 0.15 300)",
+          "oklch(63% 0.13 300)",
+          "oklch(75% 0.10 300)",
+          "oklch(85% 0.06 300)",
+          "oklch(95% 0.02 300)"
+        ]
+      },
+      "devolvido": {
+        "role": "tertiary",
+        "displayName": "Ocre Devolvido",
+        "canonical": "#9c6c10",
+        "dark": "#d5a444",
+        "tonalRamp": [
+          "oklch(15% 0.04 75)",
+          "oklch(27% 0.07 75)",
+          "oklch(39% 0.10 75)",
+          "oklch(51% 0.12 75)",
+          "oklch(63% 0.12 75)",
+          "oklch(75% 0.10 75)",
+          "oklch(85% 0.06 75)",
+          "oklch(95% 0.02 75)"
+        ]
+      },
+      "correcao-carga": {
+        "role": "secondary",
+        "displayName": "Vermelho Correção",
+        "canonical": "color-mix(in srgb, #bf3a33 78%, #ffffff)",
+        "dark": "color-mix(in srgb, #ec6d65 78%, #0d1013)",
+        "tonalRamp": [
+          "oklch(15% 0.05 27)",
+          "oklch(27% 0.09 27)",
+          "oklch(39% 0.12 27)",
+          "oklch(51% 0.14 27)",
+          "oklch(63% 0.13 27)",
+          "oklch(75% 0.10 27)",
+          "oklch(85% 0.06 27)",
+          "oklch(95% 0.02 27)"
+        ]
+      }
     },
     "roles": {
-      "light": { "--trilho": "n2", "--baia": "n3", "--faixa": "n0", "--faixa-realce": "n1", "--filete": "n4", "--tinta-1": "n10", "--tinta-2": "n8", "--tinta-3": "n7" },
-      "dark": { "--trilho": "n2", "--baia": "n1", "--faixa": "n3", "--faixa-realce": "n4", "--filete": "n4", "--tinta-1": "n10", "--tinta-2": "n8", "--tinta-3": "n7" },
-      "grupos": { "--grupo-dev": "n9", "--grupo-est-dev": "n6", "--grupo-qa": "n8", "--grupo-est-qa": "n5", "--grupo-gestao": "n7", "--grupo-outros": "n4" },
-      "papeis-carga": { "--papel-a_iniciar": "n5 (escuro n6)", "--papel-andamento": "n8", "--papel-qa": "entrada", "--papel-correcao": "correcao-carga" }
+      "light": {
+        "--trilho": "n2",
+        "--baia": "n3",
+        "--faixa": "n0",
+        "--faixa-realce": "n1",
+        "--filete": "n4",
+        "--tinta-1": "n10",
+        "--tinta-2": "n8",
+        "--tinta-3": "n7",
+        "--foco": "entrada"
+      },
+      "dark": {
+        "--trilho": "n2",
+        "--baia": "n1",
+        "--faixa": "n3",
+        "--faixa-realce": "n4",
+        "--filete": "n4",
+        "--tinta-1": "n10",
+        "--tinta-2": "n8",
+        "--tinta-3": "n7"
+      },
+      "grupos": {
+        "--grupo-dev": "n9",
+        "--grupo-est-dev": "n6",
+        "--grupo-qa": "n8",
+        "--grupo-est-qa": "n5",
+        "--grupo-gestao": "n7",
+        "--grupo-outros": "n4"
+      },
+      "papeis-carga": {
+        "--papel-a_iniciar": "n5 (escuro n6)",
+        "--papel-andamento": "n8",
+        "--papel-qa": "entrada",
+        "--papel-correcao": "correcao-carga"
+      }
     },
     "typographyMeta": {
-      "numeral": { "displayName": "Numeral", "purpose": "Valor do contador na cabeça do quadro; 24px abaixo de 700px." },
-      "headline": { "displayName": "Headline", "purpose": "Nome da pessoa na tela Pessoa." },
-      "title": { "displayName": "Title", "purpose": "Título do card na tela Card." },
-      "body": { "displayName": "Body", "purpose": "Base do documento e abas." },
-      "body-sm": { "displayName": "Body pequeno", "purpose": "Conteúdo das faixas, controles, campos e botões." },
-      "label": { "displayName": "Label", "purpose": "Título de baia, rótulo de KPI e da busca, em caixa alta; cabeçalho de tabela e rótulo de ficha no degrau 11px/0.05em." },
-      "label-sm": { "displayName": "Label pequeno", "purpose": "Nome do estado ao lado do marcador, título de grupo, dia no feed; caixa alta." },
-      "dado": { "displayName": "Dado", "purpose": "Números, #card, horários, dias em QA, períodos e eixos de gráfico, em mono tabular." }
+      "numeral": {
+        "displayName": "Numeral",
+        "purpose": "Valor do contador na cabeça do quadro (--t-numeral 28px); --t-numeral-estreito 24px abaixo de 700px.",
+        "token": "--t-numeral"
+      },
+      "headline": {
+        "displayName": "Destaque",
+        "purpose": "Nome da pessoa na tela Pessoa e valor do contador de apoio (kpi--menor).",
+        "token": "--t-destaque"
+      },
+      "title": {
+        "displayName": "Título",
+        "purpose": "Título do card, título da tela de falha e valor numérico da ficha.",
+        "token": "--t-titulo"
+      },
+      "body": {
+        "displayName": "Corpo",
+        "purpose": "Base do documento e abas.",
+        "token": "--t-corpo"
+      },
+      "body-sm": {
+        "displayName": "Dado (corpo pequeno)",
+        "purpose": "Conteúdo das faixas, controles, campos, botões, números das tabelas e aviso de coleta.",
+        "token": "--t-dado"
+      },
+      "label": {
+        "displayName": "Título de baia / meta",
+        "purpose": "Título de baia em tinta 1 e rótulo de KPI e da busca, caixa alta (--t-titulo-baia); meta, notas, #card e horários usam --t-meta no mesmo degrau de 12px.",
+        "token": "--t-titulo-baia"
+      },
+      "label-sm": {
+        "displayName": "Rótulo",
+        "purpose": "Nome do estado, marca 'novo', cabeçalho de tabela, rótulo de ficha, título de grupo, dia no feed, delta sob número, tecla de atalho; caixa alta onde é rótulo. Nada abaixo de 11px.",
+        "token": "--t-rotulo"
+      },
+      "dado": {
+        "displayName": "Dado mono",
+        "purpose": "Números, #card, horários, dias em QA, períodos, contagem da baia e eixos de gráfico, em JetBrains Mono tabular; o tamanho vem do papel (--t-meta ou --t-dado).",
+        "token": "--face-dado"
+      }
     },
     "shadows": [
-      { "name": "sombra-baia", "value": "inset 0 1px 2px rgb(27 31 37 / 0.08)", "dark": "inset 0 1px 2px rgb(0 0 0 / 0.4)", "purpose": "Baia rebaixada no trilho; trilho da barra de carga; caixa do segmentado." },
-      { "name": "sombra-afundado", "value": "inset 0 1px 2px rgb(27 31 37 / 0.14)", "dark": "inset 0 1px 3px rgb(0 0 0 / 0.55)", "purpose": "Aba atual, botão e chip pressionados afundam no trilho." },
-      { "name": "porta-faixa", "value": "inset 4px 0 0 var(--porta-cor, var(--n4))", "purpose": "Borda esquerda de estado da faixa; neutra em n4 sem estado." },
-      { "name": "relevo-segmentado", "value": "0 1px 0 var(--filete)", "purpose": "Opções inativas do segmentado, um fio acima da caixa." },
-      { "name": "sombra-eixo", "value": "rgb(27 31 37 / 0.05)", "dark": "rgb(255 255 255 / 0.04)", "purpose": "Ponteiro de eixo dos gráficos." }
+      {
+        "name": "sombra-baia",
+        "value": "inset 0 1px 2px rgb(27 31 37 / 0.08)",
+        "dark": "inset 0 1px 2px rgb(0 0 0 / 0.4)",
+        "purpose": "Baia rebaixada no trilho; trilho da barra de carga; caixa do segmentado; baias do esqueleto."
+      },
+      {
+        "name": "sombra-afundado",
+        "value": "inset 0 1px 2px rgb(27 31 37 / 0.14)",
+        "dark": "inset 0 1px 3px rgb(0 0 0 / 0.55)",
+        "purpose": "Aba atual, botão e chip pressionados afundam no trilho."
+      },
+      {
+        "name": "porta-faixa",
+        "value": "inset var(--porta) 0 0 var(--porta-cor, var(--n4))",
+        "purpose": "Borda esquerda de estado (--porta 4px); neutra em n4 sem estado; n6 no aviso de coleta e nas observações; tinta 1 na cabeça da Pessoa, no aviso grave e na falha."
+      },
+      {
+        "name": "porta-projecao",
+        "value": "inset calc(var(--porta) + 2px) 0 0 var(--porta-cor, var(--n4))",
+        "purpose": "Porta-faixa de 6px dos números grandes do modo Reunião, lido de longe."
+      },
+      {
+        "name": "filete-campo",
+        "value": "inset 1px 0 0 var(--filete) | inset -1px 0 0 var(--filete)",
+        "purpose": "Filete vertical entre campos da faixa (fila, feed, carga, linha do tempo)."
+      },
+      {
+        "name": "relevo-segmentado",
+        "value": "0 1px 0 var(--filete)",
+        "purpose": "Opções inativas do segmentado, um fio acima da caixa."
+      },
+      {
+        "name": "marca-vazada",
+        "value": "inset 0 0 0 1px var(--tinta-2)",
+        "purpose": "Quadrado vazado da marca 'fora do painel' (1.5px no aviso de coleta)."
+      },
+      {
+        "name": "sombra-eixo",
+        "value": "rgb(27 31 37 / 0.05)",
+        "dark": "rgb(255 255 255 / 0.04)",
+        "purpose": "Ponteiro de eixo dos gráficos."
+      }
     ],
     "motion": [
-      { "name": "insercao", "value": "560ms cubic-bezier(0.16, 1, 0.3, 1) both; from translateX(-10px) e fundo --faixa-realce", "purpose": "Faixa que chegou na última coleta entra uma vez." },
-      { "name": "reduzido", "value": "prefers-reduced-motion: reduce desliga toda transição e animação", "purpose": "Respeito ao movimento reduzido." },
-      { "name": "graficos", "value": "animation: false", "purpose": "Gráficos não animam." }
+      {
+        "name": "insercao",
+        "value": "insercao 560ms cubic-bezier(0.16, 1, 0.3, 1) both; from translateX(-10px) e fundo --faixa-realce",
+        "purpose": "Faixa do feed que chegou na última coleta entra uma vez, na primeira vez que aquela coleta aparece na aba; voltar à tela não repete; dado de coleta parada não é novo."
+      },
+      {
+        "name": "reduzido",
+        "value": "prefers-reduced-motion: reduce desliga toda transição e animação",
+        "purpose": "Respeito ao movimento reduzido."
+      },
+      {
+        "name": "graficos",
+        "value": "animation: false",
+        "purpose": "Gráficos não animam."
+      },
+      {
+        "name": "esqueleto",
+        "value": "estático",
+        "purpose": "Carga inicial mostra o contorno do quadro parado, sem brilho correndo."
+      }
     ],
     "breakpoints": [
-      { "name": "estreito", "value": "max-width: 700px" },
-      { "name": "mensal-uma-coluna", "value": "max-width: 800px" },
-      { "name": "agora-tres-baias", "value": "min-width: 1100px" }
+      {
+        "name": "estreito",
+        "value": "max-width: 700px"
+      },
+      {
+        "name": "mensal-uma-coluna",
+        "value": "max-width: 800px"
+      },
+      {
+        "name": "agora-baias-empilhadas",
+        "value": "max-width: 1099px",
+        "note": "Cada baia rola por dentro com teto de 60vh."
+      },
+      {
+        "name": "agora-tres-baias",
+        "value": "min-width: 1100px",
+        "note": "minmax(270px, 0.8fr) | minmax(0, 1.7fr) | minmax(300px, 1fr)."
+      },
+      {
+        "name": "card-ficha-lateral",
+        "value": "min-width: 1300px",
+        "note": "Linha do tempo minmax(0, 1fr) + ficha de 320px à direita."
+      }
     ],
     "keyboard": [
-      { "keys": "1-4", "action": "Troca entre Agora, Equipe, Mensal e Card." },
-      { "keys": "# ou /", "action": "Vai direto para a busca de card." }
+      {
+        "keys": "1-5",
+        "action": "Troca entre Agora, Equipe, Mensal, Card e Reunião."
+      },
+      {
+        "keys": "# ou /",
+        "action": "Vai direto para a busca de card."
+      },
+      {
+        "keys": "→ / espaço / PageDown / clique à direita",
+        "action": "Reunião: próxima lâmina."
+      },
+      {
+        "keys": "← / clique à esquerda",
+        "action": "Reunião: lâmina anterior."
+      },
+      {
+        "keys": "Home / End",
+        "action": "Reunião: primeira / última lâmina."
+      },
+      {
+        "keys": "F",
+        "action": "Reunião: tela cheia."
+      },
+      {
+        "keys": "Esc",
+        "action": "Reunião: volta ao preparo."
+      }
+    ],
+    "typeScale": {
+      "source": "src/estilo/base.css :root",
+      "note": "O CSS não usa tamanho literal de texto: todo font-size aponta para --t-* (tela) ou --r-* (projeção).",
+      "tokens": [
+        {
+          "name": "--t-numeral",
+          "value": "28px",
+          "purpose": "Valor do contador."
+        },
+        {
+          "name": "--t-numeral-estreito",
+          "value": "24px",
+          "purpose": "Valor do contador abaixo de 700px."
+        },
+        {
+          "name": "--t-destaque",
+          "value": "22px",
+          "purpose": "Nome da pessoa; contador de apoio."
+        },
+        {
+          "name": "--t-titulo",
+          "value": "16px",
+          "purpose": "Título do card; valor da ficha; título da falha."
+        },
+        {
+          "name": "--t-corpo",
+          "value": "14px",
+          "purpose": "Base do documento."
+        },
+        {
+          "name": "--t-dado",
+          "value": "13px",
+          "purpose": "Faixas, tabelas, controles, campos, botões."
+        },
+        {
+          "name": "--t-meta",
+          "value": "12px",
+          "purpose": "Meta, notas, #card, horários, selo, legenda, rodapé TV, contagem."
+        },
+        {
+          "name": "--t-titulo-baia",
+          "value": "12px",
+          "purpose": "Título de baia, rótulo de KPI e da busca, em caixa alta."
+        },
+        {
+          "name": "--t-rotulo",
+          "value": "11px",
+          "purpose": "Rótulos de estado, cabeçalhos de tabela, delta, tecla; o piso."
+        }
+      ]
+    },
+    "projectionScale": {
+      "source": "src/estilo/base.css :root",
+      "note": "Escala da apresentação do modo Reunião, lida a ~3 m; acompanha a altura da tela.",
+      "tokens": [
+        {
+          "name": "--r-numeral",
+          "value": "clamp(48px, 9vh, 96px)",
+          "purpose": "Número grande da lâmina."
+        },
+        {
+          "name": "--r-titulo",
+          "value": "clamp(26px, 4.2vh, 44px)",
+          "purpose": "Título da lâmina."
+        },
+        {
+          "name": "--r-sub",
+          "value": "clamp(17px, 2.4vh, 26px)",
+          "purpose": "Linha de apoio sob os números grandes."
+        },
+        {
+          "name": "--r-dado",
+          "value": "clamp(16px, 2.2vh, 24px)",
+          "purpose": "Células de tabela, observações, conversa, nota."
+        },
+        {
+          "name": "--r-rotulo",
+          "value": "clamp(13px, 1.7vh, 18px)",
+          "purpose": "Contexto da cabeça, rótulo do número, cabeçalho de tabela, delta, contador de lâminas."
+        }
+      ]
+    },
+    "states": [
+      {
+        "name": "esqueleto",
+        "purpose": "Carga inicial: faixa de contadores vazia e três baias rebaixadas paradas, na grade da Agora."
+      },
+      {
+        "name": "falha",
+        "purpose": "Faixa de até 520px com filete e porta-faixa em tinta 1, título em --t-titulo."
+      },
+      {
+        "name": "aviso-coleta",
+        "purpose": "Faixa entre a barra e o quadro quando o dado não é de hoje (porta n6, marca vazada) ou a coleta parou no expediente (grave: porta e marca cheia em tinta 1). Nunca vermelho."
+      },
+      {
+        "name": "kpis-velho",
+        "purpose": "Contadores de um momento passado saem em tinta 2."
+      },
+      {
+        "name": "selo-erro",
+        "purpose": "'Falha ao atualizar' escrito em tinta 1/600 com botão mini 'Tentar de novo'."
+      }
     ]
   },
   "components": [
@@ -65,65 +588,105 @@
       "name": "Botão",
       "kind": "button",
       "refersTo": "botao",
-      "description": "Controle quieto de borda fina; pressionado afunda no trilho.",
-      "html": "<div style=\"display:flex;gap:8px\"><button class=\"ds-botao\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 6h18v11H3zM8 21h8M12 17v4\"/></svg>Modo TV</button><button class=\"ds-botao\" aria-pressed=\"true\">Ligado</button></div>",
-      "css": ".ds-botao { display:inline-flex; align-items:center; gap:6px; height:28px; border:1px solid var(--n5, #b6bdc6); border-radius:2px; background:var(--faixa, #ffffff); color:var(--tinta-1, #1b1f25); padding:0 12px; font:500 13px 'Public Sans', system-ui, sans-serif; cursor:pointer; } .ds-botao:hover { background:var(--faixa-realce, #f7f8fa); } .ds-botao:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; } .ds-botao[aria-pressed='true'] { background:var(--trilho, #eef0f3); box-shadow:inset 0 1px 2px rgb(27 31 37 / 0.14); }"
+      "description": "Controle quieto de borda fina; pressionado afunda no trilho; variante leve em filete e mini de 22px.",
+      "html": "<div style=\"display:flex;gap:8px;align-items:center\"><button class=\"ds-botao\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 6h18v11H3zM8 21h8M12 17v4\"/></svg>Modo TV</button><button class=\"ds-botao\" aria-pressed=\"true\">Ligado</button><button class=\"ds-botao ds-botao--leve\">Limpar</button><button class=\"ds-botao ds-botao--mini\">Tentar de novo</button></div>",
+      "css": ".ds-botao { display:inline-flex; align-items:center; gap:6px; height:28px; border:1px solid var(--n5, #b6bdc6); border-radius:2px; background:var(--faixa, #ffffff); color:var(--tinta-1, #1b1f25); padding:0 12px; font:500 var(--t-dado, 13px) 'Public Sans', system-ui, sans-serif; cursor:pointer; } .ds-botao:hover { background:var(--faixa-realce, #f7f8fa); } .ds-botao:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; } .ds-botao[aria-pressed='true'] { background:var(--trilho, #eef0f3); box-shadow:var(--sombra-afundado, inset 0 1px 2px rgb(27 31 37 / 0.14)); } .ds-botao--leve { border-color:var(--filete, #d3d8de); color:var(--tinta-2, #4b535e); } .ds-botao--mini { height:22px; padding:0 8px; font-size:var(--t-meta, 12px); }"
+    },
+    {
+      "name": "Botão principal (preparo da reunião)",
+      "kind": "button",
+      "refersTo": "botao",
+      "description": "Única ação cheia do sistema: bloco em tinta 1 com texto em faixa, 34px, para abrir a apresentação; inerte a 50% enquanto falta escolha.",
+      "html": "<div style=\"display:flex;gap:8px\"><a class=\"ds-botao-primario\" href=\"#\">Apresentar</a><a class=\"ds-botao-primario ds-botao-primario--inerte\" aria-disabled=\"true\">Apresentar</a></div>",
+      "css": ".ds-botao-primario { display:inline-flex; align-items:center; height:34px; padding:0 16px; border:1px solid var(--tinta-1, #1b1f25); border-radius:2px; background:var(--tinta-1, #1b1f25); color:var(--faixa, #ffffff); font:600 var(--t-dado, 13px) 'Public Sans', system-ui, sans-serif; text-decoration:none; cursor:pointer; } .ds-botao-primario:hover { background:var(--n9, #313740); } .ds-botao-primario:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; } .ds-botao-primario--inerte { opacity:0.5; pointer-events:none; }"
     },
     {
       "name": "Filtro segmentado",
       "kind": "chip",
       "refersTo": "segmentado-opcao",
       "description": "Opções em relevo numa caixa rebaixada; a ativa perde o relevo e afunda.",
-      "html": "<div class=\"ds-seg\" role=\"radiogroup\"><button class=\"ds-seg__op\" role=\"radio\" aria-checked=\"true\">Todos</button><button class=\"ds-seg__op\" role=\"radio\" aria-checked=\"false\">DEV</button><button class=\"ds-seg__op\" role=\"radio\" aria-checked=\"false\">WEB</button><button class=\"ds-seg__op\" role=\"radio\" aria-checked=\"false\">MOB</button></div>",
-      "css": ".ds-seg { display:inline-flex; padding:2px; gap:2px; border-radius:2px; background:var(--baia, #e3e6ea); box-shadow:inset 0 1px 2px rgb(27 31 37 / 0.08); } .ds-seg__op { border:0; border-radius:2px; background:var(--faixa, #ffffff); padding:3px 10px; color:var(--tinta-2, #4b535e); font:400 13px 'Public Sans', system-ui, sans-serif; box-shadow:0 1px 0 var(--filete, #d3d8de); cursor:pointer; } .ds-seg__op:hover { color:var(--tinta-1, #1b1f25); } .ds-seg__op:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; } .ds-seg__op[aria-checked='true'] { background:transparent; box-shadow:none; color:var(--tinta-1, #1b1f25); font-weight:600; }"
+      "html": "<div class=\"ds-seg\" role=\"radiogroup\"><button class=\"ds-seg__op\" role=\"radio\" aria-checked=\"true\">Todos</button><button class=\"ds-seg__op\" role=\"radio\" aria-checked=\"false\">DEV</button><button class=\"ds-seg__op\" role=\"radio\" aria-checked=\"false\">WEB</button><button class=\"ds-seg__op\" role=\"radio\" aria-checked=\"false\">MOB</button><button class=\"ds-seg__op\" role=\"radio\" aria-checked=\"false\">Demandas</button></div>",
+      "css": ".ds-seg { display:inline-flex; padding:2px; gap:2px; border-radius:2px; background:var(--baia, #e3e6ea); box-shadow:var(--sombra-baia, inset 0 1px 2px rgb(27 31 37 / 0.08)); } .ds-seg__op { border:0; border-radius:2px; background:var(--faixa, #ffffff); padding:3px 10px; color:var(--tinta-2, #4b535e); font:400 var(--t-dado, 13px) 'Public Sans', system-ui, sans-serif; box-shadow:0 1px 0 var(--filete, #d3d8de); cursor:pointer; } .ds-seg__op:hover { color:var(--tinta-1, #1b1f25); } .ds-seg__op:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; } .ds-seg__op[aria-checked='true'] { background:transparent; box-shadow:none; color:var(--tinta-1, #1b1f25); font-weight:600; }"
     },
     {
       "name": "Barra do topo e abas",
       "kind": "nav",
       "refersTo": "aba",
-      "description": "Marca, abas com tecla de atalho, aba atual afundada no trilho.",
-      "html": "<nav class=\"ds-topo\"><span class=\"ds-marca\"><span class=\"ds-marca__qa\">QA</span>SETEC</span><button class=\"ds-aba\" aria-current=\"page\"><kbd class=\"ds-tecla\">1</kbd>Agora</button><button class=\"ds-aba\"><kbd class=\"ds-tecla\">2</kbd>Equipe</button><button class=\"ds-aba\"><kbd class=\"ds-tecla\">3</kbd>Mensal</button><button class=\"ds-aba\"><kbd class=\"ds-tecla\">4</kbd>Card</button></nav>",
-      "css": ".ds-topo { display:flex; align-items:center; gap:4px; min-height:44px; padding:0 16px; background:var(--faixa, #ffffff); border-bottom:1px solid var(--filete, #d3d8de); font:400 14px 'Public Sans', system-ui, sans-serif; } .ds-marca { display:inline-flex; align-items:center; gap:6px; margin-right:16px; font-size:12px; font-weight:600; letter-spacing:0.06em; color:var(--tinta-2, #4b535e); } .ds-marca__qa { background:var(--tinta-1, #1b1f25); color:var(--faixa, #ffffff); padding:1px 5px; border-radius:2px; } .ds-aba { display:inline-flex; align-items:center; gap:7px; height:30px; border:0; border-radius:2px; background:none; padding:0 10px 0 7px; color:var(--tinta-2, #4b535e); font:500 14px 'Public Sans', system-ui, sans-serif; cursor:pointer; } .ds-aba:hover { color:var(--tinta-1, #1b1f25); background:var(--faixa-realce, #f7f8fa); } .ds-aba:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; } .ds-aba[aria-current='page'] { color:var(--tinta-1, #1b1f25); background:var(--trilho, #eef0f3); box-shadow:inset 0 1px 2px rgb(27 31 37 / 0.14); } .ds-tecla { font:400 10px/14px 'JetBrains Mono', ui-monospace, monospace; min-width:16px; text-align:center; padding:0 3px; border:1px solid var(--filete, #d3d8de); border-radius:2px; color:var(--tinta-3, #69727e); background:var(--faixa, #ffffff); }"
+      "description": "Marca, cinco abas com tecla de atalho, aba atual afundada no trilho, selo de coleta à direita.",
+      "html": "<nav class=\"ds-topo\"><span class=\"ds-marca\"><span class=\"ds-marca__qa\">QA</span>SETEC</span><button class=\"ds-aba\" aria-current=\"page\"><kbd class=\"ds-tecla\">1</kbd>Agora</button><button class=\"ds-aba\"><kbd class=\"ds-tecla\">2</kbd>Equipe</button><button class=\"ds-aba\"><kbd class=\"ds-tecla\">3</kbd>Mensal</button><button class=\"ds-aba\"><kbd class=\"ds-tecla\">4</kbd>Card</button><button class=\"ds-aba\"><kbd class=\"ds-tecla\">5</kbd>Reunião</button><span class=\"ds-selo\"><span class=\"ds-selo__ponto\"></span><span>Coleta das <span class=\"ds-dado\">14:20</span></span><span class=\"ds-selo__idade\">há 3 min</span></span></nav>",
+      "css": ".ds-topo { display:flex; align-items:center; gap:4px; min-height:44px; padding:0 16px; background:var(--faixa, #ffffff); border-bottom:1px solid var(--filete, #d3d8de); font:400 var(--t-corpo, 14px) 'Public Sans', system-ui, sans-serif; } .ds-marca { display:inline-flex; align-items:center; gap:6px; margin-right:16px; font-size:var(--t-meta, 12px); font-weight:600; letter-spacing:0.06em; color:var(--tinta-2, #4b535e); } .ds-marca__qa { background:var(--tinta-1, #1b1f25); color:var(--faixa, #ffffff); padding:1px 5px; border-radius:2px; } .ds-aba { display:inline-flex; align-items:center; gap:7px; height:30px; border:0; border-radius:2px; background:none; padding:0 10px 0 7px; color:var(--tinta-2, #4b535e); font:500 var(--t-corpo, 14px) 'Public Sans', system-ui, sans-serif; cursor:pointer; } .ds-aba:hover { color:var(--tinta-1, #1b1f25); background:var(--faixa-realce, #f7f8fa); } .ds-aba:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; } .ds-aba[aria-current='page'] { color:var(--tinta-1, #1b1f25); background:var(--trilho, #eef0f3); box-shadow:var(--sombra-afundado, inset 0 1px 2px rgb(27 31 37 / 0.14)); } .ds-tecla { font:400 var(--t-rotulo, 11px)/14px 'JetBrains Mono', ui-monospace, monospace; min-width:16px; text-align:center; padding:0 3px; border:1px solid var(--filete, #d3d8de); border-radius:2px; color:var(--tinta-3, #69727e); background:var(--faixa, #ffffff); } .ds-aba[aria-current='page'] .ds-tecla { color:var(--tinta-2, #4b535e); border-color:var(--n5, #b6bdc6); } .ds-selo { margin-left:auto; display:flex; align-items:center; gap:8px; font-size:var(--t-meta, 12px); color:var(--tinta-2, #4b535e); } .ds-selo__ponto { width:7px; height:7px; background:var(--n7, #69727e); } .ds-selo__idade { color:var(--tinta-3, #69727e); } .ds-dado { font-family:'JetBrains Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums; }"
     },
     {
       "name": "Campo",
       "kind": "input",
       "refersTo": "campo",
-      "description": "Campo de 28px com filete, foco em contorno azul.",
+      "description": "Campo de 28px com filete, hover em n5, foco em contorno azul.",
       "html": "<label class=\"ds-busca\"><span class=\"ds-busca__rotulo\">Card</span><input class=\"ds-campo\" placeholder=\"#11805\" /></label>",
-      "css": ".ds-busca { display:flex; align-items:center; gap:8px; } .ds-busca__rotulo { font:600 12px 'Public Sans', system-ui, sans-serif; letter-spacing:0.06em; text-transform:uppercase; color:var(--tinta-2, #4b535e); } .ds-campo { height:28px; width:12ch; border:1px solid var(--filete, #d3d8de); border-radius:2px; background:var(--faixa, #ffffff); color:var(--tinta-1, #1b1f25); padding:0 8px; font:400 13px 'Public Sans', system-ui, sans-serif; caret-color:var(--entrada, #2f5fc4); } .ds-campo:hover { border-color:var(--n5, #b6bdc6); } .ds-campo:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; }"
-    },
-    {
-      "name": "Contador",
-      "kind": "card",
-      "refersTo": "kpi",
-      "description": "Faixa de contadores com porta-faixa na cor do que o número é.",
-      "html": "<dl class=\"ds-kpis\"><div class=\"ds-kpi\" style=\"--porta-cor:#2f5fc4\"><dt class=\"ds-kpi__rotulo\">Em QA agora</dt><dd class=\"ds-kpi__valor\">59</dd><dd class=\"ds-kpi__sub\">1 novo nesta coleta</dd></div><div class=\"ds-kpi\" style=\"--porta-cor:#1f7f55\"><dt class=\"ds-kpi__rotulo\">Aprovados hoje</dt><dd class=\"ds-kpi__valor\">8</dd><dd class=\"ds-kpi__sub\">ter 29/09: <span class=\"ds-kpi__ant\">14</span></dd></div></dl>",
-      "css": ".ds-kpis { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:1px; margin:0; background:var(--filete, #d3d8de); border:1px solid var(--filete, #d3d8de); } .ds-kpi { background:var(--faixa, #ffffff); padding:9px 14px 10px 16px; box-shadow:inset 4px 0 0 var(--porta-cor, #d3d8de); display:grid; grid-template-columns:1fr auto; grid-template-areas:'rotulo rotulo' 'valor sub'; align-items:end; gap:2px 10px; } .ds-kpi dd { margin:0; } .ds-kpi__rotulo { grid-area:rotulo; font:600 12px 'Public Sans', system-ui, sans-serif; letter-spacing:0.06em; text-transform:uppercase; color:var(--tinta-2, #4b535e); } .ds-kpi__valor { grid-area:valor; font:500 28px/1.1 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums; letter-spacing:-0.02em; color:var(--tinta-1, #1b1f25); } .ds-kpi__sub { grid-area:sub; font:400 12px 'Public Sans', system-ui, sans-serif; color:var(--tinta-3, #69727e); text-align:right; padding-bottom:3px; } .ds-kpi__ant { font-family:'JetBrains Mono', ui-monospace, monospace; color:var(--tinta-2, #4b535e); }"
-    },
-    {
-      "name": "Baia com faixas",
-      "kind": "custom",
-      "refersTo": "faixa",
-      "description": "Assinatura do sistema: baia rebaixada com pilha de faixas retas, porta-faixa de estado e rótulo escrito.",
-      "html": "<section class=\"ds-baia\"><h2 class=\"ds-baia__titulo\">Movimentações recentes</h2><ul class=\"ds-pilha\"><li class=\"ds-faixa\" style=\"--porta-cor:#1f7f55;--cor-etiqueta:#1f7f55\"><span class=\"ds-faixa__hora\">12:58</span><span class=\"ds-etiqueta\">Aprovado</span><span class=\"ds-faixa__corpo\"><a class=\"ds-card\" href=\"#\">#11781</a> Visualização de documentos</span></li><li class=\"ds-faixa\" style=\"--porta-cor:#bf3a33;--cor-etiqueta:#bf3a33\"><span class=\"ds-faixa__hora\">11:37</span><span class=\"ds-etiqueta\">Reprovado</span><span class=\"ds-faixa__corpo\"><a class=\"ds-card\" href=\"#\">#11784</a> Listas auxiliares</span></li><li class=\"ds-faixa\"><span class=\"ds-faixa__hora\">10:58</span><span class=\"ds-etiqueta\">Criado</span><span class=\"ds-faixa__corpo\"><a class=\"ds-card\" href=\"#\">#11802</a> Ajustar marcação visual</span></li></ul></section>",
-      "css": ".ds-baia { background:var(--baia, #e3e6ea); box-shadow:inset 0 1px 2px rgb(27 31 37 / 0.08); padding-bottom:6px; font:400 13px/1.45 'Public Sans', system-ui, sans-serif; color:var(--tinta-1, #1b1f25); } .ds-baia__titulo { margin:0; padding:9px 10px 8px; font-size:12px; font-weight:600; letter-spacing:0.07em; text-transform:uppercase; color:var(--tinta-2, #4b535e); } .ds-pilha { list-style:none; margin:0; padding:0 6px; display:grid; gap:1px; } .ds-faixa { display:grid; grid-template-columns:42px minmax(0, 1fr); grid-template-areas:'hora etiqueta' 'hora corpo'; gap:2px 8px; padding:6px 10px 7px 14px; background:var(--faixa, #ffffff); box-shadow:inset 4px 0 0 var(--porta-cor, var(--n4, #d3d8de)); animation:ds-insercao 560ms cubic-bezier(0.16, 1, 0.3, 1) both; } .ds-faixa:hover { background:var(--faixa-realce, #f7f8fa); } .ds-faixa__hora { grid-area:hora; font:400 12px 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums; color:var(--tinta-3, #69727e); padding-top:1px; } .ds-etiqueta { grid-area:etiqueta; display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:600; letter-spacing:0.07em; text-transform:uppercase; color:var(--tinta-2, #4b535e); } .ds-etiqueta::before { content:''; width:7px; height:7px; background:var(--cor-etiqueta, var(--n5, #b6bdc6)); } .ds-faixa__corpo { grid-area:corpo; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .ds-card { font:500 12px 'JetBrains Mono', ui-monospace, monospace; color:var(--tinta-1, #1b1f25); text-decoration:underline; text-decoration-color:var(--n5, #b6bdc6); text-underline-offset:3px; } .ds-card:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; } @keyframes ds-insercao { from { transform:translateX(-10px); background:var(--faixa-realce, #f7f8fa); } } @media (prefers-reduced-motion: reduce) { .ds-faixa { animation:none; } }"
-    },
-    {
-      "name": "Barra de carga",
-      "kind": "custom",
-      "refersTo": "faixa",
-      "description": "Linha de carga por pessoa: nome, trilho rebaixado com segmentos por coluna, total em mono.",
-      "html": "<div class=\"ds-carga-linha\"><span class=\"ds-carga-nome\">Matheus</span><div class=\"ds-carga\"><div class=\"ds-carga__trilho\" style=\"width:60%\"><span style=\"flex-grow:2;background:#b6bdc6\"></span><span style=\"flex-grow:1;background:#4b535e\"></span><span style=\"flex-grow:6;background:#2f5fc4\"></span><span style=\"flex-grow:4;background:color-mix(in srgb, #bf3a33 78%, #ffffff)\"></span></div></div><span class=\"ds-carga-total\">33</span></div>",
-      "css": ".ds-carga-linha { display:grid; grid-template-columns:116px 1fr 30px; align-items:center; gap:10px; padding:5px 10px 5px 14px; background:var(--faixa, #ffffff); box-shadow:inset 4px 0 0 var(--n4, #d3d8de); font:500 13px 'Public Sans', system-ui, sans-serif; color:var(--tinta-1, #1b1f25); } .ds-carga { height:10px; background:var(--trilho, #eef0f3); box-shadow:inset 0 1px 2px rgb(27 31 37 / 0.08); } .ds-carga__trilho { display:flex; height:100%; gap:1px; } .ds-carga__trilho > span { min-width:3px; } .ds-carga-total { font:400 13px 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums; text-align:right; }"
+      "css": ".ds-busca { display:flex; align-items:center; gap:8px; } .ds-busca__rotulo { font:600 var(--t-titulo-baia, 12px) 'Public Sans', system-ui, sans-serif; letter-spacing:0.06em; text-transform:uppercase; color:var(--tinta-2, #4b535e); } .ds-campo { height:28px; width:12ch; border:1px solid var(--filete, #d3d8de); border-radius:2px; background:var(--faixa, #ffffff); color:var(--tinta-1, #1b1f25); padding:0 8px; font:400 var(--t-dado, 13px) 'Public Sans', system-ui, sans-serif; caret-color:var(--entrada, #2f5fc4); } .ds-campo:hover { border-color:var(--n5, #b6bdc6); } .ds-campo:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; }"
     },
     {
       "name": "Chip",
       "kind": "chip",
       "refersTo": "chip",
       "description": "Filtro pequeno de filete; pressionado afunda.",
-      "html": "<div style=\"display:flex;gap:6px\"><button class=\"ds-chip\" aria-pressed=\"true\">DEV</button><button class=\"ds-chip\" aria-pressed=\"false\">QA</button></div>",
-      "css": ".ds-chip { border:1px solid var(--filete, #d3d8de); background:var(--faixa, #ffffff); border-radius:2px; padding:1px 8px; font:400 12px 'Public Sans', system-ui, sans-serif; color:var(--tinta-2, #4b535e); cursor:pointer; } .ds-chip:hover { color:var(--tinta-1, #1b1f25); } .ds-chip:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; } .ds-chip[aria-pressed='true'] { background:var(--trilho, #eef0f3); box-shadow:inset 0 1px 2px rgb(27 31 37 / 0.14); color:var(--tinta-1, #1b1f25); }"
+      "html": "<div style=\"display:flex;gap:6px\"><button class=\"ds-chip\" aria-pressed=\"true\">Fora do painel</button><button class=\"ds-chip\" aria-pressed=\"false\">QA</button></div>",
+      "css": ".ds-chip { border:1px solid var(--filete, #d3d8de); background:var(--faixa, #ffffff); border-radius:2px; padding:1px 8px; font:400 var(--t-meta, 12px) 'Public Sans', system-ui, sans-serif; color:var(--tinta-2, #4b535e); cursor:pointer; } .ds-chip:hover { color:var(--tinta-1, #1b1f25); } .ds-chip:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; } .ds-chip[aria-pressed='true'] { background:var(--trilho, #eef0f3); box-shadow:var(--sombra-afundado, inset 0 1px 2px rgb(27 31 37 / 0.14)); color:var(--tinta-1, #1b1f25); }"
+    },
+    {
+      "name": "Contador",
+      "kind": "card",
+      "refersTo": "kpi",
+      "description": "Faixa de contadores com porta-faixa na cor do que o número é; comparação à direita; linha extra opcional; variante menor em --t-destaque.",
+      "html": "<dl class=\"ds-kpis\"><div class=\"ds-kpi\" style=\"--porta-cor:var(--entrada, #2f5fc4)\"><dt class=\"ds-kpi__rotulo\">Em QA agora</dt><dd class=\"ds-kpi__valor\">59</dd><dd class=\"ds-kpi__sub\">1 novo nesta coleta</dd></div><div class=\"ds-kpi\" style=\"--porta-cor:var(--aprovado, #1f7f55)\"><dt class=\"ds-kpi__rotulo\">Aprovados hoje</dt><dd class=\"ds-kpi__valor\">8</dd><dd class=\"ds-kpi__sub\">Ontem: <span class=\"ds-kpi__ant\">14</span></dd></div><div class=\"ds-kpi ds-kpi--menor\"><dt class=\"ds-kpi__rotulo\">Retornos</dt><dd class=\"ds-kpi__valor\">3</dd><dd class=\"ds-kpi__sub\">set: <span class=\"ds-kpi__ant\">5</span></dd><dd class=\"ds-kpi__extra\">12% dos testes</dd></div></dl>",
+      "css": ".ds-kpis { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:1px; margin:0; background:var(--filete, #d3d8de); border:1px solid var(--filete, #d3d8de); } .ds-kpi { background:var(--faixa, #ffffff); padding:9px 14px 10px 16px; box-shadow:inset 4px 0 0 var(--porta-cor, var(--n4, #d3d8de)); display:grid; grid-template-columns:1fr auto; grid-template-areas:'rotulo rotulo' 'valor sub' 'extra extra'; align-items:end; gap:2px 10px; } .ds-kpi dd { margin:0; } .ds-kpi__rotulo { grid-area:rotulo; font:600 var(--t-titulo-baia, 12px) 'Public Sans', system-ui, sans-serif; letter-spacing:0.06em; text-transform:uppercase; color:var(--tinta-2, #4b535e); } .ds-kpi__valor { grid-area:valor; font:500 var(--t-numeral, 28px)/1.1 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums; letter-spacing:-0.02em; color:var(--tinta-1, #1b1f25); } .ds-kpi--menor { padding-top:7px; padding-bottom:7px; } .ds-kpi--menor .ds-kpi__valor { font-size:var(--t-destaque, 22px); } .ds-kpi__sub { grid-area:sub; font:400 var(--t-meta, 12px) 'Public Sans', system-ui, sans-serif; color:var(--tinta-3, #69727e); text-align:right; padding-bottom:3px; } .ds-kpi__ant { font-family:'JetBrains Mono', ui-monospace, monospace; color:var(--tinta-2, #4b535e); } .ds-kpi__extra { grid-area:extra; font:400 var(--t-meta, 12px) 'Public Sans', system-ui, sans-serif; color:var(--tinta-2, #4b535e); padding-top:2px; }"
+    },
+    {
+      "name": "Baia com faixas (feed)",
+      "kind": "custom",
+      "refersTo": "faixa",
+      "description": "Assinatura: baia rebaixada com placa de cabeçalho (título + contagem em campo próprio + filete), faixas retas com porta-faixa de estado, campo de hora separado por filete, rótulo escrito e marca 'novo' na faixa da última coleta, que entra uma vez.",
+      "html": "<section class=\"ds-baia\"><header class=\"ds-baia__cabeca\"><h2 class=\"ds-baia__titulo\">Movimentações<span class=\"ds-contagem\">24</span></h2></header><ul class=\"ds-pilha\"><li class=\"ds-faixa ds-faixa--nova\" style=\"--porta-cor:var(--aprovado, #1f7f55);--cor-etiqueta:var(--aprovado, #1f7f55)\"><span class=\"ds-faixa__hora\">12:58</span><span class=\"ds-faixa__cabeca\"><span class=\"ds-etiqueta\">Aprovado</span><span class=\"ds-marca-novo\">novo</span><span class=\"ds-meta\">Ana · por Bruno</span></span><span class=\"ds-faixa__corpo\"><a class=\"ds-card\" href=\"#\">#11781</a> Visualização de documentos</span></li><li class=\"ds-faixa\" style=\"--porta-cor:var(--reprovado, #bf3a33);--cor-etiqueta:var(--reprovado, #bf3a33)\"><span class=\"ds-faixa__hora\">11:37</span><span class=\"ds-faixa__cabeca\"><span class=\"ds-etiqueta\">Reprovado</span><span class=\"ds-meta\">Carla · por Davi</span></span><span class=\"ds-faixa__corpo\"><a class=\"ds-card\" href=\"#\">#11784</a> Listas auxiliares</span></li><li class=\"ds-faixa\"><span class=\"ds-faixa__hora\">10:58</span><span class=\"ds-faixa__cabeca\"><span class=\"ds-etiqueta\">Criado</span></span><span class=\"ds-faixa__corpo\"><a class=\"ds-card\" href=\"#\">#11802</a> Ajustar marcação visual</span></li></ul></section>",
+      "css": ".ds-baia { background:var(--baia, #e3e6ea); box-shadow:var(--sombra-baia, inset 0 1px 2px rgb(27 31 37 / 0.08)); padding-bottom:6px; font:400 var(--t-dado, 13px)/1.45 'Public Sans', system-ui, sans-serif; color:var(--tinta-1, #1b1f25); } .ds-baia__cabeca { padding:9px 10px 7px; margin-bottom:6px; border-bottom:1px solid var(--filete, #d3d8de); } .ds-baia__titulo { margin:0; font-size:var(--t-titulo-baia, 12px); font-weight:600; letter-spacing:0.07em; text-transform:uppercase; color:var(--tinta-1, #1b1f25); } .ds-contagem { display:inline-block; min-width:2.4em; margin-left:8px; padding:0 6px; border:1px solid var(--filete, #d3d8de); border-radius:2px; background:var(--faixa, #ffffff); font:500 var(--t-meta, 12px)/1.6 'JetBrains Mono', ui-monospace, monospace; letter-spacing:0; text-align:center; vertical-align:1px; } .ds-pilha { list-style:none; margin:0; padding:0 6px; display:grid; gap:1px; } .ds-faixa { display:grid; grid-template-columns:42px minmax(0, 1fr); grid-template-areas:'hora cabeca' 'hora corpo'; gap:2px 8px; padding:6px 10px 7px 14px; background:var(--faixa, #ffffff); box-shadow:inset 4px 0 0 var(--porta-cor, var(--n4, #d3d8de)); } .ds-faixa:hover { background:var(--faixa-realce, #f7f8fa); } .ds-faixa--nova { animation:ds-insercao 560ms cubic-bezier(0.16, 1, 0.3, 1) both; } .ds-faixa__hora { grid-area:hora; align-self:stretch; box-shadow:inset -1px 0 0 var(--filete, #d3d8de); padding:1px 8px 0 0; font:400 var(--t-meta, 12px) 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums; color:var(--tinta-3, #69727e); } .ds-faixa__cabeca { grid-area:cabeca; display:flex; align-items:baseline; gap:10px; min-width:0; } .ds-etiqueta, .ds-marca-novo { display:inline-flex; align-items:center; gap:6px; font-size:var(--t-rotulo, 11px); font-weight:600; letter-spacing:0.07em; text-transform:uppercase; white-space:nowrap; color:var(--tinta-2, #4b535e); } .ds-etiqueta::before, .ds-marca-novo::before { content:''; width:7px; height:7px; background:var(--cor-etiqueta, var(--n5, #b6bdc6)); } .ds-marca-novo { gap:5px; letter-spacing:0.06em; } .ds-marca-novo::before { background:var(--entrada, #2f5fc4); } .ds-meta { font-size:var(--t-meta, 12px); color:var(--tinta-3, #69727e); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .ds-faixa__corpo { grid-area:corpo; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .ds-card { font:500 var(--t-meta, 12px) 'JetBrains Mono', ui-monospace, monospace; color:var(--tinta-1, #1b1f25); text-decoration:underline; text-decoration-color:var(--n5, #b6bdc6); text-underline-offset:3px; } .ds-card:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; } @keyframes ds-insercao { from { transform:translateX(-10px); background:var(--faixa-realce, #f7f8fa); } } @media (prefers-reduced-motion: reduce) { .ds-faixa--nova { animation:none; } }"
+    },
+    {
+      "name": "Tabela como pilha de faixas",
+      "kind": "custom",
+      "refersTo": "faixa",
+      "description": "Linhas-faixa separadas por 1px; campos em caixas de filete; cabeçalho em rótulo sans com quadradinho de estado; delta sem cor sob o número; mini-barra neutra no Resumo mensal (até 4 meses).",
+      "html": "<div class=\"ds-baia-t\"><table class=\"ds-tabela\"><thead><tr><th>Pessoa</th><th class=\"ds-num\"><span class=\"ds-tom\" style=\"--cor-etiqueta:var(--aprovado, #1f7f55)\">Aprovados</span></th><th class=\"ds-num\">Taxa</th></tr></thead><tbody><tr><th>Ana</th><td class=\"ds-num\">14<span class=\"ds-delta\">+3</span></td><td class=\"ds-num\">82%<span class=\"ds-minibarra\"><span style=\"width:82%\"></span></span></td></tr><tr><th>Bruno</th><td class=\"ds-num ds-zero\">0<span class=\"ds-delta\">−2</span></td><td class=\"ds-num\">—</td></tr></tbody></table></div>",
+      "css": ".ds-baia-t { background:var(--baia, #e3e6ea); box-shadow:var(--sombra-baia, inset 0 1px 2px rgb(27 31 37 / 0.08)); padding:6px; font:400 var(--t-corpo, 14px)/1.45 'Public Sans', system-ui, sans-serif; color:var(--tinta-1, #1b1f25); } .ds-tabela { width:100%; border-collapse:separate; border-spacing:0 1px; } .ds-tabela th, .ds-tabela td { padding:7px 10px; text-align:left; vertical-align:top; } .ds-tabela thead th { background:var(--baia, #e3e6ea); color:var(--tinta-2, #4b535e); font:600 var(--t-rotulo, 11px) 'Public Sans', system-ui, sans-serif; letter-spacing:0.05em; text-transform:uppercase; white-space:nowrap; padding-top:2px; padding-bottom:5px; } .ds-tabela tbody th, .ds-tabela tbody td { background:var(--faixa, #ffffff); } .ds-tabela tbody th { font-weight:400; } .ds-tabela tbody td + td { box-shadow:inset 1px 0 0 var(--filete, #d3d8de); } .ds-tabela tbody tr:hover > * { background:var(--faixa-realce, #f7f8fa); } .ds-tabela tbody tr > :first-child { box-shadow:inset 4px 0 0 var(--porta-cor, var(--n4, #d3d8de)); padding-left:14px; } .ds-num { text-align:right !important; font-family:'JetBrains Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums; font-size:var(--t-dado, 13px); } thead .ds-num { font-family:'Public Sans', system-ui, sans-serif; font-size:var(--t-rotulo, 11px); } .ds-zero { color:var(--tinta-3, #69727e); } .ds-tom { display:inline-flex; align-items:center; gap:5px; } .ds-tom::before { content:''; width:7px; height:7px; background:var(--cor-etiqueta); } .ds-delta { display:block; font-size:var(--t-rotulo, 11px); line-height:1.2; color:var(--tinta-3, #69727e); } .ds-minibarra { display:block; height:4px; margin-top:4px; background:var(--trilho, #eef0f3); } .ds-minibarra > span { display:block; height:100%; background:var(--n6, #8f98a3); }"
+    },
+    {
+      "name": "Barra de carga",
+      "kind": "custom",
+      "refersTo": "faixa",
+      "description": "Linha de carga em campos de filete (nome | barra | total); trilho rebaixado de 10px, segmentos por coluna; a barra que passa do teto da escala enche e ganha um corte de 3px perto do fim.",
+      "html": "<div style=\"display:grid;gap:1px;background:var(--baia, #e3e6ea);padding:6px\"><div class=\"ds-carga-linha\"><span class=\"ds-carga-nome\">Matheus</span><div class=\"ds-carga\"><div class=\"ds-carga__trilho\" style=\"width:60%\"><span style=\"flex-grow:2;background:var(--papel-a_iniciar, #b6bdc6)\"></span><span style=\"flex-grow:1;background:var(--papel-andamento, #4b535e)\"></span><span style=\"flex-grow:6;background:var(--papel-qa, #2f5fc4)\"></span><span style=\"flex-grow:4;background:var(--papel-correcao, color-mix(in srgb, #bf3a33 78%, #ffffff))\"></span></div></div><span class=\"ds-carga-total\">33</span></div><div class=\"ds-carga-linha\"><span class=\"ds-carga-nome\">Lívia</span><div class=\"ds-carga ds-carga--cortada\"><div class=\"ds-carga__trilho\" style=\"width:100%\"><span style=\"flex-grow:5;background:var(--papel-a_iniciar, #b6bdc6)\"></span><span style=\"flex-grow:3;background:var(--papel-andamento, #4b535e)\"></span><span style=\"flex-grow:40;background:var(--papel-qa, #2f5fc4)\"></span></div></div><span class=\"ds-carga-total\">71</span></div></div>",
+      "css": ".ds-carga-linha { display:grid; grid-template-columns:116px 1fr 30px; align-items:center; gap:10px; min-height:30px; padding:0 10px 0 14px; background:var(--faixa, #ffffff); box-shadow:inset 4px 0 0 var(--n4, #d3d8de); font:500 var(--t-dado, 13px) 'Public Sans', system-ui, sans-serif; color:var(--tinta-1, #1b1f25); } .ds-carga-nome { align-self:stretch; display:flex; align-items:center; padding-right:10px; box-shadow:inset -1px 0 0 var(--filete, #d3d8de); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .ds-carga { height:10px; background:var(--trilho, #eef0f3); box-shadow:var(--sombra-baia, inset 0 1px 2px rgb(27 31 37 / 0.08)); } .ds-carga__trilho { display:flex; height:100%; gap:1px; } .ds-carga__trilho > span { min-width:3px; } .ds-carga--cortada .ds-carga__trilho { -webkit-mask:linear-gradient(90deg, #000 calc(100% - 9px), transparent calc(100% - 9px), transparent calc(100% - 6px), #000 calc(100% - 6px)); mask:linear-gradient(90deg, #000 calc(100% - 9px), transparent calc(100% - 9px), transparent calc(100% - 6px), #000 calc(100% - 6px)); } .ds-carga-total { align-self:stretch; display:flex; align-items:center; justify-content:flex-end; box-shadow:inset 1px 0 0 var(--filete, #d3d8de); font:400 var(--t-dado, 13px) 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums; }"
+    },
+    {
+      "name": "Aviso de coleta",
+      "kind": "custom",
+      "refersTo": "faixa",
+      "description": "Faixa inteira entre a barra e o quadro quando o dado não é de agora; grave (coleta parada no expediente) escurece para tinta 1, nunca vermelho.",
+      "html": "<div style=\"display:grid;gap:8px\"><div class=\"ds-aviso\" role=\"status\"><span class=\"ds-aviso__marca\"></span><p><strong>Ainda não houve coleta hoje.</strong> Os números são de ter 30/09 às 18:00, a última coleta.</p></div><div class=\"ds-aviso ds-aviso--grave\" role=\"status\"><span class=\"ds-aviso__marca\"></span><p><strong>Coleta parada há 42 min.</strong> Os números param em 13:18.</p></div></div>",
+      "css": ".ds-aviso { display:flex; align-items:center; gap:10px; padding:8px 14px 8px 16px; background:var(--faixa, #ffffff); border:1px solid var(--filete, #d3d8de); box-shadow:inset 4px 0 0 var(--n6, #8f98a3); font:400 var(--t-dado, 13px)/1.45 'Public Sans', system-ui, sans-serif; color:var(--tinta-2, #4b535e); } .ds-aviso p { margin:0; max-width:110ch; } .ds-aviso strong { color:var(--tinta-1, #1b1f25); font-weight:600; } .ds-aviso__marca { flex:none; width:8px; height:8px; box-shadow:inset 0 0 0 1.5px var(--tinta-2, #4b535e); } .ds-aviso--grave { box-shadow:inset 4px 0 0 var(--tinta-1, #1b1f25); color:var(--tinta-1, #1b1f25); } .ds-aviso--grave .ds-aviso__marca { background:var(--tinta-1, #1b1f25); box-shadow:none; }"
+    },
+    {
+      "name": "Números grandes (modo Reunião)",
+      "kind": "card",
+      "refersTo": "kpi",
+      "description": "Lâmina de projeção: faixas com porta-faixa de 6px, rótulo e número na escala --r-*, unidade em 0,45em, valor anterior embaixo.",
+      "html": "<dl class=\"ds-grandes\"><div class=\"ds-grande\" style=\"--porta-cor:var(--entrada, #2f5fc4)\"><dt class=\"ds-grande__rotulo\">Entraram em QA</dt><dd class=\"ds-grande__valor\">212</dd><dd class=\"ds-grande__anterior\">ago: <span class=\"ds-dado\">188</span></dd></div><div class=\"ds-grande\"><dt class=\"ds-grande__rotulo\">Tempo médio em QA</dt><dd class=\"ds-grande__valor\">9,4<span class=\"ds-grande__unidade\">h</span></dd><dd class=\"ds-grande__anterior\">ago: <span class=\"ds-dado\">11,2 h</span></dd></div></dl>",
+      "css": ".ds-grandes { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1px; margin:0; background:var(--filete, #d3d8de); border:1px solid var(--filete, #d3d8de); font-family:'Public Sans', system-ui, sans-serif; } .ds-grande { margin:0; background:var(--faixa, #ffffff); padding:clamp(14px, 2.4vh, 28px) clamp(16px, 2vw, 28px) clamp(14px, 2.4vh, 28px) calc(4px + clamp(14px, 2vw, 26px)); box-shadow:inset 6px 0 0 var(--porta-cor, var(--n4, #d3d8de)); display:grid; gap:clamp(4px, 0.8vh, 10px); align-content:start; } .ds-grande dd { margin:0; } .ds-grande__rotulo { font-size:var(--r-rotulo, clamp(13px, 1.7vh, 18px)); font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--tinta-2, #4b535e); } .ds-grande__valor { font:500 var(--r-numeral, clamp(48px, 9vh, 96px))/1 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums; letter-spacing:-0.03em; color:var(--tinta-1, #1b1f25); } .ds-grande__unidade { font-size:0.45em; letter-spacing:0; color:var(--tinta-2, #4b535e); } .ds-grande__anterior { font-size:var(--r-rotulo, clamp(13px, 1.7vh, 18px)); color:var(--tinta-2, #4b535e); } .ds-dado { font-family:'JetBrains Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums; }"
+    },
+    {
+      "name": "Glossário",
+      "kind": "custom",
+      "refersTo": "faixa",
+      "description": "Disclosure 'Como ler estes números': abre por clique ou teclado numa faixa de filete com definições em grade.",
+      "html": "<details class=\"ds-glossario\" open><summary>Como ler estes números</summary><dl><div><dt>Dias em QA</dt><dd>Dias corridos desde a última entrada na coluna Teste/QA.</dd></div><div><dt>Retornos</dt><dd>Quantas vezes o card voltou de QA para Correções.</dd></div></dl></details>",
+      "css": ".ds-glossario { font:400 var(--t-meta, 12px)/1.45 'Public Sans', system-ui, sans-serif; color:var(--tinta-2, #4b535e); } .ds-glossario summary { cursor:pointer; width:max-content; } .ds-glossario summary:focus-visible { outline:2px solid var(--entrada, #2f5fc4); outline-offset:1px; } .ds-glossario dl { margin:8px 0 0; padding:10px 14px; background:var(--faixa, #ffffff); border:1px solid var(--filete, #d3d8de); display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:8px 20px; max-width:1100px; } .ds-glossario dt { font-weight:600; color:var(--tinta-1, #1b1f25); } .ds-glossario dd { margin:0; }"
     }
   ],
   "narrative": {
@@ -138,12 +701,36 @@
       "Teclado de primeira classe: 1–4 trocam de tela, # ou / vai para a busca de card."
     ],
     "rules": [
-      { "name": "A Regra do Porta-Faixa", "body": "A cor de estado mora no porta-faixa (borda esquerda de 4px, reta, feita com sombra interna) e nos marcadores quadrados de 7px dos rótulos e cabeçalhos; barras de carga e séries de gráfico são as únicas outras superfícies coloridas, e sempre com legenda. Texto, fundo de faixa e número não recebem cor de estado.", "section": "colors" },
-      { "name": "A Regra da Cor Escrita", "body": "Nenhuma cor aparece sozinha: todo porta-faixa colorido tem o nome do estado escrito na mesma faixa ou na coluna, todo quadradinho tem rótulo ao lado, toda série tem legenda.", "section": "colors" },
-      { "name": "A Regra dos Onze Cinzas", "body": "Nenhum cinza existe fora de --n0..--n10. Um cinza novo é um degrau errado da escala, não um token novo.", "section": "colors" },
-      { "name": "A Regra do Grupo Neutro", "body": "Grupos de pessoas (DEV, QA, estagiários, gestão) são tons da escala neutra, nunca matizes de estado: grupo não é acontecimento.", "section": "colors" },
-      { "name": "A Regra da Impressão", "body": "Mono só para dado: números, códigos de card, horários, datas e períodos. Cabeçalhos, rótulos, nomes e frases ficam em Public Sans, inclusive o cabeçalho das colunas numéricas.", "section": "typography" },
-      { "name": "A Regra do Afundar", "body": "O que está selecionado desce para o trilho (fundo --trilho mais sombra afundada, texto em tinta 1); não ganha cor, contorno colorido nem elevação.", "section": "elevation" }
+      {
+        "name": "A Regra do Porta-Faixa",
+        "body": "A cor de estado mora no porta-faixa (borda esquerda de 4px, reta, feita com sombra interna) e nos marcadores quadrados de 7px dos rótulos e cabeçalhos; barras de carga e séries de gráfico são as únicas outras superfícies coloridas, e sempre com legenda. Texto, fundo de faixa e número não recebem cor de estado.",
+        "section": "colors"
+      },
+      {
+        "name": "A Regra da Cor Escrita",
+        "body": "Nenhuma cor aparece sozinha: todo porta-faixa colorido tem o nome do estado escrito na mesma faixa ou na coluna, todo quadradinho tem rótulo ao lado, toda série tem legenda.",
+        "section": "colors"
+      },
+      {
+        "name": "A Regra dos Onze Cinzas",
+        "body": "Nenhum cinza existe fora de --n0..--n10. Um cinza novo é um degrau errado da escala, não um token novo.",
+        "section": "colors"
+      },
+      {
+        "name": "A Regra do Grupo Neutro",
+        "body": "Grupos de pessoas (DEV, QA, estagiários, gestão) são tons da escala neutra, nunca matizes de estado: grupo não é acontecimento.",
+        "section": "colors"
+      },
+      {
+        "name": "A Regra da Impressão",
+        "body": "Mono só para dado: números, códigos de card, horários, datas e períodos. Cabeçalhos, rótulos, nomes e frases ficam em Public Sans, inclusive o cabeçalho das colunas numéricas.",
+        "section": "typography"
+      },
+      {
+        "name": "A Regra do Afundar",
+        "body": "O que está selecionado desce para o trilho (fundo --trilho mais sombra afundada, texto em tinta 1); não ganha cor, contorno colorido nem elevação.",
+        "section": "elevation"
+      }
     ],
     "dos": [
       "Do tirar todo cinza da escala --n0..--n10 e usar os papéis (--trilho, --baia, --faixa, --faixa-realce, --filete, --tinta-1..3) em vez do degrau cru quando o papel existe.",

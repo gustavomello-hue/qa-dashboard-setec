@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 import type { Dashboard } from "../data/contrato";
-import { NOME_PAPEL, dataCurta, diasDesde, nomeCurto, numero, porcento, separarEtiquetas } from "../data/formato";
-import { intervalo, intervaloAnterior, rotuloAnterior, rotuloPeriodoLongo, ultimoDia, type Periodo } from "../data/periodo";
+import { NOME_PAPEL, dataCurta, haDias, nomeCurto, numero, porcento, separarEtiquetas } from "../data/formato";
+import { intervalo, intervaloAnterior, mesAnterior, rotuloAnterior, rotuloPeriodoLongo, ultimoDia, type Periodo } from "../data/periodo";
+import { mesParcial } from "../data/reuniao";
 import { indiceProjetos, indiceTitulos, type Filtro } from "../data/seletores";
 import {
   ROTULO_GRUPO, atribuicoesDe, inicioDaSemana, semanaIncompleta, cardsAbertos, cardsDaMetrica, cargaPorPessoa, cargaVazia, concluidos, ehQa,
@@ -35,7 +36,8 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar }: Pr
   const atribs = atribuicoesDe(dados, atual, filtro);
   const r = (uid !== undefined && resumirPorPessoa(atribs).porPessoa.get(uid)) || resumoVazio();
   const a = (uid !== undefined && resumirPorPessoa(atribuicoesDe(dados, intervaloAnterior(periodo, agora), filtro)).porPessoa.get(uid)) || resumoVazio();
-  const antes = rotuloAnterior(periodo, agora);
+  // Base medida só em parte: o rótulo avisa, para "ago/26: 1" não virar comparação.
+  const antes = rotuloAnterior(periodo, agora) + (periodo.tipo === "mes" && mesParcial(dados, mesAnterior(periodo.mes)) ? " (parcial)" : "");
   const qa = pessoa ? ehQa(pessoa) : false;
   const dev = pessoa ? pessoa.grupos.some((g) => g === "dev" || g === "estagiario_dev") || r.entregues > 0 : false;
 
@@ -301,7 +303,7 @@ function ListaAbertos({
               <span className="meta">
                 <span>{nomeCurto(projetos.get(c.project_id) ?? "")}</span>
                 <span>{NOME_PAPEL[c.papel] ?? c.coluna}</span>
-                {c.desde && <span>há {diasDesde(c.desde)} dias na coluna</span>}
+                {c.desde && <span>{haDias(c.desde)} na coluna</span>}
               </span>
             </span>
           </li>

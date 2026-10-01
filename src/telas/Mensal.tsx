@@ -4,6 +4,7 @@ import { mesCurto, numero, porcento } from "../data/formato";
 import { mesLocal, resumoPorMes, type Filtro } from "../data/seletores";
 import { ROTULO_GRUPO, composicaoPorMes, taxaCardsPorMes } from "../data/pessoas";
 import { DEFINICAO } from "../data/glossario";
+import { mesParcial } from "../data/reuniao";
 import { Glossario } from "../componentes/Glossario";
 import { Grafico, base, cor, useTema, type OpcoesGrafico } from "../componentes/Grafico";
 
@@ -32,7 +33,8 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
   const taxaDe = (mes: string) => taxas.get(mes)?.taxa ?? null;
   // O mês corrente leva "*": está em andamento e não se compara de igual para igual.
   const mesAtual = mesLocal(new Date());
-  const rotuloMes = (m: string) => (m === mesAtual ? `${mesCurto(m)} *` : mesCurto(m));
+  const rotuloMes = (m: string) =>
+    m === mesAtual ? `${mesCurto(m)} *` : mesParcial(dados, m) ? `${mesCurto(m)} (parcial)` : mesCurto(m);
   const meses = linhas.map((l) => rotuloMes(l.ano_mes));
   // Linha com 2 pontos não mostra tendência: até 4 meses, % e tempo ficam como
   // mini-barras no Resumo; os gráficos de linha entram a partir do 4º mês.
@@ -119,7 +121,7 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
       <section className="bloco mensal__largo" aria-labelledby="t-tabela-mes">
         <header className="bloco__cabeca">
           <h2 id="t-tabela-mes" className="bloco__titulo">Resumo</h2>
-          {!comTendencia && <p className="nota">Com menos de 4 meses, % e tempo médio aparecem como barras aqui; os gráficos de tendência entram a partir do 4º mês.</p>}
+          {!comTendencia && <p className="nota">Até 4 meses de dados, % e tempo médio aparecem como barras na tabela.</p>}
           <Glossario />
         </header>
         <div className="rolavel-x">

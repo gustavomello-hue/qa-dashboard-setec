@@ -1,7 +1,8 @@
 import { useState } from "react";
 import type { Dashboard, Grupo, Metrica, Pessoa } from "../data/contrato";
-import { numero, porcento } from "../data/formato";
-import { intervalo, intervaloAnterior, rotuloAnterior, ultimoDia, type Periodo } from "../data/periodo";
+import { mesCurto, numero, porcento } from "../data/formato";
+import { intervalo, intervaloAnterior, mesAnterior, rotuloAnterior, ultimoDia, type Periodo } from "../data/periodo";
+import { mesParcial } from "../data/reuniao";
 import type { Filtro } from "../data/seletores";
 import {
   GRUPOS_TABELA, ROTULO_GRUPO, atribuicoesDe, cargaPorPessoa, concluidos, indicePessoas, nomeDe,
@@ -18,6 +19,8 @@ interface Props {
   filtro: Filtro;
   periodo: Periodo;
   inativos: boolean;
+  /** Período escolhido sozinho (início do mês abre o mês fechado anterior). */
+  periodoAutomatico?: boolean;
   alternarInativos: () => void;
   hrefPessoa: (id: number) => string;
 }
@@ -64,7 +67,7 @@ const SPARK: Record<"dev" | "qa", { metricas: Metrica[]; rotulo: string }> = {
   qa: { metricas: ["testou_aprovado", "testou_reprovado"], rotulo: "testados" },
 };
 
-export function Equipe({ dados, filtro, periodo, inativos, alternarInativos, hrefPessoa }: Props) {
+export function Equipe({ dados, filtro, periodo, inativos, periodoAutomatico, alternarInativos, hrefPessoa }: Props) {
   const agora = new Date();
   const atual = intervalo(periodo, agora);
   const atribs = atribuicoesDe(dados, atual, filtro);
@@ -78,6 +81,8 @@ export function Equipe({ dados, filtro, periodo, inativos, alternarInativos, hre
   const cargas = cargaPorPessoa(dados, filtro);
   const carga = (uid: number) => PAPEIS_CARGA.reduce((s, p) => s + (cargas.get(uid)?.[p] ?? 0), 0);
   const pessoas = indicePessoas(dados);
+  // Base medida só em parte (mês reconstruído): sem sinal de variação.
+  const baseParcial = periodo.tipo === "mes" && mesParcial(dados, mesAnterior(periodo.mes));
 
   if (!dados.equipe) return <p className="vazio">Este dashboard.json ainda não traz as métricas por pessoa.</p>;
 
@@ -88,7 +93,11 @@ export function Equipe({ dados, filtro, periodo, inativos, alternarInativos, hre
     <div className="equipe">
       <div className="barra-acoes">
         <p className="nota">
-          Crédito ao responsável <strong>no momento</strong> de cada evento. Sob cada número, a diferença para {rotuloAnterior(periodo, agora)}.
+          {periodoAutomatico && periodo.tipo === "mes" && <>Início do mês: mostrando {mesCurto(periodo.mes)}, o último mês fechado. </>}
+          Crédito ao responsável <strong>no momento</strong> de cada evento.{" "}
+          {baseParcial
+            ? <>A base {rotuloAnterior(periodo, agora)} foi medida só em parte: sem variação.</>
+            : <>Sob cada número, a diferença para {rotuloAnterior(periodo, agora)}.</>}
         </p>
         <Glossario />
         <label className="alternador">
@@ -109,7 +118,8 @@ export function Equipe({ dados, filtro, periodo, inativos, alternarInativos, hre
             tendencia={(uid) => porSemana(historico, uid, SPARK[tipo].metricas, inicios)}
             rotuloTendencia={SPARK[tipo].rotulo}
             parcial={parcial}
-            rotuloAnterior={rotuloAnterior(periodo, agora)}
+            rotuloAnterior={rotuloAnterior(periodo, agora) + (baseParcial ? " (parcial)" : "")}
+            semDelta={baseParcial}
             hrefPessoa={hrefPessoa}
             rodape={
               g === "qa" ? (
@@ -149,7 +159,8 @@ export function Equipe({ dados, filtro, periodo, inativos, alternarInativos, hre
           ]}
           resumo={(uid) => porPessoa.get(uid) ?? resumoVazio()}
           anterior={(uid) => antes.get(uid) ?? resumoVazio()}
-          rotuloAnterior={rotuloAnterior(periodo, agora)}
+          rotuloAnterior={rotuloAnterior(periodo, agora) + (baseParcial ? " (parcial)" : "")}
+          semDelta={baseParcial}
           hrefPessoa={hrefPessoa}
           mostrarGrupo
         />
@@ -170,6 +181,8 @@ interface TabelaProps {
   parcial?: boolean;
   /** Nome do período de comparação ("ago/26", "set/26 até dia 3"). */
   rotuloAnterior: string;
+  /** Base parcial: sem diferença sob os números. */
+  semDelta?: boolean;
   hrefPessoa: (id: number) => string;
   rodape?: React.ReactNode;
   semTitulo?: boolean;
@@ -199,7 +212,7 @@ function formatar(v: number | null, c: Coluna): string {
 }
 
 function TabelaGrupo({
-  grupo, pessoas, colunas, resumo, anterior, tendencia, rotuloTendencia, parcial = false, rotuloAnterior, hrefPessoa, rodape, semTitulo, mostrarGrupo,
+  grupo, pessoas, colunas, resumo, anterior, tendencia, rotuloTendencia, parcial = false, rotuloAnterior, semDelta = false, hrefPessoa, rodape, semTitulo, mostrarGrupo,
 }: TabelaProps) {
   // Abre em ordem alfabética (sem ranking); clicar no cabeçalho ordena.
   const [ordem, setOrdem] = useState<{ id: string; desc: boolean } | null>(null);
@@ -272,7 +285,7 @@ function TabelaGrupo({
                           title={va === null ? undefined : `${rotuloAnterior}: ${formatar(va, c)}`}
                         >
                           {formatar(v, c)}
-                          <Delta atual={v} anterior={va} pct={c.formato === "pct"} />
+                          {!semDelta && <Delta atual={v} anterior={va} pct={c.formato === "pct"} />}
                         </td>
                       );
                     })}

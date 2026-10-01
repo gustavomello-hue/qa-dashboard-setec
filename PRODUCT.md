@@ -35,6 +35,7 @@ Os dados são coletados a cada 10 minutos, das 7h às 19h.
   - uma aba aberta no monitor da mesa **o dia todo**, ao lado do Kanboard, consultada várias vezes ao dia (cena principal: pede conforto visual);
   - reunião de acompanhamento com a gestão, com números do mês e fichas por pessoa.
 - **Modo TV:** existe (`?tv`), mas é secundário; o design é otimizado para leitura de perto.
+- **Reunião projetada:** a aba Reunião serve à reunião mensal e à conversa individual (só projetar; impressão fora do escopo).
 - **Coleta:** o PC da SETEC coleta pelo Agendador de Tarefas e publica o `dashboard.json` no branch `dados`. O site busca o JSON a cada 10 min, só com a aba visível.
 - **Links:** os links dos cards abrem o Kanboard interno, que só funciona na VPN ou na rede da prefeitura.
 - **Idioma:** pt-BR.
@@ -52,6 +53,7 @@ Os dados são coletados a cada 10 minutos, das 7h às 19h.
   - **Pessoa:** ficha individual com comparação com o período anterior, gráfico semanal, cards abertos, reprovados e concluídos sem QA.
   - **Mensal:** volume, % de reprovação, tempo médio em QA e entregas por grupo.
   - **Card:** linha do tempo.
+  - **Reunião:** apresentação para projetar (lâminas em sequência, teclado), em dois tipos. A mensal da equipe tem números do mês, volume e grupos, tabelas por pessoa e o que não foi medido. A conversa individual mostra só a pessoa: três números e os cards para conversar.
 - **Filtros:** prefixo, projeto e período (mês ou últimos 7 dias). Tudo fica na URL.
 - **Regras de métrica:**
   - O crédito vai ao responsável **no momento** do evento.

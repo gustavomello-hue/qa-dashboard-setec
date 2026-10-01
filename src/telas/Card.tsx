@@ -38,6 +38,7 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
         }}
       >
         <label className="busca__rotulo" htmlFor="campo-card">Card #</label>
+        <span className="busca__atalho" aria-hidden="true">atalho <kbd className="tecla">/</kbd></span>
         <input
           id="campo-card"
           name="card"
@@ -69,6 +70,8 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
               </a>
             )}
           </header>
+          {/* Em tela larga a ficha vira painel lateral e a linha do tempo ganha a largura toda. */}
+          <div className={`card-corpo${metricas ? " card-corpo--com-ficha" : ""}`}>
           {metricas && (
             <dl className="ficha">
               <div><dt>Entradas em QA</dt><dd className="num">{numero(metricas.entradas_qa)}</dd></div>
@@ -79,7 +82,7 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
               </div>
               <div><dt>Projeto</dt><dd>{nomeCurto(metricas.projeto)}</dd></div>
               <div><dt>Criador</dt><dd>{nome(metricas.criador) || "—"}</dd></div>
-              <div><dt>Concluído por</dt><dd>{nome(metricas.concluido_por) || "—"}</dd></div>
+              <div><dt>Concluído por</dt><dd>{metricas.concluido_em ? nome(metricas.concluido_por) || "—" : "ainda aberto"}</dd></div>
               {naFila && naFila.no_painel !== undefined && naFila.no_painel !== null && (
                 <div>
                   <dt>Painel do Kanboard</dt>
@@ -109,6 +112,7 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
               </li>
             ))}
           </ol>
+          </div>
         </section>
       )}
     </div>

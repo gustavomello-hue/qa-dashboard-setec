@@ -3,7 +3,7 @@ import { useDashboard } from "./data/carregar";
 import { TELAS, escreverRota, useRota, type Rota, type Tela } from "./data/rota";
 import type { Dashboard, Prefixo } from "./data/contrato";
 import type { Filtro } from "./data/seletores";
-import { mesesDisponiveis, periodoPadrao, escreverPeriodo, lerPeriodo, rotuloPeriodo } from "./data/periodo";
+import { inicioDeMes, mesesDisponiveis, periodoPadrao, escreverPeriodo, lerPeriodo, rotuloPeriodo } from "./data/periodo";
 import { SEGUNDOS_POR_QUADRO, sequenciaAtracao } from "./data/atracao";
 import { haQuanto, nomeCurto } from "./data/formato";
 import { estadoAtualizacao } from "./data/seletores";
@@ -15,8 +15,9 @@ import { Equipe } from "./telas/Equipe";
 import { Pessoa } from "./telas/Pessoa";
 import { Mensal } from "./telas/Mensal";
 import { Card } from "./telas/Card";
+import { Reuniao } from "./telas/Reuniao";
 
-const NOMES: Record<Tela, string> = { agora: "Agora", equipe: "Equipe", pessoa: "Pessoa", mensal: "Mensal", card: "Card" };
+const NOMES: Record<Tela, string> = { agora: "Agora", equipe: "Equipe", pessoa: "Pessoa", mensal: "Mensal", card: "Card", reuniao: "Reunião" };
 const PREFIXOS: Prefixo[] = ["DEV", "WEB", "MOB", "Demandas"];
 
 export function App() {
@@ -87,13 +88,16 @@ function Painel({ dados, erro, recarregar }: { dados: Dashboard; erro: string | 
     return () => window.clearInterval(id);
   }, [rota.tv, sequencia.length]);
 
-  // Teclado: 1 a 4 trocam de tela; "#" ou "/" vai direto para a busca de card.
+  // Teclado: 1 a 5 trocam de tela; "#" ou "/" vai direto para a busca de card.
   useEffect(() => {
     const aoTeclar = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey || e.altKey) return;
+      // Na apresentação as teclas são da lâmina: um "2" sem querer numa conversa
+      // individual não pode projetar a tela Equipe com os colegas.
+      if (rota.tela === "reuniao" && rota.slide) return;
       const alvo = e.target as HTMLElement | null;
       if (alvo && (alvo.isContentEditable || ["INPUT", "SELECT", "TEXTAREA"].includes(alvo.tagName))) return;
-      const i = ["1", "2", "3", "4"].indexOf(e.key);
+      const i = ["1", "2", "3", "4", "5"].indexOf(e.key);
       if (i >= 0) {
         e.preventDefault();
         irPara({ ...rota, tela: TELAS[i], tv: false });
@@ -135,14 +139,21 @@ function Painel({ dados, erro, recarregar }: { dados: Dashboard; erro: string | 
       primeira.current = false;
       return;
     }
+    // Tela nova começa do topo (a rolagem da anterior não vem junto).
+    window.scrollTo(0, 0);
     if (!rota.tv) principal.current?.focus({ preventScroll: true });
   }, [tela, rota.pessoa, rota.card, rota.tv]);
   const projetos = dados.projetos
     .filter((p) => !filtro.prefixo || p.prefixo === filtro.prefixo)
     .sort((a, b) => nomeCurto(a.nome).localeCompare(nomeCurto(b.nome)));
   const usaPeriodo = tela === "equipe" || tela === "pessoa";
-  const usaFiltro = tela !== "card";
+  const usaFiltro = tela !== "card" && tela !== "reuniao";
   const meses = mesesDisponiveis(dados.equipe?.desde ?? dados.regras.qa_confiavel_desde, new Date());
+
+  // Apresentação da reunião: a tela inteira é da lâmina, sem barra nem filtros.
+  if (tela === "reuniao" && rota.slide) {
+    return <Reuniao dados={dados} rota={rota} ir={ir} aviso={<AvisoColeta dados={dados} agora={agora} />} />;
+  }
 
   return (
     <div className={`app${rota.tv ? " app--tv" : ""}${tela === "agora" ? " app--cheia" : ""}`}>
@@ -184,7 +195,7 @@ function Painel({ dados, erro, recarregar }: { dados: Dashboard; erro: string | 
                     onClick={() => mudarFiltro(p ? { prefixo: p } : {})}
                     disabled={rota.tv}
                   >
-                    {p ?? "Todos"}
+                    {p ?? "Todas"}
                   </button>
                 );
               })}
@@ -258,6 +269,7 @@ function Painel({ dados, erro, recarregar }: { dados: Dashboard; erro: string | 
             filtro={filtro}
             periodo={periodo}
             inativos={!!rota.inativos}
+            periodoAutomatico={!rota.periodo && inicioDeMes(agora)}
             alternarInativos={() => ir({ inativos: !rota.inativos })}
             hrefPessoa={hrefPessoa}
           />
@@ -274,6 +286,7 @@ function Painel({ dados, erro, recarregar }: { dados: Dashboard; erro: string | 
         )}
         {tela === "mensal" && <Mensal dados={dados} filtro={filtro} />}
         {tela === "card" && <Card dados={dados} card={rota.card} abrir={abrirCard} />}
+        {tela === "reuniao" && <Reuniao dados={dados} rota={rota} ir={ir} aviso={null} />}
       </main>
 
       {rota.tv && atual && (

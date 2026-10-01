@@ -301,6 +301,7 @@ details.bloco > summary {
 }
 
 .rolavel {
+  position: relative;
   overflow: auto;
   min-height: 0;
   flex: 1;
@@ -310,6 +311,9 @@ details.bloco > summary {
 .rolavel-x {
   overflow-x: auto;
   padding: 0 6px;
+  /* Prende o texto só-leitor-de-tela (.sr, posição absoluta) dentro da área que rola:
+     sem isso ele escapa e alarga a página no celular. */
+  position: relative;
 }
 
 .vazio {
@@ -880,6 +884,8 @@ details.bloco > summary {
 .equipe {
   display: grid;
   gap: 14px;
+  /* A tabela larga rola dentro da baia; a página não pode crescer com ela. */
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .barra-acoes {
@@ -1148,7 +1154,6 @@ details.bloco > summary {
 
 /* ---------- Estreito ---------- */
 @media (max-width: 700px) {
-  .so-largo,
   .tecla,
   .filtros__tv {
     display: none;
@@ -1263,8 +1268,8 @@ a.link-pessoa:hover {
 
 .aviso__marca {
   flex: none;
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   box-shadow: inset 0 0 0 1.5px var(--tinta-2);
 }
 
@@ -1593,5 +1598,407 @@ a.link-pessoa:hover {
   .linha-tempo__item > * + * {
     box-shadow: none;
     padding-left: 0;
+  }
+}
+
+/* ---------- Modo reunião ---------- */
+
+.preparo {
+  max-width: 920px;
+}
+
+.preparo__bloco {
+  padding-bottom: 16px;
+}
+
+.preparo__campos {
+  display: grid;
+  gap: 14px;
+  padding: 8px 12px 4px;
+}
+
+.preparo__campo {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.preparo__campo > legend,
+.preparo__campo > label {
+  font-size: var(--t-rotulo);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tinta-2);
+  padding: 0;
+  margin-bottom: 2px;
+}
+
+.preparo__campo .campo {
+  max-width: 320px;
+}
+
+.preparo__resumo {
+  margin: 12px 12px 14px;
+  color: var(--tinta-2);
+  font-size: var(--t-dado);
+  max-width: 80ch;
+}
+
+.botao--primario {
+  margin: 0 12px;
+  width: max-content;
+  height: 34px;
+  padding: 0 16px;
+  background: var(--tinta-1);
+  border-color: var(--tinta-1);
+  color: var(--faixa);
+  font-weight: 600;
+}
+
+.botao--primario:hover {
+  background: var(--n9);
+}
+
+.botao--inerte {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* A apresentação ocupa a tela toda; nada de barra, filtro ou hover. */
+.apresentacao {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(12px, 2.4vh, 28px);
+  padding: clamp(16px, 3vh, 40px) clamp(20px, 4vw, 64px) clamp(10px, 1.6vh, 18px);
+  background: var(--trilho);
+}
+
+.apresentacao__cabeca {
+  display: grid;
+  gap: 4px;
+  padding-bottom: clamp(8px, 1.6vh, 18px);
+  border-bottom: 1px solid var(--filete);
+}
+
+.apresentacao__contexto {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--r-rotulo);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--tinta-2);
+}
+
+.apresentacao__titulo {
+  font-size: var(--r-titulo);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+.apresentacao__corpo {
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  align-content: start;
+  gap: clamp(12px, 2vh, 24px);
+  cursor: pointer;
+}
+
+.apresentacao__corpo .aviso {
+  margin: 0;
+  font-size: var(--r-rotulo);
+}
+
+.apresentacao__rodape {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--tinta-3);
+  font-size: var(--t-meta);
+}
+
+.apresentacao__dica {
+  margin-left: auto;
+}
+
+.apresentacao__contador {
+  font-size: var(--r-rotulo);
+  color: var(--tinta-2);
+  min-width: 4ch;
+}
+
+/* Números grandes: faixas com porta-faixa, o número lido de longe. */
+.grandes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1px;
+  margin: 0;
+  background: var(--filete);
+  border: 1px solid var(--filete);
+}
+
+.grandes--tres {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grande {
+  margin: 0;
+  background: var(--faixa);
+  padding: clamp(14px, 2.4vh, 28px) clamp(16px, 2vw, 28px) clamp(14px, 2.4vh, 28px) calc(var(--porta) + clamp(14px, 2vw, 26px));
+  box-shadow: inset calc(var(--porta) + 2px) 0 0 var(--porta-cor, var(--n4));
+  display: grid;
+  gap: clamp(4px, 0.8vh, 10px);
+  align-content: start;
+}
+
+.grande dd {
+  margin: 0;
+}
+
+.grande__rotulo {
+  font-size: var(--r-rotulo);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tinta-2);
+}
+
+.grande__valor {
+  text-align: left;
+  font-size: var(--r-numeral);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.grande__apoio {
+  font-size: var(--r-dado);
+  color: var(--tinta-1);
+}
+
+.grande__anterior {
+  font-size: var(--r-dado);
+  color: var(--tinta-2);
+}
+
+.grande-sub {
+  font-size: var(--r-sub);
+  color: var(--tinta-2);
+}
+
+.grande-nota,
+.grande-vazio {
+  font-size: var(--r-dado);
+}
+
+.graficos-reuniao,
+.grupos-reuniao,
+.conversa {
+  display: grid;
+  gap: clamp(16px, 2vw, 32px);
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  align-items: start;
+}
+
+.grupos-reuniao {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.graficos-reuniao [role="img"] {
+  background: var(--faixa);
+}
+
+.grupo-reuniao__titulo {
+  font-size: var(--r-rotulo);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tinta-1);
+  margin-bottom: 8px;
+}
+
+/* O respiro acompanha a conta de linhas por lâmina em Reuniao.tsx (clamp 4–10px). */
+.tabela--reuniao th,
+.tabela--reuniao td {
+  font-size: var(--r-dado);
+  padding: clamp(4px, 0.7vh, 10px) 14px;
+  vertical-align: middle;
+}
+
+.tabela--reuniao td.num {
+  font-size: var(--r-dado);
+}
+
+.tabela--reuniao thead th {
+  font-size: var(--r-rotulo);
+  background: var(--trilho);
+}
+
+.tabela--reuniao tbody th {
+  font-weight: 600;
+}
+
+/* Na projeção a variação vai ao lado do número: uma linha por pessoa, cabem mais. */
+.tabela--reuniao .delta {
+  display: inline;
+  margin-left: 0.6em;
+  font-size: var(--r-rotulo);
+  color: var(--tinta-2);
+}
+
+.observacoes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1px;
+  max-width: 120ch;
+}
+
+.observacoes li {
+  background: var(--faixa);
+  box-shadow: inset var(--porta) 0 0 var(--n6);
+  padding: clamp(10px, 1.6vh, 18px) 18px clamp(10px, 1.6vh, 18px) 22px;
+  font-size: var(--r-dado);
+  line-height: 1.5;
+}
+
+.conversa__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1px;
+}
+
+.conversa__lista li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 2px 12px;
+  background: var(--faixa);
+  box-shadow: inset var(--porta) 0 0 var(--n4);
+  padding: 10px 14px 10px 18px;
+}
+
+.conversa__id {
+  grid-row: span 2;
+  font-size: var(--r-rotulo);
+  color: var(--tinta-2);
+  text-align: left;
+  padding-top: 2px;
+}
+
+/* Ninguém passa o mouse num projetor: o título usa até duas linhas. */
+.conversa__titulo {
+  font-size: var(--r-dado);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.conversa__lista .meta {
+  font-size: var(--r-rotulo);
+}
+
+/* Botão principal como link: o seletor a.botao herda a cor do texto; aqui não. */
+a.botao--primario {
+  color: var(--faixa);
+}
+
+.preparo__campo > .segmentado {
+  justify-self: start;
+}
+
+.grande__unidade {
+  font-size: 0.45em;
+  letter-spacing: 0;
+  color: var(--tinta-2);
+}
+
+/* ---------- Card: a tela usa a largura toda ---------- */
+.card-tela {
+  max-width: none;
+}
+
+@media (min-width: 1300px) {
+  .card-corpo--com-ficha {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 12px;
+    align-items: start;
+    padding: 0 6px;
+  }
+
+  .card-corpo--com-ficha .ficha {
+    grid-column: 2;
+    grid-row: 1;
+    grid-template-columns: 1fr;
+    margin: 0;
+  }
+
+  .card-corpo--com-ficha .linha-tempo {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+  }
+}
+
+/* ---------- Polish 2 ---------- */
+
+/* Lâmina de números grandes: o bloco fica no meio da altura, não colado no topo. */
+.apresentacao__corpo--centro {
+  align-content: center;
+}
+
+.conversa__lista .conversa__mais {
+  display: block;
+  box-shadow: none;
+  background: transparent;
+  font-size: var(--r-rotulo);
+  color: var(--tinta-2);
+  padding: 8px 0 0;
+}
+
+.busca__atalho {
+  font-size: var(--t-meta);
+  color: var(--tinta-3);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Na Agora a tela é fixa: o glossário abre por cima, sem espremer as baias. */
+.agora__rodape .glossario {
+  position: relative;
+}
+
+.agora__rodape .glossario dl {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 6px);
+  width: min(920px, calc(100vw - 32px));
+  z-index: 5;
+  border-color: var(--n5);
+}
+
+@media (max-width: 700px) {
+  .fila .tabela th.num,
+  .fila .tabela td.num {
+    padding-left: 4px;
+    padding-right: 4px;
+    white-space: nowrap;
+  }
+
+  .agora__rodape .glossario dl {
+    position: static;
+    width: auto;
   }
 }

@@ -7,9 +7,12 @@ import { escreverPeriodo, lerPeriodo, type Periodo } from "./periodo";
 // para qualquer visão poder ser compartilhada por link. Hash, e não caminho,
 // porque o GitHub Pages não sabe redirecionar /equipe para o index.html.
 
-export type Tela = "agora" | "equipe" | "pessoa" | "mensal" | "card";
+export type Tela = "agora" | "equipe" | "pessoa" | "mensal" | "card" | "reuniao";
 /** Telas do menu. "pessoa" abre clicando num nome. */
-export const TELAS: Tela[] = ["agora", "equipe", "mensal", "card"];
+export const TELAS: Tela[] = ["agora", "equipe", "mensal", "card", "reuniao"];
+
+/** Modo reunião: mensal da equipe ou conversa individual. */
+export type TipoReuniao = "mensal" | "individual";
 const TODAS: Tela[] = [...TELAS, "pessoa"];
 
 export interface Rota {
@@ -27,6 +30,10 @@ export interface Rota {
   fora?: boolean;
   /** Tela Equipe com quem já saiu da equipe. */
   inativos?: boolean;
+  /** Reunião: qual apresentação. */
+  reuniao?: TipoReuniao;
+  /** Reunião: lâmina aberta (1, 2, ...). Ausente = tela de preparo. */
+  slide?: number;
 }
 
 const PREFIXOS: Prefixo[] = ["DEV", "WEB", "MOB", "Demandas", "Outros"];
@@ -50,10 +57,14 @@ export function lerRota(hash: string): Rota {
   const periodo = lerPeriodo(p.get("periodo"));
   const card = inteiro(p.get("card"));
   const pessoa = inteiro(p.get("pessoa"));
+  const reuniao = p.get("reuniao");
+  const slide = inteiro(p.get("slide"));
   const rota: Rota = { tela, filtro };
   if (periodo) rota.periodo = periodo;
   if (card !== undefined) rota.card = card;
   if (pessoa !== undefined) rota.pessoa = pessoa;
+  if (reuniao === "mensal" || reuniao === "individual") rota.reuniao = reuniao;
+  if (slide !== undefined) rota.slide = slide;
   for (const f of FLAGS) if (p.has(f)) rota[f] = true;
   return rota;
 }
@@ -65,6 +76,8 @@ export function escreverRota(r: Rota): string {
   if (r.periodo) p.set("periodo", escreverPeriodo(r.periodo));
   if (r.card !== undefined) p.set("card", String(r.card));
   if (r.pessoa !== undefined) p.set("pessoa", String(r.pessoa));
+  if (r.reuniao) p.set("reuniao", r.reuniao);
+  if (r.slide !== undefined) p.set("slide", String(r.slide));
   for (const f of FLAGS) if (r[f]) p.set(f, "");
   // Flags sem valor ficam "?tv", não "?tv=".
   const busca = p.toString().replace(/\b(tv|fora|inativos)=(&|$)/g, "$1$2");

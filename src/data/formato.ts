@@ -63,8 +63,9 @@ export function separarEtiquetas(titulo: string): { etiquetas: string; resto: st
   return { etiquetas: m[1].replace(/\]\s*\[/g, "][").trim(), resto };
 }
 
+/** Sempre uma casa decimal: "7,0%" ao lado de "36,5%" alinha na vírgula. */
 export function porcento(v: number | null): string {
-  return v === null ? "—" : `${v.toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%`;
+  return v === null ? "—" : `${v.toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`;
 }
 
 export const NOME_EVENTO: Record<string, string> = {
@@ -102,4 +103,11 @@ export function duracao(segundos: number): string {
   if (h < 48) return `${h} h`;
   const dias = Math.round(h / 24);
   return `${dias} dias`;
+}
+
+/** "hoje", "há 1 dia", "há 58 dias": dias corridos desde um timestamp, em português certo. */
+export function haDias(ts: number | null, agora = Date.now()): string {
+  const n = diasDesde(ts, agora);
+  if (n === null) return "";
+  return n <= 0 ? "hoje" : n === 1 ? "há 1 dia" : `há ${n} dias`;
 }

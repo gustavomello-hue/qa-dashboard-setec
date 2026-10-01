@@ -18,7 +18,7 @@ function somarDias(dia: string, n: number): string {
   return diaLocal(new Date(a, m - 1, d + n));
 }
 
-function mesAnterior(mes: string): string {
+export function mesAnterior(mes: string): string {
   const [a, m] = mes.split("-").map(Number);
   return mesLocal(new Date(a, m - 2, 1));
 }
@@ -60,8 +60,18 @@ export function dentro(dia: string, i: Intervalo): boolean {
   return dia >= i.de && dia <= i.ate;
 }
 
+/**
+ * Período que a tela abre sem escolha. Nos 5 primeiros dias o mês corrente
+ * ainda é quase vazio (um mar de zeros parece equipe parada): abre o último
+ * mês fechado, e a tela diz isso.
+ */
 export function periodoPadrao(agora: Date): Periodo {
+  if (inicioDeMes(agora)) return { tipo: "mes", mes: mesAnterior(mesLocal(agora)) };
   return { tipo: "mes", mes: mesLocal(agora) };
+}
+
+export function inicioDeMes(agora: Date): boolean {
+  return agora.getDate() <= 5;
 }
 
 /** Meses selecionáveis: de `desde` até o mês corrente, do mais novo ao mais velho. */
