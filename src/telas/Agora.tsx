@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import type { Dashboard } from "../data/contrato";
 import { NOME_EVENTO, diaCurto, hora, separarEtiquetas } from "../data/formato";
 import { diaDeReferencia, diaLocal, estadoAtualizacao, kpisHoje, indiceTitulos, passaNoFiltro, inicioDaUltimaColeta, type Filtro } from "../data/seletores";
@@ -61,7 +62,7 @@ export function Agora({ dados, filtro, agora, hrefCard, hrefPessoa, soForaDoPain
           "o que está parado" é a pergunta nº 1. No desktop a grade põe a carga à esquerda. */}
       <Fila dados={dados} filtro={filtro} hrefCard={hrefCard} soForaDoPainel={soForaDoPainel} alternarForaDoPainel={alternarForaDoPainel} />
       <CargaEquipe dados={dados} filtro={filtro} hrefPessoa={hrefPessoa} />
-      <Feed dados={dados} filtro={filtro} hrefCard={hrefCard} />
+      <Feed dados={dados} filtro={filtro} hrefCard={hrefCard} velho={velho} />
       <div className="agora__rodape">
         <Lacunas dados={dados} />
         <Glossario />
@@ -120,10 +121,23 @@ const TOM_EVENTO: Record<string, Tom> = {
   criada: "neutro",
 };
 
-function Feed({ dados, filtro, hrefCard }: { dados: Dashboard; filtro: Filtro; hrefCard: (id: number) => string }) {
+/**
+ * Coleta cuja chegada já foi animada nesta aba. Fica fora do componente de
+ * propósito: voltar para a tela Agora não deve repetir o gesto, só uma coleta
+ * nova deve.
+ */
+let coletaAnimada: number | null = null;
+
+function Feed({ dados, filtro, hrefCard, velho }: { dados: Dashboard; filtro: Filtro; hrefCard: (id: number) => string; velho: boolean }) {
   const eventos = feedRecente(dados, filtro, 40);
-  // O que chegou nesta coleta entra no quadro com o gesto de inserir a faixa.
-  const desde = inicioDaUltimaColeta(dados);
+  // O que chegou na última coleta ganha a marca "novo"; na primeira vez que a
+  // coleta aparece, a faixa entra deslizando no trilho. Dado velho não é novo.
+  const desde = velho ? null : inicioDaUltimaColeta(dados);
+  const momentoColeta = dados.coleta.momento;
+  const [animar] = useState(() => momentoColeta !== null && momentoColeta !== coletaAnimada);
+  useEffect(() => {
+    coletaAnimada = momentoColeta;
+  }, [momentoColeta]);
   const titulos = indiceTitulos(dados);
   const pessoas = indicePessoas(dados);
   // O evento traz o nome completo do Kanboard; a tela usa o nome curto da equipe.
@@ -145,13 +159,15 @@ function Feed({ dados, filtro, hrefCard }: { dados: Dashboard; filtro: Filtro; h
             diaAnterior = e.dia;
             const titulo = separarEtiquetas(titulos.get(e.task_id) ?? e.titulo ?? "").resto;
             const dono = e.evento === "criada" ? nome(e.creator_nome) : nome(e.owner_nome);
+            const novo = desde !== null && e.momento > desde;
             return (
               <li key={`${e.task_id}-${e.momento}-${i}`}>
                 {cabecalho && <p className="feed__dia">{cabecalho}</p>}
-                <div className={`feed__item faixa--${TOM_EVENTO[e.evento] ?? "neutro"}${desde !== null && e.momento > desde ? " faixa--nova" : ""}`}>
+                <div className={`feed__item faixa--${TOM_EVENTO[e.evento] ?? "neutro"}${novo && animar ? " faixa--nova" : ""}`}>
                   <span className="feed__hora num">{hora(e.momento)}</span>
                   <span className="feed__cabeca">
                     <span className={`etiqueta etiqueta--${TOM_EVENTO[e.evento] ?? "neutro"}`}>{NOME_EVENTO[e.evento]}</span>
+                    {novo && <span className="marca-novo" title="Chegou na última coleta">novo</span>}
                     <span className="meta">
                       {dono && <span className="meta__pessoa">{dono}</span>}
                       {e.movido_por && nome(e.movido_por) !== dono && <span>por {nome(e.movido_por)}</span>}

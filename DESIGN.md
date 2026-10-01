@@ -261,7 +261,7 @@ Controles quietos, de borda fina, que afundam quando ligados.
 - **State:** pressionado afunda no trilho como o botão.
 
 ### Cards / Containers
-- **Baia:** fundo --baia, cantos retos, sombra de baia, cabeça com título em Label e contagem em mono tinta 1; rola por dentro.
+- **Baia:** fundo --baia, cantos retos, sombra de baia; rola por dentro. A cabeça é uma placa: título em Label tinta 1, a contagem num campo próprio (caixa de filete, fundo de faixa, mono 12px, 2px de canto) e um filete de 1px separando a placa do conteúdo.
 - **Faixa:** fundo --faixa, cantos retos, porta-faixa de 4px à esquerda, padding 6–7px por 10px com 14px à esquerda, hover em faixa realce. Título e meta numa linha cada, cortados com reticências; o texto completo fica no title.
 - **Ficha** (detalhe do card): grade auto-fit de campos de 140px sobre fundo de faixa, separados por filetes de 1px, rótulo em Label 11px e valor numérico em mono 16px.
 
@@ -279,16 +279,16 @@ Controles quietos, de borda fina, que afundam quando ligados.
 Faixa única de cinco contadores em grade auto-fit (mín. 160px), separados por fio de 1px em filete. Cada contador tem porta-faixa na cor do que o número é (não de se é bom ou ruim), rótulo em Label, valor em Numeral e comparação à direita em 12px tinta 3 com o valor anterior em mono tinta 2.
 
 ### Tabela como pilha de faixas
-Linhas separadas por 1px (border-spacing), cada linha é uma faixa com porta-faixa na primeira célula, hover em faixa realce. Cabeçalho fixo no fundo da baia, em Label 11px sans. Colunas de estado levam o quadradinho de 7px da cor no cabeçalho; os números da coluna ficam em tinta. Zeros e pessoas inativas em tinta 3. Rodapé de total em 600 sobre fundo transparente.
+Linhas separadas por 1px (border-spacing), cada linha é uma faixa com porta-faixa na primeira célula, hover em faixa realce. Na fila de QA, os campos da faixa (#card · título · dias · retornos) ficam em caixas separadas por filete vertical de 1px, como a faixa de controle de voo. Na Equipe, sob cada número, a diferença para o período anterior em 11px tinta 3, sem cor; zero contra zero fica em branco. Cabeçalho fixo no fundo da baia, em Label 11px sans. Colunas de estado levam o quadradinho de 7px da cor no cabeçalho; os números da coluna ficam em tinta. Zeros e pessoas inativas em tinta 3. Rodapé de total em 600 sobre fundo transparente.
 
 ### Barra de carga
-Trilho rebaixado de 10px com segmentos de no mínimo 3px separados por 1px: A iniciar, Em andamento (neutros), Teste/QA (Azul Entrada), Correções (Vermelho Correção). Largura proporcional ao maior total; legenda escrita acima. Linha de carga: nome (116px) · barra · total em mono.
+Trilho rebaixado de 10px com segmentos de no mínimo 3px separados por 1px: A iniciar, Em andamento (neutros), Teste/QA (Azul Entrada), Correções (Vermelho Correção). Largura proporcional ao teto da escala (o maior total, ou 1,2× o segundo maior quando o maior passa de 1,5× o segundo); a barra que passa do teto enche e ganha um corte de 3px perto do fim, com o número inteiro ao lado. Legenda escrita acima. Linha de carga em campos com filete: nome · barra · total em mono. QA vem primeiro na lista.
 
 ### Feed de movimentações e linha do tempo
-Faixas agrupadas por dia (Label-sm), com horário em mono tinta 3 à esquerda, rótulo do evento com marcador quadrado, #card e título, e "pessoa · por quem moveu" em meta. A faixa que chegou na última coleta entra uma vez deslizando 10px da esquerda a partir de faixa realce (560ms, cubic-bezier(0.16, 1, 0.3, 1)); com movimento reduzido, nada anima.
+Faixas agrupadas por dia (Label-sm), com horário em mono tinta 3 à esquerda, rótulo do evento com marcador quadrado, #card e título, e "pessoa · por quem moveu" em meta. A faixa que chegou na última coleta leva a marca "novo" (quadrado Azul Entrada + texto) e, na primeira vez que aquela coleta aparece na aba, entra deslizando 10px da esquerda a partir de faixa realce (560ms, cubic-bezier(0.16, 1, 0.3, 1)); voltar à tela não repete o gesto, e dado de coleta parada não é "novo". Com movimento reduzido, nada anima. Na linha do tempo do Card, os campos (quando · evento · de→para · tempo na coluna) ficam em caixas de filete, e o tempo em Teste/QA vem em tinta 1.
 
 ### Gráficos
-ECharts em canvas, lendo as cores dos tokens em tempo de execução e redesenhando quando o tema do sistema muda. Sem animação, legenda de quadrados 10×10 no topo, eixos e grade em filete, rótulos de eixo em mono 11px tinta 3, tooltip de faixa com filete e 2px de canto, ponteiro de eixo em sombra leve. Barras com no máximo 28px. Desenhados sobre uma faixa larga dentro da baia.
+ECharts em canvas, lendo as cores dos tokens em tempo de execução e redesenhando quando o tema do sistema muda. Sem animação, legenda de quadrados 10×10 no topo, eixos e grade em filete, rótulos de eixo em mono 11px tinta 3, tooltip de faixa com filete e 2px de canto, ponteiro de eixo em sombra leve. Barras com no máximo 28px. Desenhados sobre uma faixa larga dentro da baia. Linha de tendência só com 4 meses ou mais; antes disso, % e tempo médio aparecem como mini-barras neutras (4px, n6 sobre o trilho) dentro do Resumo. O mês corrente leva "*" no eixo e na tabela.
 
 ## Do's and Don'ts
 

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import type { Dashboard, Grupo } from "../data/contrato";
 import { mesCurto, numero, porcento } from "../data/formato";
-import { resumoPorMes, type Filtro } from "../data/seletores";
+import { mesLocal, resumoPorMes, type Filtro } from "../data/seletores";
 import { ROTULO_GRUPO, composicaoPorMes, taxaCardsPorMes } from "../data/pessoas";
 import { DEFINICAO } from "../data/glossario";
 import { Glossario } from "../componentes/Glossario";
@@ -30,7 +30,14 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
   // % de cards reprovados: a mesma conta da Equipe e da Pessoa (por card, não por evento).
   const taxas = taxaCardsPorMes(dados, filtro);
   const taxaDe = (mes: string) => taxas.get(mes)?.taxa ?? null;
-  const meses = linhas.map((l) => mesCurto(l.ano_mes));
+  // O mês corrente leva "*": está em andamento e não se compara de igual para igual.
+  const mesAtual = mesLocal(new Date());
+  const rotuloMes = (m: string) => (m === mesAtual ? `${mesCurto(m)} *` : mesCurto(m));
+  const meses = linhas.map((l) => rotuloMes(l.ano_mes));
+  // Linha com 2 pontos não mostra tendência: até 4 meses, % e tempo ficam como
+  // mini-barras no Resumo; os gráficos de linha entram a partir do 4º mês.
+  const comTendencia = linhas.length >= 4;
+  const maxTempo = Math.max(1, ...linhas.map((l) => l.tempo_medio_qa_h ?? 0));
   const chave =
     linhas.map((l) => `${l.ano_mes}${l.entradas}${l.aprovados}${l.reprovados}${l.tempo_medio_qa_h}${taxaDe(l.ano_mes)}`).join() + tema;
 
@@ -93,7 +100,7 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
     const presentes = GRUPOS_COMPOSICAO.filter((g) => composicao.some((c) => c.entregues[g] > 0));
     return {
       ...b,
-      xAxis: { ...(b.xAxis as object), data: composicao.map((c) => mesCurto(c.ano_mes)) },
+      xAxis: { ...(b.xAxis as object), data: composicao.map((c) => rotuloMes(c.ano_mes)) },
       series: presentes.map((g) => ({
         name: ROTULO_GRUPO[g],
         type: "bar" as const, barMaxWidth: 28,
@@ -112,6 +119,7 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
       <section className="bloco mensal__largo" aria-labelledby="t-tabela-mes">
         <header className="bloco__cabeca">
           <h2 id="t-tabela-mes" className="bloco__titulo">Resumo</h2>
+          {!comTendencia && <p className="nota">Com menos de 4 meses, % e tempo médio aparecem como barras aqui; os gráficos de tendência entram a partir do 4º mês.</p>}
           <Glossario />
         </header>
         <div className="rolavel-x">
@@ -131,19 +139,27 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
             <tbody>
               {linhas.slice().reverse().map((l) => (
                 <tr key={l.ano_mes}>
-                  <th scope="row">{mesCurto(l.ano_mes)}</th>
+                  <th scope="row">{rotuloMes(l.ano_mes)}</th>
                   <td className="num">{numero(l.entradas)}</td>
                   <td className="num">{numero(l.aprovados)}</td>
                   <td className="num">{numero(l.reprovados)}</td>
                   <td className="num">
                     {porcento(taxaDe(l.ano_mes))}
+                    {!comTendencia && taxaDe(l.ano_mes) !== null && (
+                      <span className="minibarra" aria-hidden="true"><span style={{ width: `${taxaDe(l.ano_mes)}%` }} /></span>
+                    )}
                     {taxas.get(l.ano_mes) && (
                       <span className="meta celula-denominador">
                         {taxas.get(l.ano_mes)!.cardsReprovados} de {taxas.get(l.ano_mes)!.cardsJulgados}
                       </span>
                     )}
                   </td>
-                  <td className="num">{l.tempo_medio_qa_h === null ? "—" : `${l.tempo_medio_qa_h.toLocaleString("pt-BR")} h`}</td>
+                  <td className="num">
+                    {l.tempo_medio_qa_h === null ? "—" : `${l.tempo_medio_qa_h.toLocaleString("pt-BR")} h`}
+                    {!comTendencia && l.tempo_medio_qa_h !== null && (
+                      <span className="minibarra" aria-hidden="true"><span style={{ width: `${(100 * l.tempo_medio_qa_h) / maxTempo}%` }} /></span>
+                    )}
+                  </td>
                   <td className="num">{numero(composicao.find((c) => c.ano_mes === l.ano_mes)?.criadosGestao ?? 0)}</td>
                   <td><span className="meta">{MEDICAO[l.completude] ?? l.completude}</span></td>
                 </tr>
@@ -156,11 +172,13 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
       <section className="bloco mensal__largo" aria-labelledby="t-volume">
         <header className="bloco__cabeca">
           <h2 id="t-volume" className="bloco__titulo">Volume de QA por mês</h2>
-          <p className="nota">Desde {desde}: antes disso só há amostra incompleta.</p>
+          <p className="nota">Desde {desde}: antes disso só há amostra incompleta. * mês em andamento.</p>
         </header>
         <Grafico opcoes={volume} altura={220} rotulo={`Entradas, aprovados e reprovados por mês desde ${desde}`} />
       </section>
 
+      {comTendencia && (
+        <>
       <section className="bloco" aria-labelledby="t-reprov">
         <header className="bloco__cabeca">
           <h2 id="t-reprov" className="bloco__titulo">% de cards reprovados</h2>
@@ -176,6 +194,8 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
         </header>
         <Grafico opcoes={tempo} altura={200} rotulo="Tempo médio em QA por mês, em horas" />
       </section>
+        </>
+      )}
 
       <section className="bloco mensal__largo" aria-labelledby="t-grupos">
         <header className="bloco__cabeca">

@@ -1124,7 +1124,8 @@ details.bloco > summary {
 
 .linha-tempo__item {
   display: grid;
-  grid-template-columns: 96px 150px minmax(0, 1fr) auto;
+  /* Campo de tempo com largura fixa: os filetes alinham de faixa em faixa. */
+  grid-template-columns: 96px 150px minmax(0, 1fr) 200px;
   gap: 10px;
   align-items: baseline;
   padding: 7px 10px 7px 14px;
@@ -1485,4 +1486,112 @@ a.link-pessoa:hover {
 
 .aviso p {
   max-width: 110ch;
+}
+
+/* ---------- Pontos do revisor: a gramática da faixa por inteiro ---------- */
+
+/*
+ * Campos em caixas. Uma faixa de controle de voo é uma fileira de campos de
+ * largura fixa separados por filete de 1px: aqui, #card | título | dias |
+ * retornos na fila; hora | evento na movimentação; nome | barra | total na
+ * carga; quando | evento | de-para | tempo na linha do tempo.
+ */
+.fila .tabela tbody td + td {
+  box-shadow: inset 1px 0 0 var(--filete);
+}
+
+.feed__hora {
+  align-self: stretch;
+  box-shadow: inset -1px 0 0 var(--filete);
+  padding-right: 8px;
+}
+
+.carga-linha {
+  padding-top: 0;
+  padding-bottom: 0;
+  min-height: 30px;
+}
+
+.carga-linha > .link-pessoa,
+.carga-linha__total {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+
+.carga-linha > .link-pessoa {
+  box-shadow: inset -1px 0 0 var(--filete);
+  padding-right: 10px;
+}
+
+.carga-linha__total {
+  justify-content: flex-end;
+  box-shadow: inset 1px 0 0 var(--filete);
+}
+
+.linha-tempo__item {
+  padding-top: 0;
+  padding-bottom: 0;
+  min-height: 34px;
+  align-items: stretch;
+}
+
+.linha-tempo__item > * {
+  display: flex;
+  align-items: center;
+}
+
+.linha-tempo__item > * + * {
+  box-shadow: inset 1px 0 0 var(--filete);
+  padding-left: 10px;
+}
+
+.linha-tempo__estadia {
+  justify-content: flex-end;
+}
+
+/*
+ * Placa de cabeçalho da baia: o título em caixa-alta e a contagem num campo
+ * próprio, separados do conteúdo por um filete, como a etiqueta de uma
+ * baia no quadro.
+ */
+.bloco__cabeca {
+  border-bottom: 1px solid var(--filete);
+  margin-bottom: 6px;
+  padding-bottom: 7px;
+}
+
+.contagem {
+  display: inline-block;
+  min-width: 2.4em;
+  margin-left: 8px;
+  padding: 0 6px;
+  border: 1px solid var(--filete);
+  border-radius: 2px;
+  background: var(--faixa);
+  font-size: var(--t-meta);
+  line-height: 1.6;
+  text-align: center;
+  vertical-align: 1px;
+}
+
+/* Mini-barra na célula do Resumo: substitui um gráfico de linha de dois pontos. */
+.minibarra {
+  display: block;
+  height: 4px;
+  margin-top: 4px;
+  background: var(--trilho);
+}
+
+.minibarra > span {
+  display: block;
+  height: 100%;
+  background: var(--n6);
+}
+
+@media (max-width: 700px) {
+  .linha-tempo__item > * + * {
+    box-shadow: none;
+    padding-left: 0;
+  }
 }
