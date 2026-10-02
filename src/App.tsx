@@ -7,7 +7,8 @@ import { inicioDeMes, mesesDisponiveis, periodoPadrao, escreverPeriodo, lerPerio
 import { SEGUNDOS_POR_QUADRO, sequenciaAtracao } from "./data/atracao";
 import { haQuanto, nomeCurto } from "./data/formato";
 import { estadoAtualizacao } from "./data/seletores";
-import { AvisoColeta, SeloColeta } from "./componentes/Sinal";
+import { AvisoColeta, AvisoVersao, SeloColeta } from "./componentes/Sinal";
+import { useVersaoNova } from "./data/atualizacao";
 import { filaFiltrada } from "./componentes/Fila";
 import { Icone } from "./componentes/Icone";
 import { Agora } from "./telas/Agora";
@@ -78,6 +79,7 @@ function Painel({ dados, erro, recarregar }: { dados: Dashboard; erro: string | 
   const [rota, irPara] = useRota();
   const agora = useRelogio();
   const principal = useRef<HTMLElement>(null);
+  const versaoNova = useVersaoNova(rota.tela === "reuniao" && !!rota.slide);
 
   // --- Modo TV ------------------------------------------------------------
   const sequencia = useMemo(() => sequenciaAtracao((f) => filaFiltrada(dados, f).length), [dados]);
@@ -249,6 +251,7 @@ function Painel({ dados, erro, recarregar }: { dados: Dashboard; erro: string | 
       </header>
 
       <AvisoColeta dados={dados} agora={agora} />
+      {versaoNova && !rota.tv && <AvisoVersao />}
 
       <main className="tela" key={`${tela}|${rota.pessoa ?? ""}|${rota.card ?? ""}`} ref={principal} tabIndex={-1}>
         {tela !== "pessoa" && <h1 className="sr">{NOMES[tela]}</h1>}

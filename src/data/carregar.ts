@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { VERSAO_CONTRATO, type Dashboard } from "./contrato";
+import { intervaloBusca, recarregarPorContrato } from "./atualizacao";
 
 // De onde vem o JSON:
 // - publicado: branch `dados` do repo, servido pelo raw do GitHub (o site não
@@ -12,19 +13,21 @@ const URL_PADRAO = import.meta.env.DEV
 
 export const URL_DADOS: string = import.meta.env.VITE_DADOS_URL || URL_PADRAO;
 
-/** Recarrega a cada 10 min (o intervalo da coleta), e só com a aba visível. */
-export const INTERVALO_MS = 10 * 60 * 1000;
-
 export class ErroDeDados extends Error {}
+
+/** O JSON está num contrato que este build não entende: o site precisa ser recarregado. */
+export class ErroDeContrato extends ErroDeDados {}
 
 /** Desiste de uma busca travada: sem isso, uma rede ruim deixa o painel em "Carregando…" para sempre. */
 const TEMPO_LIMITE_MS = 20 * 1000;
 
 export async function buscarDashboard(url = URL_DADOS): Promise<Dashboard> {
-  // O parâmetro fura o cache do navegador; o do raw (~5 min) é aceitável.
+  // "no-cache" revalida com o ETag: sem coleta nova, a resposta é um 304 de
+  // poucos bytes. Um "?t=" não adiantaria: o CDN do raw ignora a query e
+  // segura o arquivo por até 5 min de qualquer jeito.
   let resposta: Response;
   try {
-    resposta = await fetch(`${url}?t=${Date.now()}`, { cache: "no-store", signal: AbortSignal.timeout(TEMPO_LIMITE_MS) });
+    resposta = await fetch(url, { cache: "no-cache", signal: AbortSignal.timeout(TEMPO_LIMITE_MS) });
   } catch (e) {
     const tempo = e instanceof DOMException && (e.name === "TimeoutError" || e.name === "AbortError");
     throw new ErroDeDados(
@@ -46,7 +49,7 @@ export async function buscarDashboard(url = URL_DADOS): Promise<Dashboard> {
     throw new ErroDeDados("O arquivo de dados chegou incompleto ou corrompido. Tente de novo; se persistir, a publicação precisa ser refeita.");
   }
   if (dados.versao !== VERSAO_CONTRATO) {
-    throw new ErroDeDados(
+    throw new ErroDeContrato(
       `Os dados estão no formato v${dados.versao} e este site entende v${VERSAO_CONTRATO}. ` +
         "Recarregue a página (Ctrl+F5) para buscar a versão nova do site.");
   }
@@ -74,23 +77,29 @@ export function useDashboard(): EstadoDados {
     setCarregando(true);
     buscarDashboard()
       .then((d) => {
-        setDados(d);
+        // Sem coleta nova (o caso comum da busca de 1 min): mesmo objeto, nada redesenha.
+        setDados((atual) => (atual && atual.gerado_em === d.gerado_em ? atual : d));
         setErro(null);
         setBuscadoEm(Date.now());
       })
-      // Falha na atualização mantém o último dado bom na tela.
-      .catch((e: unknown) => setErro(e instanceof Error ? e.message : String(e)))
+      .catch((e: unknown) => {
+        // Contrato novo: recarrega para buscar o site que o entende (com trava contra laço).
+        if (e instanceof ErroDeContrato && recarregarPorContrato()) return;
+        // Falha na atualização mantém o último dado bom na tela.
+        setErro(e instanceof Error ? e.message : String(e));
+      })
       .finally(() => setCarregando(false));
   }, []);
 
   useEffect(() => {
     recarregar();
     const tick = () => {
-      if (document.visibilityState === "visible" && Date.now() - ultimaBusca.current >= INTERVALO_MS) {
+      if (document.visibilityState === "visible" && Date.now() - ultimaBusca.current >= intervaloBusca(new Date())) {
         recarregar();
       }
     };
-    const id = window.setInterval(tick, 60 * 1000);
+    // Volta curta: o intervalo de 1 min não pode virar 2 por causa do arredondamento.
+    const id = window.setInterval(tick, 15 * 1000);
     document.addEventListener("visibilitychange", tick);
     return () => {
       window.clearInterval(id);

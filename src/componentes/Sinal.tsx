@@ -54,6 +54,22 @@ export function AvisoColeta({ dados, agora }: { dados: Dashboard; agora: Date })
   );
 }
 
+/**
+ * Saiu um deploy novo e alguém está usando a aba: avisa em vez de recarregar
+ * no meio do uso. Ninguém mexendo por 2 min, a página recarrega sozinha.
+ */
+export function AvisoVersao() {
+  return (
+    <div className="aviso" role="status">
+      <span className="aviso__marca" aria-hidden="true" />
+      <p>
+        <strong>Nova versão do painel.</strong> A página se atualiza sozinha quando ficar sem uso.
+      </p>
+      <button className="botao botao--mini" onClick={() => window.location.reload()}>Atualizar agora</button>
+    </div>
+  );
+}
+
 /** Lacunas de coleta dos últimos 7 dias: o que não foi medido fica visível. */
 export function Lacunas({ dados }: { dados: Dashboard }) {
   const lacunas = lacunasRecentes(dados, new Date()).slice().reverse();
