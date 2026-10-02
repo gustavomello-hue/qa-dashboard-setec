@@ -1339,6 +1339,40 @@ a.link-pessoa:hover {
   color: var(--tinta-1);
 }
 
+/* ---------- Porta do painel (senha) ---------- */
+.porta {
+  width: min(380px, calc(100vw - 32px));
+}
+
+.porta__campo {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  text-align: left;
+  font-size: var(--t-dado);
+}
+
+.porta__campo label {
+  color: var(--tinta-1);
+  font-weight: 500;
+}
+
+.porta__campo .campo {
+  max-width: none;
+  height: 32px;
+}
+
+/* Erro em tinta forte: o painel não usa cor para estado (DESIGN.md). */
+.porta__erro {
+  color: var(--tinta-1);
+  font-weight: 600;
+}
+
+.porta .botao {
+  justify-content: center;
+  min-width: 120px;
+}
+
 /* Semana ainda em curso: barra vazada, para não parecer queda. */
 .sparkline__parcial {
   fill: none;

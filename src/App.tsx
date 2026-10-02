@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useDashboard } from "./data/carregar";
+import { sairDoPainel, useDashboard } from "./data/carregar";
 import { TELAS, escreverRota, useRota, type Rota, type Tela } from "./data/rota";
 import type { Dashboard, Prefixo } from "./data/contrato";
 import type { Filtro } from "./data/seletores";
@@ -9,6 +9,7 @@ import { haQuanto, nomeCurto } from "./data/formato";
 import { estadoAtualizacao } from "./data/seletores";
 import { AvisoColeta, AvisoVersao, SeloColeta } from "./componentes/Sinal";
 import { useVersaoNova } from "./data/atualizacao";
+import { TelaSenha } from "./componentes/Senha";
 import { filaFiltrada } from "./componentes/Fila";
 import { Icone } from "./componentes/Icone";
 import { Agora } from "./telas/Agora";
@@ -22,12 +23,14 @@ const NOMES: Record<Tela, string> = { agora: "Agora", equipe: "Equipe", pessoa: 
 const PREFIXOS: Prefixo[] = ["DEV", "WEB", "MOB", "Demandas"];
 
 export function App() {
-  const { dados, erro, carregando, recarregar } = useDashboard();
+  const { dados, erro, carregando, recarregar, pedeSenha, entrar, protegido } = useDashboard();
+  // Senha antes de tudo: com a senha trocada, o dado antigo na tela também some.
+  if (pedeSenha !== null) return <TelaSenha motivo={pedeSenha} entrar={entrar} />;
   if (!dados) {
     if (erro && !carregando) return <FalhaInicial erro={erro} recarregar={recarregar} />;
     return <Esqueleto />;
   }
-  return <Painel dados={dados} erro={erro} recarregar={recarregar} />;
+  return <Painel dados={dados} erro={erro} recarregar={recarregar} protegido={protegido} />;
 }
 
 /** Primeira carga: o contorno do quadro já no lugar, sem piscar nem girar. */
@@ -75,7 +78,7 @@ function useRelogio(ms = 30 * 1000): Date {
   return agora;
 }
 
-function Painel({ dados, erro, recarregar }: { dados: Dashboard; erro: string | null; recarregar: () => void }) {
+function Painel({ dados, erro, recarregar, protegido }: { dados: Dashboard; erro: string | null; recarregar: () => void; protegido: boolean }) {
   const [rota, irPara] = useRota();
   const agora = useRelogio();
   const principal = useRef<HTMLElement>(null);
@@ -181,6 +184,11 @@ function Painel({ dados, erro, recarregar }: { dados: Dashboard; erro: string | 
             </ul>
           </nav>
           <SeloColeta dados={dados} erro={erro} agora={agora} recarregar={recarregar} />
+          {protegido && !rota.tv && (
+            <button className="botao botao--leve botao--mini" onClick={sairDoPainel} title="Esquece a senha neste dispositivo">
+              Sair
+            </button>
+          )}
         </div>
 
         {usaFiltro && (

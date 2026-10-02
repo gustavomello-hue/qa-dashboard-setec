@@ -1,0 +1,10 @@
+{
+ "cifrado": "qa-cifrado-1",
+ "kdf": {
+  "nome": "PBKDF2-SHA256",
+  "iteracoes": 600000,
+  "sal": "cWEtZGFzaGJvYXJkLXNldGVjL3NlbmhhLXYx"
+ },
+ "iv": "GLN7CgBcZsWz3VBt",
+ "dados": "tIXHmGFe1dEvpf+wMNdmkRQitB/bT/Y4LfW9/GznTpTOSrPM5HIk6prap8wiKgbTZwKyQVnFfiy/Cv3slP6KQdGbexQ4GFQXkBkT53JwZFOSGOALI+x7m/e+1gwYhplPrw=="
+}
