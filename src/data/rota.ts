@@ -7,9 +7,9 @@ import { escreverPeriodo, lerPeriodo, type Periodo } from "./periodo";
 // para qualquer visão poder ser compartilhada por link. Hash, e não caminho,
 // porque o GitHub Pages não sabe redirecionar /equipe para o index.html.
 
-export type Tela = "agora" | "equipe" | "pessoa" | "mensal" | "card" | "reuniao";
+export type Tela = "agora" | "equipe" | "pessoa" | "mensal" | "card" | "reuniao" | "projetos";
 /** Telas do menu. "pessoa" abre clicando num nome. */
-export const TELAS: Tela[] = ["agora", "equipe", "mensal", "card", "reuniao"];
+export const TELAS: Tela[] = ["agora", "equipe", "mensal", "card", "reuniao", "projetos"];
 
 /** Modo reunião: mensal da equipe ou conversa individual. */
 export type TipoReuniao = "mensal" | "individual";
@@ -34,6 +34,8 @@ export interface Rota {
   reuniao?: TipoReuniao;
   /** Reunião: lâmina aberta (1, 2, ...). Ausente = tela de preparo. */
   slide?: number;
+  /** Projetos: project_id aberto no detalhe. */
+  detalhe?: number;
 }
 
 const PREFIXOS: Prefixo[] = ["DEV", "WEB", "MOB", "Demandas", "Outros"];
@@ -65,6 +67,8 @@ export function lerRota(hash: string): Rota {
   if (pessoa !== undefined) rota.pessoa = pessoa;
   if (reuniao === "mensal" || reuniao === "individual") rota.reuniao = reuniao;
   if (slide !== undefined) rota.slide = slide;
+  const detalhe = inteiro(p.get("detalhe"));
+  if (detalhe !== undefined) rota.detalhe = detalhe;
   for (const f of FLAGS) if (p.has(f)) rota[f] = true;
   return rota;
 }
@@ -78,10 +82,16 @@ export function escreverRota(r: Rota): string {
   if (r.pessoa !== undefined) p.set("pessoa", String(r.pessoa));
   if (r.reuniao) p.set("reuniao", r.reuniao);
   if (r.slide !== undefined) p.set("slide", String(r.slide));
+  if (r.detalhe !== undefined) p.set("detalhe", String(r.detalhe));
   for (const f of FLAGS) if (r[f]) p.set(f, "");
   // Flags sem valor ficam "?tv", não "?tv=".
   const busca = p.toString().replace(/\b(tv|fora|inativos)=(&|$)/g, "$1$2");
   return `#/${r.tela}${busca ? `?${busca}` : ""}`;
+}
+
+/** Rota ao trocar de aba: a tela nova começa limpa (sem pessoa, card de outra tela ou detalhe de projeto). */
+export function rotaDaTela(r: Rota, tela: Tela): Rota {
+  return { ...r, tela, tv: false, pessoa: undefined, card: tela === "card" ? r.card : undefined, detalhe: undefined };
 }
 
 export function useRota(): [Rota, (r: Rota) => void] {

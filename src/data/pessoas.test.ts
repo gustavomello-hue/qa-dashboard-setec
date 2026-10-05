@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { Atribuicao, Dashboard, Metrica, Pessoa } from "./contrato";
 import {
   atribuicoesDe, cargaPorPessoa, cardsDaMetrica, composicaoPorMes, grupoPrincipal, inicioDaSemana,
-  porSemana, resumirPorPessoa, semanaIncompleta, semanas, taxaReprovacao, taxaReprovacaoQa,
+  porSemana, resumirPorPessoa, semanaIncompleta, semanas, taxaCardsPorMes, taxaReprovacao, taxaReprovacaoQa,
 } from "./pessoas";
 import { intervalo, intervaloAnterior, mesesDisponiveis, rotuloAnterior, ultimoDia } from "./periodo";
 
@@ -163,5 +163,28 @@ describe("escala da carga", () => {
     expect(escalaCarga([20, 18, 3])).toBe(20);
     expect(escalaCarga([5, 0])).toBe(5);
     expect(escalaCarga([])).toBe(1);
+  });
+});
+
+describe("etapa 4: quadros sem Correções", () => {
+  const atribs: Atribuicao[] = [
+    at("aprovado", 1, 10, "2026-10-08", 398),
+    at("reprovado", 1, 11, "2026-10-08", 227),
+  ];
+  it("contam nas contagens, não na taxa por card", () => {
+    const r = resumirPorPessoa(atribs, new Set([398])).porPessoa.get(1)!;
+    expect(r.aprovados).toBe(1);
+    expect(r.cardsJulgados).toBe(1);
+    expect(taxaReprovacao(r)).toBe(100);
+  });
+  it("taxa por mês ignora o quadro que não mede", () => {
+    const d = dashboard({
+      projetos: [
+        { id: 227, nome: "DEV: SGO", prefixo: "DEV", ativo: true, mede_reprovacao: true },
+        { id: 398, nome: "GPEI", prefixo: "Outros", ativo: true, mede_reprovacao: false },
+      ],
+      atribuicoes: atribs,
+    });
+    expect(taxaCardsPorMes(d, {}).get("2026-10")).toMatchObject({ cardsJulgados: 1, cardsReprovados: 1, taxa: 100 });
   });
 });

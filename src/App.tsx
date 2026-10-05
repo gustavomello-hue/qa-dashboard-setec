@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { sairDoPainel, useDashboard } from "./data/carregar";
-import { TELAS, escreverRota, useRota, type Rota, type Tela } from "./data/rota";
+import { TELAS, escreverRota, rotaDaTela, useRota, type Rota, type Tela } from "./data/rota";
 import type { Dashboard, Prefixo } from "./data/contrato";
 import type { Filtro } from "./data/seletores";
 import { inicioDeMes, mesesDisponiveis, periodoPadrao, escreverPeriodo, lerPeriodo, rotuloPeriodo } from "./data/periodo";
@@ -18,8 +18,9 @@ import { Pessoa } from "./telas/Pessoa";
 import { Mensal } from "./telas/Mensal";
 import { Card } from "./telas/Card";
 import { Reuniao } from "./telas/Reuniao";
+import { Projetos } from "./telas/Projetos";
 
-const NOMES: Record<Tela, string> = { agora: "Agora", equipe: "Equipe", pessoa: "Pessoa", mensal: "Mensal", card: "Card", reuniao: "Reunião" };
+const NOMES: Record<Tela, string> = { agora: "Agora", equipe: "Equipe", pessoa: "Pessoa", mensal: "Mensal", card: "Card", reuniao: "Reunião", projetos: "Projetos" };
 const PREFIXOS: Prefixo[] = ["DEV", "WEB", "MOB", "Demandas"];
 
 export function App() {
@@ -93,7 +94,7 @@ function Painel({ dados, erro, recarregar, protegido }: { dados: Dashboard; erro
     return () => window.clearInterval(id);
   }, [rota.tv, sequencia.length]);
 
-  // Teclado: 1 a 5 trocam de tela; "#" ou "/" vai direto para a busca de card.
+  // Teclado: 1 a 6 trocam de tela; "#" ou "/" vai direto para a busca de card.
   useEffect(() => {
     const aoTeclar = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey || e.altKey) return;
@@ -102,10 +103,10 @@ function Painel({ dados, erro, recarregar, protegido }: { dados: Dashboard; erro
       if (rota.tela === "reuniao" && rota.slide) return;
       const alvo = e.target as HTMLElement | null;
       if (alvo && (alvo.isContentEditable || ["INPUT", "SELECT", "TEXTAREA"].includes(alvo.tagName))) return;
-      const i = ["1", "2", "3", "4", "5"].indexOf(e.key);
+      const i = ["1", "2", "3", "4", "5", "6"].indexOf(e.key);
       if (i >= 0) {
         e.preventDefault();
-        irPara({ ...rota, tela: TELAS[i], tv: false });
+        irPara(rotaDaTela(rota, TELAS[i]));
       } else if (e.key === "#" || e.key === "/") {
         e.preventDefault();
         irPara({ ...rota, tela: "card", tv: false });
@@ -127,8 +128,7 @@ function Painel({ dados, erro, recarregar, protegido }: { dados: Dashboard; erro
   // Links de verdade: cada visão abre em nova aba (Ctrl+clique) e cabe num link.
   const hrefCard = (card: number) => escreverRota({ tela: "card", filtro: {}, card });
   const hrefPessoa = (pessoa: number) => escreverRota({ ...rota, tela: "pessoa", pessoa, tv: false });
-  const hrefTela = (t: Tela) =>
-    escreverRota({ ...rota, tela: t, tv: false, pessoa: undefined, card: t === "card" ? rota.card : undefined });
+  const hrefTela = (t: Tela) => escreverRota(rotaDaTela(rota, t));
 
   // Título da aba: a tela e, se a coleta parou, há quanto tempo.
   const estado = estadoAtualizacao(dados, agora);
@@ -152,7 +152,7 @@ function Painel({ dados, erro, recarregar, protegido }: { dados: Dashboard; erro
     .filter((p) => !filtro.prefixo || p.prefixo === filtro.prefixo)
     .sort((a, b) => nomeCurto(a.nome).localeCompare(nomeCurto(b.nome)));
   const usaPeriodo = tela === "equipe" || tela === "pessoa";
-  const usaFiltro = tela !== "card" && tela !== "reuniao";
+  const usaFiltro = tela !== "card" && tela !== "reuniao" && tela !== "projetos";
   const meses = mesesDisponiveis(dados.equipe?.desde ?? dados.regras.qa_confiavel_desde, new Date());
 
   // Apresentação da reunião: a tela inteira é da lâmina, sem barra nem filtros.
@@ -261,7 +261,7 @@ function Painel({ dados, erro, recarregar, protegido }: { dados: Dashboard; erro
       <AvisoColeta dados={dados} agora={agora} />
       {versaoNova && !rota.tv && <AvisoVersao />}
 
-      <main className="tela" key={`${tela}|${rota.pessoa ?? ""}|${rota.card ?? ""}`} ref={principal} tabIndex={-1}>
+      <main className="tela" key={`${tela}|${rota.pessoa ?? ""}|${rota.card ?? ""}|${rota.detalhe ?? ""}`} ref={principal} tabIndex={-1}>
         {tela !== "pessoa" && <h1 className="sr">{NOMES[tela]}</h1>}
         {tela === "agora" && (
           <Agora
@@ -298,6 +298,15 @@ function Painel({ dados, erro, recarregar, protegido }: { dados: Dashboard; erro
         {tela === "mensal" && <Mensal dados={dados} filtro={filtro} />}
         {tela === "card" && <Card dados={dados} card={rota.card} abrir={abrirCard} />}
         {tela === "reuniao" && <Reuniao dados={dados} rota={rota} ir={ir} aviso={null} />}
+        {tela === "projetos" && (
+          <Projetos
+            dados={dados}
+            detalhe={rota.detalhe}
+            agora={agora}
+            hrefDetalhe={(id) => escreverRota({ tela: "projetos", filtro: {}, detalhe: id })}
+            hrefVoltar={escreverRota({ tela: "projetos", filtro: {} })}
+          />
+        )}
       </main>
 
       {rota.tv && atual && (

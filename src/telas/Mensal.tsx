@@ -7,6 +7,7 @@ import { DEFINICAO } from "../data/glossario";
 import { mesParcial } from "../data/reuniao";
 import { Glossario } from "../componentes/Glossario";
 import { Grafico, base, cor, useTema, type OpcoesGrafico } from "../componentes/Grafico";
+import { NotasQa } from "../componentes/NotasQa";
 
 const MEDICAO: Record<string, string> = {
   completo: "Completo",
@@ -175,6 +176,7 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
         <header className="bloco__cabeca">
           <h2 id="t-volume" className="bloco__titulo">Volume de QA por mês</h2>
           <p className="nota">Desde {desde}: antes disso só há amostra incompleta. * mês em andamento.</p>
+          <NotasQa dados={dados} filtro={filtro} meses={linhas.map((l) => l.ano_mes)} />
         </header>
         <Grafico opcoes={volume} altura={220} rotulo={`Entradas, aprovados e reprovados por mês desde ${desde}`} />
       </section>

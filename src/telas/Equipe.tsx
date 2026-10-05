@@ -3,7 +3,7 @@ import type { Dashboard, Grupo, Metrica, Pessoa } from "../data/contrato";
 import { mesCurto, numero, porcento } from "../data/formato";
 import { intervalo, intervaloAnterior, mesAnterior, rotuloAnterior, ultimoDia, type Periodo } from "../data/periodo";
 import { mesParcial } from "../data/reuniao";
-import type { Filtro } from "../data/seletores";
+import { mesLocal, semReprovacao, type Filtro } from "../data/seletores";
 import {
   GRUPOS_TABELA, ROTULO_GRUPO, atribuicoesDe, cargaPorPessoa, concluidos, indicePessoas, nomeDe,
   pessoasDoGrupo, pessoasFora, porSemana, semanaIncompleta, resumirPorPessoa, resumoVazio, semanas, taxaReprovacao,
@@ -13,6 +13,7 @@ import { Sparkline } from "../componentes/Sparkline";
 import { Glossario } from "../componentes/Glossario";
 import { DEFINICAO } from "../data/glossario";
 import { Icone } from "../componentes/Icone";
+import { NotasQa } from "../componentes/NotasQa";
 
 interface Props {
   dados: Dashboard;
@@ -71,8 +72,8 @@ export function Equipe({ dados, filtro, periodo, inativos, periodoAutomatico, al
   const agora = new Date();
   const atual = intervalo(periodo, agora);
   const atribs = atribuicoesDe(dados, atual, filtro);
-  const { porPessoa, saidasSemAutor } = resumirPorPessoa(atribs);
-  const { porPessoa: antes } = resumirPorPessoa(atribuicoesDe(dados, intervaloAnterior(periodo, agora), filtro));
+  const { porPessoa, saidasSemAutor } = resumirPorPessoa(atribs, semReprovacao(dados));
+  const { porPessoa: antes } = resumirPorPessoa(atribuicoesDe(dados, intervaloAnterior(periodo, agora), filtro), semReprovacao(dados));
   // A sparkline olha as 8 semanas até o fim do período, com o mesmo filtro de projeto.
   const fim = ultimoDia(atual, agora);
   const inicios = semanas(fim, SEMANAS);
@@ -99,6 +100,7 @@ export function Equipe({ dados, filtro, periodo, inativos, periodoAutomatico, al
             ? <>A base {rotuloAnterior(periodo, agora)} foi medida só em parte: sem variação.</>
             : <>Sob cada número, a diferença para {rotuloAnterior(periodo, agora)}.</>}
         </p>
+        <NotasQa dados={dados} filtro={filtro} meses={[periodo.tipo === "mes" ? periodo.mes : mesLocal(agora)]} />
         <Glossario />
         <label className="alternador">
           <input type="checkbox" checked={inativos} onChange={alternarInativos} /> Mostrar quem saiu da equipe

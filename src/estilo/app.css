@@ -2036,3 +2036,86 @@ a.botao--primario {
     width: auto;
   }
 }
+
+/* ---------- Projetos (etapa 4): fluxo de todos os projetos ---------- */
+.projetos {
+  display: grid;
+  gap: 12px;
+}
+
+.projetos__filtros {
+  justify-content: flex-start;
+}
+
+.projetos__filtros .campo {
+  width: 220px;
+}
+
+/* Projeto com card parado: porta-faixa em tinta 1, como o aviso de coleta
+   parada. Atenção sem alarme: nada de vermelho. */
+.tabela tbody tr.linha-parada > :first-child {
+  --porta-cor: var(--tinta-1);
+}
+
+.projetos__tabela tbody tr {
+  cursor: pointer;
+}
+
+/* "não medido" e "poucos dados" são frase, não número: sans, tinta 3. */
+.nao-medido {
+  font-family: var(--face);
+  font-size: var(--t-meta);
+  color: var(--tinta-3);
+  white-space: nowrap;
+}
+
+.projeto__colunas .zero,
+.projeto__qtd {
+  font-family: var(--face-dado);
+  font-variant-numeric: tabular-nums;
+}
+
+.projeto__colunas .zero {
+  color: var(--tinta-3);
+}
+
+.projeto__mais {
+  padding: 6px 10px 2px;
+}
+
+@media (max-width: 700px) {
+  .projetos .so-largo {
+    display: none;
+  }
+
+  .projetos__filtros .campo {
+    width: 100%;
+  }
+
+  /* No celular o nome quebra linha: senão empurra os números para fora da tela. */
+  .projetos__tabela thead th,
+  .projetos__tabela tbody th,
+  .projetos__tabela thead .ordenar,
+  .projetos__tabela .nao-medido {
+    white-space: normal;
+  }
+
+  /* Seis abas não cabem em 375px: a lista rola de lado dentro da barra,
+     em vez de alargar a página. */
+  .topo__linha > nav {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .abas {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  /* 3 colunas no celular: folga lateral menor nas células numéricas. */
+  .projetos__tabela th.num,
+  .projetos__tabela td.num {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+}

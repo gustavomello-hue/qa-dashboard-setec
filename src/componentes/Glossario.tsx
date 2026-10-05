@@ -5,12 +5,12 @@ import { GLOSSARIO } from "../data/glossario";
  * teclado. O tooltip do cabeçalho continua, mas não é mais o único lugar
  * onde a definição existe (teclado, toque e leitor de tela não o alcançam).
  */
-export function Glossario() {
+export function Glossario({ termos = GLOSSARIO }: { termos?: { termo: string; definicao: string }[] }) {
   return (
     <details className="glossario">
       <summary>Como ler estes números</summary>
       <dl>
-        {GLOSSARIO.map((g) => (
+        {termos.map((g) => (
           <div key={g.termo}>
             <dt>{g.termo}</dt>
             <dd>{g.definicao}</dd>

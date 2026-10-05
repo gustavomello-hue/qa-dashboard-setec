@@ -10,9 +10,9 @@ import {
   resumoPorMes,
   ultimoDiaUtil,
 } from "./seletores";
-import { escreverRota, lerRota } from "./rota";
+import { escreverRota, lerRota, rotaDaTela } from "./rota";
 import { sequenciaAtracao } from "./atracao";
-import { inicioDaUltimaColeta, paginar } from "./seletores";
+import { estreiasNoMes, frasesQa, inicioDaUltimaColeta, notaReprovacao, paginar, semReprovacao } from "./seletores";
 
 const ts = (s: string) => Math.floor(new Date(s).getTime() / 1000);
 
@@ -222,5 +222,67 @@ describe("permanência em cada coluna", async () => {
   it("concluído não tem permanência em aberto", () => {
     const h = [passo("qa_para_concluida", "2026-09-01T10:00:00", "Teste/QA", "Concluídas", "concluida")];
     expect(permanencias(h, ts("2026-09-06T09:00:00"))[0]).toBeNull();
+  });
+});
+
+describe("etapa 4: fidelidade", () => {
+  const d = (): Dashboard => dashboard({
+    projetos: [
+      { id: 227, nome: "DEV: SGO", prefixo: "DEV", ativo: true, mede_reprovacao: true, qa_desde: null },
+      { id: 398, nome: "GPEI", prefixo: "Outros", ativo: true, mede_reprovacao: false, qa_desde: "2026-10-06" },
+    ],
+    resumo_mensal: [
+      resumo("2026-10", 227, { aprovados: 0, aprovados_medidos: 0, reprovados: 1 }),
+      resumo("2026-10", 398, { aprovados: 1, aprovados_medidos: 0, reprovados: 0 }),
+    ],
+  });
+  it("semReprovacao lista os quadros sem Correções", () => {
+    expect([...semReprovacao(d())]).toEqual([398]);
+  });
+  it("taxa agregada ignora quem não mede", () => {
+    const [out] = resumoPorMes(d(), { prefixo: "Outros" });
+    expect(out.taxa_aprovacao).toBeNull(); // só o 398 no filtro: não medido, nunca 100%
+    const [so227] = resumoPorMes(d(), { projeto: 227 });
+    expect(so227.taxa_aprovacao).toBe(0);
+  });
+  it("nota aparece quando o filtro tem projeto fora", () => {
+    expect(notaReprovacao(d(), {})).toBe("Reprovação medida só em quadros com coluna de Correções (1 projeto fora).");
+    expect(notaReprovacao(d(), { projeto: 227 })).toBeNull();
+  });
+  it("estreias no mês", () => {
+    expect(estreiasNoMes(d(), "2026-10").map((p) => p.id)).toEqual([398]);
+    expect(estreiasNoMes(d(), "2026-09")).toEqual([]);
+  });
+});
+
+describe("rota da tela Projetos", () => {
+  it("lê e escreve o detalhe", () => {
+    expect(lerRota("#/projetos?detalhe=12")).toMatchObject({ tela: "projetos", detalhe: 12 });
+    expect(escreverRota({ tela: "projetos", filtro: {}, detalhe: 12 })).toBe("#/projetos?detalhe=12");
+  });
+});
+
+describe("revisão final da etapa 4", () => {
+  const d = (): Dashboard => dashboard({
+    projetos: [
+      { id: 227, nome: "DEV: SGO", prefixo: "DEV", ativo: true, mede_reprovacao: true, qa_desde: null },
+      { id: 398, nome: "GPEI", prefixo: "Outros", ativo: true, mede_reprovacao: false, qa_desde: "2026-10-06" },
+    ],
+  });
+  it("estreias respeitam o filtro", () => {
+    expect(estreiasNoMes(d(), "2026-10", { prefixo: "DEV" })).toEqual([]);
+    expect(estreiasNoMes(d(), "2026-10", { prefixo: "Outros" }).map((p) => p.id)).toEqual([398]);
+  });
+  it("frasesQa junta estreias e reprovação, para tela e lâmina", () => {
+    expect(frasesQa(d(), {}, ["2026-10"])).toEqual([
+      "A partir de 06/10: +1 projeto na frente de QA.",
+      "Reprovação medida só em quadros com coluna de Correções (1 projeto fora).",
+    ]);
+    expect(frasesQa(d(), { prefixo: "DEV" }, ["2026-10"])).toEqual([]);
+  });
+  it("trocar de aba limpa o detalhe de projeto, a pessoa e o card", () => {
+    const r = rotaDaTela({ tela: "projetos", filtro: { prefixo: "DEV" }, detalhe: 12, pessoa: 3, tv: true }, "equipe");
+    expect(r).toEqual({ tela: "equipe", filtro: { prefixo: "DEV" }, tv: false, pessoa: undefined, card: undefined, detalhe: undefined });
+    expect(escreverRota(rotaDaTela({ tela: "projetos", filtro: {}, detalhe: 12 }, "projetos"))).toBe("#/projetos");
   });
 });

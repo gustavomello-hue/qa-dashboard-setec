@@ -6,7 +6,7 @@ import { dentro, type Intervalo } from "./periodo";
 import {
   atribuicoesDe, cardsAbertos, cardsDaMetrica, resumirPorPessoa, taxaCardsPorMes, type CardContado,
 } from "./pessoas";
-import { resumoPorMes, type Filtro } from "./seletores";
+import { resumoPorMes, semReprovacao, type Filtro } from "./seletores";
 
 export interface NumerosMes {
   mes: string;
@@ -96,7 +96,7 @@ export interface Observacoes {
 
 /** O que não foi medido (ou foi feito fora do papel) no mês. */
 export function observacoesDoMes(d: Dashboard, periodo: Intervalo, filtro: Filtro): Observacoes {
-  const { porPessoa, saidasSemAutor } = resumirPorPessoa(atribuicoesDe(d, periodo, filtro));
+  const { porPessoa, saidasSemAutor } = resumirPorPessoa(atribuicoesDe(d, periodo, filtro), semReprovacao(d));
   const naoQa = [...porPessoa.entries()]
     .filter(([, r]) => r.saidasNaoQa > 0)
     .map(([user_id, r]) => ({ user_id, saidas: r.saidasNaoQa }))

@@ -5,7 +5,7 @@
 // só entra o que depende do "agora" do navegador (o que é "hoje", há quanto
 // tempo o dado foi coletado) ou de somar projetos por filtro.
 
-import type { Dashboard, Evento, Lacuna, Prefixo, ResumoMensal } from "./contrato";
+import type { Dashboard, Evento, Lacuna, Prefixo, Projeto, ResumoMensal } from "./contrato";
 
 export interface Filtro {
   prefixo?: Prefixo;
@@ -86,7 +86,7 @@ export function resumoPorMes(d: Dashboard, filtro: Filtro): ResumoMensal[] {
       ...r,
       projeto: "(filtro)",
       project_id: null,
-      entradas: 0, cards_distintos: 0, reprovados: 0, aprovados: 0,
+      entradas: 0, cards_distintos: 0, reprovados: 0, aprovados: 0, aprovados_medidos: 0,
       outras_saidas: 0, saldo_qa: 0, horas_qa_soma: 0, pares_qa: 0,
     };
     acc.entradas += r.entradas;
@@ -99,15 +99,18 @@ export function resumoPorMes(d: Dashboard, filtro: Filtro): ResumoMensal[] {
     acc.saldo_qa += r.saldo_qa;
     acc.horas_qa_soma += r.horas_qa_soma;
     acc.pares_qa += r.pares_qa;
+    // Quadro sem Correções aprova mas não reprova: fora da base da taxa (etapa 4).
+    acc.aprovados_medidos = (acc.aprovados_medidos ?? 0) + (r.aprovados_medidos ?? r.aprovados);
     porMes.set(r.ano_mes, acc);
   }
   return [...porMes.values()]
     .sort((a, b) => a.ano_mes.localeCompare(b.ano_mes))
     .map((r) => {
-      const julgados = r.aprovados + r.reprovados;
+      const medidos = r.aprovados_medidos ?? r.aprovados;
+      const julgados = medidos + r.reprovados;
       return {
         ...r,
-        taxa_aprovacao: julgados ? Math.round((1000 * r.aprovados) / julgados) / 10 : null,
+        taxa_aprovacao: julgados ? Math.round((1000 * medidos) / julgados) / 10 : null,
         tempo_medio_qa_h: r.pares_qa ? Math.round((10 * r.horas_qa_soma) / r.pares_qa) / 10 : null,
       };
     });
@@ -237,4 +240,40 @@ export function permanencias(historico: Evento[], ateMomento: number | null): (P
     if (!ateMomento || e.para_papel === "concluida" || FIM.includes(e.evento) || ateMomento < e.momento) return null;
     return { segundos: ateMomento - e.momento, coluna, emQa, atual: true };
   });
+}
+
+/** Projetos sem coluna de Correções: reprovação não medida (etapa 4, D2). */
+export function semReprovacao(d: Dashboard): Set<number> {
+  return new Set(d.projetos.filter((p) => p.mede_reprovacao === false).map((p) => p.id));
+}
+
+export function notaReprovacao(d: Dashboard, filtro: Filtro): string | null {
+  const passa = passaNoFiltro(d, filtro);
+  const fora = d.projetos.filter((p) => p.mede_reprovacao === false && passa(p.id)).length;
+  if (!fora) return null;
+  return `Reprovação medida só em quadros com coluna de Correções (${fora} projeto${fora > 1 ? "s" : ""} fora).`;
+}
+
+/** Projetos do filtro que entraram na frente de QA no mês (qa_desde dentro dele). */
+export function estreiasNoMes(d: Dashboard, mes: string, filtro: Filtro = {}): Projeto[] {
+  const passa = passaNoFiltro(d, filtro);
+  return d.projetos.filter((p) => p.qa_desde?.startsWith(mes) && passa(p.id));
+}
+
+/** "2026-10-06" -> "06/10". */
+const diaMes = (dia: string) => `${dia.slice(8, 10)}/${dia.slice(5, 7)}`;
+
+/**
+ * As notas de fidelidade da frente de QA (etapa 4) como frases: quem entrou
+ * nos meses mostrados e o que a taxa de reprovação não mede. Uma fonte só
+ * para a tela (NotasQa) e para as lâminas da Reunião.
+ */
+export function frasesQa(d: Dashboard, filtro: Filtro, meses: string[]): string[] {
+  const porDia = new Map<string, number>();
+  for (const p of meses.flatMap((m) => estreiasNoMes(d, m, filtro))) {
+    if (p.qa_desde) porDia.set(p.qa_desde, (porDia.get(p.qa_desde) ?? 0) + 1);
+  }
+  const frases = [...porDia].map(([dia, n]) => `A partir de ${diaMes(dia)}: +${n} projeto${n > 1 ? "s" : ""} na frente de QA.`);
+  const reprov = notaReprovacao(d, filtro);
+  return reprov ? [...frases, reprov] : frases;
 }

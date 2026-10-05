@@ -38,6 +38,10 @@ export interface Projeto {
   nome: string;
   prefixo: Prefixo;
   ativo: boolean;
+  /** false: quadro sem coluna de Correções; fica fora da taxa de reprovação (etapa 4). */
+  mede_reprovacao?: boolean;
+  /** Projeto promovido à frente de QA: só conta a partir desta data (AAAA-MM-DD). */
+  qa_desde?: string | null;
 }
 
 export interface CardNaFila {
@@ -90,6 +94,8 @@ export interface ResumoMensal {
   /** Soma e contagem para refazer a média ao somar projetos. */
   horas_qa_soma: number;
   pares_qa: number;
+  /** Aprovados só dos quadros que medem reprovação: a base da taxa (etapa 4). */
+  aprovados_medidos?: number;
 }
 
 export interface CardMetricas {
@@ -225,6 +231,50 @@ export interface Evento {
   link: string | null;
 }
 
+// --- Tela Projetos (etapa 4): fluxo de todos os projetos ------------------
+
+export interface MesFluxo {
+  ano_mes: string;
+  entradas: number;
+  /** null = saída não medida (quadro sem coluna concluída e que nunca fechou card). */
+  saidas: number | null;
+  ciclo_mediana: number | null;
+  ciclo_p85: number | null;
+  ciclo_n: number;
+}
+
+export interface CardParado {
+  task_id: number;
+  titulo: string;
+  dias: number;
+  coluna: string;
+  responsavel: string;
+  link: string;
+}
+
+export interface ProjetoFluxo {
+  id: number;
+  nome: string;
+  grupo: "qa" | "geral";
+  /** Quadro do projeto no Kanboard. */
+  link: string;
+  mede_saida: boolean;
+  abertos_por_papel: Record<string, number>;
+  colunas: { nome: string; papel: string; cards: number }[];
+  mensal: MesFluxo[];
+  ciclo_90d: { mediana: number | null; p85: number | null; n: number };
+  parados_total: number;
+  parados: CardParado[];
+}
+
+export interface ProjetosFluxo {
+  parado_dias: number;
+  janela_ciclo_dias: number;
+  /** Última coleta de cards fechados (unix) ou null se nunca rodou. */
+  fechadas_em: number | null;
+  projetos: ProjetoFluxo[];
+}
+
 export interface Dashboard {
   versao: typeof VERSAO_CONTRATO;
   gerado_em: number;
@@ -261,4 +311,6 @@ export interface Dashboard {
   execucoes: number[];
   lacunas: Lacuna[];
   eventos: Evento[];
+  /** Fluxo de todos os projetos (tela Projetos). Ausente em JSONs anteriores à etapa 4. */
+  projetos_fluxo?: ProjetosFluxo;
 }

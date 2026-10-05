@@ -4,13 +4,14 @@ import type { Rota, TipoReuniao } from "../data/rota";
 import { escreverRota } from "../data/rota";
 import { NOME_PAPEL, dataCurta, dataHora, haDias, duracao, mesCurto, nomeCurto, numero, porcento, separarEtiquetas } from "../data/formato";
 import { emAndamento, intervalo, intervaloAnterior, mesAnterior, mesesDisponiveis, rotuloAnterior, type Periodo } from "../data/periodo";
-import { indiceProjetos, indiceTitulos, mesLocal, resumoPorMes, type Filtro } from "../data/seletores";
+import { frasesQa, indiceProjetos, indiceTitulos, mesLocal, resumoPorMes, semReprovacao, type Filtro } from "../data/seletores";
 import {
   GRUPOS_TABELA, ROTULO_GRUPO, atribuicoesDe, composicaoPorMes, concluidos, ehQa, indicePessoas, nomeDe,
   pessoasDoGrupo, resumirPorPessoa, resumoVazio, taxaReprovacao, taxaReprovacaoQa, testados, type Resumo,
 } from "../data/pessoas";
 import { cardsParaConversar, dividirEmLaminas, mesParcial, numerosDoMes, observacoesDoMes } from "../data/reuniao";
 import { Grafico, base, cor, useTema, type OpcoesGrafico } from "../componentes/Grafico";
+import { NotasQa } from "../componentes/NotasQa";
 
 const PREFIXOS: Prefixo[] = ["DEV", "WEB", "MOB", "Demandas"];
 
@@ -52,6 +53,7 @@ export function Reuniao({ dados, rota, ir, aviso }: Props) {
         <header className="bloco__cabeca">
           <h2 id="t-preparo" className="bloco__titulo">Preparar a reunião</h2>
           <p className="nota">Uma lâmina por tela, para projetar. Setas ou espaço avançam, Esc volta para cá.</p>
+          <NotasQa dados={dados} filtro={rota.filtro} meses={[mes]} />
         </header>
 
         <div className="preparo__campos">
@@ -327,6 +329,7 @@ function laminasMensal(d: Dashboard, periodo: Periodo, filtro: Filtro, altura: n
         {baseParcial && (
           <p className="nota grande-nota">{antes} foi medido só em parte: serve de referência, não de comparação.</p>
         )}
+        {frasesQa(d, filtro, [mes]).map((f) => <p key={f} className="nota grande-nota">{f}</p>)}
       </>
     ),
   });
@@ -336,8 +339,8 @@ function laminasMensal(d: Dashboard, periodo: Periodo, filtro: Filtro, altura: n
   // Tabelas por pessoa: DEV numa (ou mais) lâmina; QA e estagiários em seguida.
   const atual = intervalo(periodo, agora);
   const ant = intervaloAnterior(periodo, agora);
-  const { porPessoa } = resumirPorPessoa(atribuicoesDe(d, atual, filtro));
-  const { porPessoa: porPessoaAntes } = resumirPorPessoa(atribuicoesDe(d, ant, filtro));
+  const { porPessoa } = resumirPorPessoa(atribuicoesDe(d, atual, filtro), semReprovacao(d));
+  const { porPessoa: porPessoaAntes } = resumirPorPessoa(atribuicoesDe(d, ant, filtro), semReprovacao(d));
   // Altura de uma linha da tabela projetada, pela mesma escala --r-* do CSS:
   // dado = clamp(16px, 2.2vh, 24px) com 1,45 de entrelinha, respiro = clamp(4px, 0.7vh, 10px).
   // Sobram ~290px para cabeça, cabeçalho da tabela e rodapé.
@@ -559,8 +562,8 @@ function laminasIndividual(d: Dashboard, periodo: Periodo, filtro: Filtro, uid: 
   }
   const agora = new Date();
   const atual = intervalo(periodo, agora);
-  const r = resumirPorPessoa(atribuicoesDe(d, atual, filtro)).porPessoa.get(uid) ?? resumoVazio();
-  const a = resumirPorPessoa(atribuicoesDe(d, intervaloAnterior(periodo, agora), filtro)).porPessoa.get(uid) ?? resumoVazio();
+  const r = resumirPorPessoa(atribuicoesDe(d, atual, filtro), semReprovacao(d)).porPessoa.get(uid) ?? resumoVazio();
+  const a = resumirPorPessoa(atribuicoesDe(d, intervaloAnterior(periodo, agora), filtro), semReprovacao(d)).porPessoa.get(uid) ?? resumoVazio();
   const baseParcial = periodo.tipo === "mes" && mesParcial(d, mesAnterior(periodo.mes));
   const antes = rotuloAnterior(periodo, agora);
   const qa = ehQa(pessoa);
@@ -616,6 +619,7 @@ function laminasIndividual(d: Dashboard, periodo: Periodo, filtro: Filtro, uid: 
           {baseParcial && !semNada && (
             <p className="nota grande-nota">{antes} foi medido só em parte: serve de referência, não de comparação.</p>
           )}
+          {!semNada && periodo.tipo === "mes" && frasesQa(d, filtro, [periodo.mes]).map((f) => <p key={f} className="nota grande-nota">{f}</p>)}
         </>
       ),
     },

@@ -4,7 +4,7 @@
 
 import type { Atribuicao, CargaCard, Dashboard, Evento, Grupo, Metrica, Papel, Pessoa } from "./contrato";
 import { dentro, type Intervalo } from "./periodo";
-import { diaLocal, passaNoFiltro, type Filtro } from "./seletores";
+import { diaLocal, passaNoFiltro, semReprovacao, type Filtro } from "./seletores";
 
 /** Grupos com tabela própria, na ordem da tela Equipe. */
 export const GRUPOS_TABELA: Grupo[] = ["dev", "qa", "estagiario_dev", "estagiario_qa"];
@@ -114,7 +114,7 @@ export function atribuicoesDe(d: Dashboard, periodo: Intervalo, filtro: Filtro):
  * Resumo por user_id. A chave null junta as saídas de QA sem autor
  * (só `saidasSemAutor` do retorno).
  */
-export function resumirPorPessoa(atribs: Atribuicao[]): { porPessoa: Map<number, Resumo>; saidasSemAutor: number } {
+export function resumirPorPessoa(atribs: Atribuicao[], semRep: Set<number> = new Set()): { porPessoa: Map<number, Resumo>; saidasSemAutor: number } {
   const porPessoa = new Map<number, Resumo>();
   const julgados = new Map<number, Set<number>>();
   const reprovados = new Map<number, Set<number>>();
@@ -136,6 +136,8 @@ export function resumirPorPessoa(atribs: Atribuicao[]): { porPessoa: Map<number,
     porPessoa.set(a.user_id, r);
     const campo = CAMPO[a.metrica];
     if (campo) r[campo]++;
+    // Quadro sem Correções: conta nas contagens, fica fora das taxas (etapa 4, D2).
+    if (semRep.has(a.project_id)) continue;
     if (a.metrica === "aprovado" || a.metrica === "reprovado") add(julgados, a.user_id, a.task_id);
     if (a.metrica === "reprovado") add(reprovados, a.user_id, a.task_id);
     if (a.metrica === "testou_aprovado" || a.metrica === "testou_reprovado") add(testados, a.user_id, a.task_id);
@@ -354,8 +356,9 @@ export function taxaCardsPorMes(d: Dashboard, filtro: Filtro): Map<string, TaxaM
     s.add(task);
     m.set(mes, s);
   };
+  const semRep = semReprovacao(d);
   for (const a of d.atribuicoes ?? []) {
-    if (!passa(a.project_id)) continue;
+    if (!passa(a.project_id) || semRep.has(a.project_id)) continue;
     if (a.metrica === "aprovado" || a.metrica === "reprovado") add(julgados, a.ano_mes, a.task_id);
     if (a.metrica === "reprovado") add(reprovados, a.ano_mes, a.task_id);
   }

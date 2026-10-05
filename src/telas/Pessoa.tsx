@@ -3,7 +3,7 @@ import type { Dashboard } from "../data/contrato";
 import { NOME_PAPEL, dataCurta, haDias, nomeCurto, numero, porcento, separarEtiquetas } from "../data/formato";
 import { intervalo, intervaloAnterior, mesAnterior, rotuloAnterior, rotuloPeriodoLongo, ultimoDia, type Periodo } from "../data/periodo";
 import { mesParcial } from "../data/reuniao";
-import { indiceProjetos, indiceTitulos, type Filtro } from "../data/seletores";
+import { indiceProjetos, indiceTitulos, mesLocal, semReprovacao, type Filtro } from "../data/seletores";
 import {
   ROTULO_GRUPO, atribuicoesDe, inicioDaSemana, semanaIncompleta, cardsAbertos, cardsDaMetrica, cargaPorPessoa, cargaVazia, concluidos, ehQa,
   indicePessoas, nomeDe, porSemana, projetosTestados, resumirPorPessoa, resumoVazio, semanas, taxaReprovacao,
@@ -14,6 +14,7 @@ import { DEFINICAO } from "../data/glossario";
 import { BarraCarga, LegendaCarga } from "../componentes/BarraCarga";
 import { Grafico, base, cor, useTema, type OpcoesGrafico } from "../componentes/Grafico";
 import { Icone } from "../componentes/Icone";
+import { NotasQa } from "../componentes/NotasQa";
 
 interface Props {
   dados: Dashboard;
@@ -34,8 +35,8 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar }: Pr
   const agora = new Date();
   const atual = intervalo(periodo, agora);
   const atribs = atribuicoesDe(dados, atual, filtro);
-  const r = (uid !== undefined && resumirPorPessoa(atribs).porPessoa.get(uid)) || resumoVazio();
-  const a = (uid !== undefined && resumirPorPessoa(atribuicoesDe(dados, intervaloAnterior(periodo, agora), filtro)).porPessoa.get(uid)) || resumoVazio();
+  const r = (uid !== undefined && resumirPorPessoa(atribs, semReprovacao(dados)).porPessoa.get(uid)) || resumoVazio();
+  const a = (uid !== undefined && resumirPorPessoa(atribuicoesDe(dados, intervaloAnterior(periodo, agora), filtro), semReprovacao(dados)).porPessoa.get(uid)) || resumoVazio();
   // Base medida só em parte: o rótulo avisa, para "ago/26: 1" não virar comparação.
   const antes = rotuloAnterior(periodo, agora) + (periodo.tipo === "mes" && mesParcial(dados, mesAnterior(periodo.mes)) ? " (parcial)" : "");
   const qa = pessoa ? ehQa(pessoa) : false;
@@ -103,6 +104,7 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar }: Pr
         </div>
         <p className="pessoa__periodo">{rotuloPeriodoLongo(periodo, agora)}</p>
       </header>
+      <NotasQa dados={dados} filtro={filtro} meses={[periodo.tipo === "mes" ? periodo.mes : mesLocal(agora)]} />
 
       {/* Primeiro o fluxo (entregou → aprovado/reprovado → concluiu), depois o resto em tamanho
           menor. A taxa vira contexto da reprovação, não um número de veredito ao lado das contagens. */}
