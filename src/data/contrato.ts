@@ -275,6 +275,34 @@ export interface ProjetosFluxo {
   projetos: ProjetoFluxo[];
 }
 
+// --- Cards clicáveis: descrição e campos do Kanboard ------------------------
+
+/** Detalhe de um card do universo da spec (D7). Opcionais só vêm preenchidos. */
+export interface DetalheCard {
+  titulo: string | null;
+  link: string | null;
+  /** Markdown do Kanboard, já cortado no teto de 8 KB. */
+  descricao: string | null;
+  descricao_cortada: boolean;
+  /** Coluna atual (no Kanboard). */
+  coluna: string;
+  papel: Papel;
+  /** 0 = sem responsável. */
+  responsavel_id: number;
+  prioridade: number;
+  criado_em: number | null;
+  /** false = fechado no Kanboard. */
+  aberto: boolean;
+  prazo?: number;
+  inicio?: number;
+  /** Horas. */
+  tempo_estimado?: number;
+  tempo_gasto?: number;
+  categoria?: string;
+  cor?: string;
+  referencia?: string;
+}
+
 export interface Dashboard {
   versao: typeof VERSAO_CONTRATO;
   gerado_em: number;
@@ -313,4 +341,6 @@ export interface Dashboard {
   eventos: Evento[];
   /** Fluxo de todos os projetos (tela Projetos). Ausente em JSONs anteriores à etapa 4. */
   projetos_fluxo?: ProjetosFluxo;
+  /** Descrição e campos por task_id. Ausente em JSONs anteriores ou publicados sem cifra. */
+  detalhes_cards?: Record<string, DetalheCard>;
 }

@@ -15,6 +15,7 @@ import { BarraCarga, LegendaCarga } from "../componentes/BarraCarga";
 import { Grafico, base, cor, useTema, type OpcoesGrafico } from "../componentes/Grafico";
 import { Icone } from "../componentes/Icone";
 import { NotasQa } from "../componentes/NotasQa";
+import type { Consulta, MetricaLista } from "../data/listas";
 
 interface Props {
   dados: Dashboard;
@@ -24,11 +25,13 @@ interface Props {
   hrefCard: (id: number) => string;
   /** Link de volta para a Equipe (mantém filtros e período). */
   hrefVoltar: string;
+  /** Números viram links para a lista de cards. */
+  hrefLista?: (c: Consulta) => string;
 }
 
 const SEMANAS = 12;
 
-export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar }: Props) {
+export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar, hrefLista }: Props) {
   const pessoas = indicePessoas(dados);
   const pessoa = uid !== undefined ? pessoas.get(uid) : undefined;
   const tema = useTema();
@@ -37,6 +40,7 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar }: Pr
   const atribs = atribuicoesDe(dados, atual, filtro);
   const r = (uid !== undefined && resumirPorPessoa(atribs, semReprovacao(dados)).porPessoa.get(uid)) || resumoVazio();
   const a = (uid !== undefined && resumirPorPessoa(atribuicoesDe(dados, intervaloAnterior(periodo, agora), filtro), semReprovacao(dados)).porPessoa.get(uid)) || resumoVazio();
+  const lista = (metrica: MetricaLista) => (uid === undefined ? undefined : hrefLista?.({ metrica, periodo, pessoa: uid, filtro }));
   // Base medida só em parte: o rótulo avisa, para "ago/26: 1" não virar comparação.
   const antes = rotuloAnterior(periodo, agora) + (periodo.tipo === "mes" && mesParcial(dados, mesAnterior(periodo.mes)) ? " (parcial)" : "");
   const qa = pessoa ? ehQa(pessoa) : false;
@@ -112,10 +116,11 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar }: Pr
         <section className="numeros" aria-labelledby="t-fluxo-dev">
           <h2 id="t-fluxo-dev" className="numeros__titulo">Fluxo dos cards · como responsável</h2>
           <dl className="kpis kpis--fluxo">
-            <Kpi rotulo="Entregues para QA" valor={r.entregues} anterior={a.entregues} rotuloAnterior={antes} tom="entrada" dica={DEFINICAO.entregues} />
-            <Kpi rotulo="Aprovados" valor={r.aprovados} anterior={a.aprovados} rotuloAnterior={antes} tom="aprovado" dica={DEFINICAO.aprovados} />
+            <Kpi rotulo="Entregues para QA" href={lista("entregue_qa")} valor={r.entregues} anterior={a.entregues} rotuloAnterior={antes} tom="entrada" dica={DEFINICAO.entregues} />
+            <Kpi rotulo="Aprovados" href={lista("aprovado")} valor={r.aprovados} anterior={a.aprovados} rotuloAnterior={antes} tom="aprovado" dica={DEFINICAO.aprovados} />
             <Kpi
               rotulo="Reprovações"
+              href={lista("reprovado")}
               valor={r.reprovacoes}
               anterior={a.reprovacoes}
               rotuloAnterior={antes}
@@ -124,7 +129,7 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar }: Pr
               extra={
                 r.cardsJulgados ? (
                   <>
-                    {r.cardsReprovados} de {r.cardsJulgados} cards julgados ({porcento(taxaReprovacao(r))})
+                    <LinkTaxa href={lista("cards_reprovados")}>{r.cardsReprovados} de {r.cardsJulgados} cards julgados</LinkTaxa> ({porcento(taxaReprovacao(r))})
                   </>
                 ) : (
                   "Nenhum card julgado no período"
@@ -133,6 +138,7 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar }: Pr
             />
             <Kpi
               rotulo="Concluídos"
+              href={lista("concluidos")}
               valor={concluidos(r)}
               anterior={concluidos(a)}
               rotuloAnterior={antes}
@@ -141,9 +147,9 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar }: Pr
             />
           </dl>
           <dl className="kpis kpis--outros" aria-label="Outros números como responsável">
-            <Kpi menor rotulo="Concluídos sem QA" valor={r.concluidosSemQa} anterior={a.concluidosSemQa} rotuloAnterior={antes} tom="sem-qa" dica={DEFINICAO.semQa} />
-            <Kpi menor rotulo="Devolvidos" valor={r.devolvidos} anterior={a.devolvidos} rotuloAnterior={antes} tom="devolvido" dica={DEFINICAO.devolvidos} />
-            <Kpi menor rotulo="Criados" valor={r.criados} anterior={a.criados} rotuloAnterior={antes} dica={DEFINICAO.criados} />
+            <Kpi menor rotulo="Concluídos sem QA" href={lista("concluido_sem_qa")} valor={r.concluidosSemQa} anterior={a.concluidosSemQa} rotuloAnterior={antes} tom="sem-qa" dica={DEFINICAO.semQa} />
+            <Kpi menor rotulo="Devolvidos" href={lista("devolvido")} valor={r.devolvidos} anterior={a.devolvidos} rotuloAnterior={antes} tom="devolvido" dica={DEFINICAO.devolvidos} />
+            <Kpi menor rotulo="Criados" href={lista("criado")} valor={r.criados} anterior={a.criados} rotuloAnterior={antes} dica={DEFINICAO.criados} />
           </dl>
         </section>
       )}
@@ -151,10 +157,11 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar }: Pr
         <section className="numeros" aria-labelledby="t-fluxo-qa">
           <h2 id="t-fluxo-qa" className="numeros__titulo">Testes · como QA</h2>
           <dl className="kpis kpis--fluxo">
-            <Kpi rotulo="Testados" valor={testados(r)} anterior={testados(a)} rotuloAnterior={antes} tom="entrada" dica={DEFINICAO.testados} />
-            <Kpi rotulo="Aprovou" valor={r.testouAprovado} anterior={a.testouAprovado} rotuloAnterior={antes} tom="aprovado" dica={DEFINICAO.aprovou} />
+            <Kpi rotulo="Testados" href={lista("testados")} valor={testados(r)} anterior={testados(a)} rotuloAnterior={antes} tom="entrada" dica={DEFINICAO.testados} />
+            <Kpi rotulo="Aprovou" href={lista("testou_aprovado")} valor={r.testouAprovado} anterior={a.testouAprovado} rotuloAnterior={antes} tom="aprovado" dica={DEFINICAO.aprovou} />
             <Kpi
               rotulo="Reprovou"
+              href={lista("testou_reprovado")}
               valor={r.testouReprovado}
               anterior={a.testouReprovado}
               rotuloAnterior={antes}
@@ -163,7 +170,7 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar }: Pr
               extra={
                 r.cardsTestados ? (
                   <>
-                    {r.cardsTestadosReprovados} de {r.cardsTestados} cards testados ({porcento(taxaReprovacaoQa(r))})
+                    <LinkTaxa href={lista("cards_reprovou")}>{r.cardsTestadosReprovados} de {r.cardsTestados} cards testados</LinkTaxa> ({porcento(taxaReprovacaoQa(r))})
                   </>
                 ) : (
                   "Nenhum card testado no período"
@@ -172,8 +179,8 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar }: Pr
             />
           </dl>
           <dl className="kpis kpis--outros" aria-label="Outros números como QA">
-            <Kpi menor rotulo="Devolveu" valor={r.testouDevolvido} anterior={a.testouDevolvido} rotuloAnterior={antes} tom="devolvido" dica={DEFINICAO.devolveu} />
-            {!dev && <Kpi menor rotulo="Criados" valor={r.criados} anterior={a.criados} rotuloAnterior={antes} dica={DEFINICAO.criados} />}
+            <Kpi menor rotulo="Devolveu" href={lista("testou_devolvido")} valor={r.testouDevolvido} anterior={a.testouDevolvido} rotuloAnterior={antes} tom="devolvido" dica={DEFINICAO.devolveu} />
+            {!dev && <Kpi menor rotulo="Criados" href={lista("criado")} valor={r.criados} anterior={a.criados} rotuloAnterior={antes} dica={DEFINICAO.criados} />}
           </dl>
         </section>
       )}
@@ -320,4 +327,9 @@ function ListaAbertos({
 function TituloCard({ titulo }: { titulo?: string }) {
   const resto = titulo ? separarEtiquetas(titulo).resto : "";
   return resto ? <span title={resto}>{resto}</span> : <span className="meta">Título não registrado (card anterior ao histórico)</span>;
+}
+
+/** "3 de 8 cards julgados": vira link para a base da taxa quando há lista. */
+function LinkTaxa({ href, children }: { href?: string; children: React.ReactNode }) {
+  return href ? <a className="link-numero" href={href}>{children}</a> : <>{children}</>;
 }

@@ -40,6 +40,11 @@ export const GLOSSARIO: { termo: string; definicao: string }[] = [
   { termo: "Dias em QA", definicao: DEFINICAO.diasEmQa },
   { termo: "Retornos", definicao: DEFINICAO.retornos },
   { termo: "Sem autor", definicao: DEFINICAO.semAutor },
+  {
+    termo: "Lista de cards",
+    definicao:
+      "Clique num número para ver os cards que ele conta. \"N×\" indica que o mesmo card conta N vezes (ex.: reprovado duas vezes no mês); a soma das marcas é o número clicado.",
+  },
 ];
 
 /** Termos da tela Projetos (etapa 4): fluxo de todos os projetos do Kanboard. */

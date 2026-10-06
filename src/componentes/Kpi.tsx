@@ -18,14 +18,17 @@ interface Props {
   extra?: ReactNode;
   /** Contador de apoio: numeral menor, para não competir com o fluxo principal. */
   menor?: boolean;
+  /** Abre a lista de cards por trás do número. */
+  href?: string;
 }
 
 /** Número grande com a comparação embaixo. A cor diz o que o número É, não se é bom ou ruim. */
-export function Kpi({ rotulo, valor, tom = "neutro", anterior, rotuloAnterior, dicaAnterior, sub, dica, extra, menor }: Props) {
+export function Kpi({ rotulo, valor, tom = "neutro", anterior, rotuloAnterior, dicaAnterior, sub, dica, extra, menor, href }: Props) {
+  const texto = typeof valor === "number" ? numero(valor) : valor;
   return (
     <div className={`kpi kpi--${tom}${menor ? " kpi--menor" : ""}`} title={dica}>
       <dt className="kpi__rotulo">{rotulo}</dt>
-      <dd className="kpi__valor">{typeof valor === "number" ? numero(valor) : valor}</dd>
+      <dd className="kpi__valor">{href && valor !== 0 ? <a className="kpi__link" href={href} title="Ver os cards deste número">{texto}</a> : texto}</dd>
       <dd
         className="kpi__sub"
         title={anterior !== undefined && dicaAnterior ? `${dicaAnterior}: ${typeof anterior === "number" ? numero(anterior) : anterior}` : undefined}

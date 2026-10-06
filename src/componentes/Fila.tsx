@@ -27,7 +27,7 @@ export function Fila({ dados, filtro, hrefCard, soForaDoPainel = false, alternar
   const curto = new Map([...indicePessoas(dados).values()].map((p) => [p.nome_kanboard, p.nome]));
 
   return (
-    <section className="bloco fila" aria-labelledby="t-fila">
+    <section className="bloco fila" id="fila" tabIndex={-1} aria-labelledby="t-fila">
       <header className="bloco__cabeca">
         <h2 id="t-fila" className="bloco__titulo">
           Fila de QA <span className="contagem">{fila.length}</span>

@@ -1,7 +1,8 @@
-import type { Dashboard, Evento } from "../data/contrato";
-import { NOME_EVENTO, dataHora, duracao, nomeCurto, numero } from "../data/formato";
+import type { Dashboard, DetalheCard, Evento } from "../data/contrato";
+import { NOME_EVENTO, dataCurta, dataHora, duracao, nomeCurto, numero } from "../data/formato";
 import { historicoDoCard, permanencias } from "../data/seletores";
-import { indicePessoas } from "../data/pessoas";
+import { indicePessoas, nomeDe } from "../data/pessoas";
+import { descricaoHtml } from "../data/markdown";
 import { DEFINICAO } from "../data/glossario";
 import { Icone } from "../componentes/Icone";
 import type { Tom } from "../componentes/Kpi";
@@ -18,8 +19,9 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
   const historico = card ? historicoDoCard(dados, card) : [];
   const metricas = card ? dados.cards.find((c) => c.task_id === card) : undefined;
   const naFila = card ? dados.fila_qa.find((c) => c.task_id === card) : undefined;
-  const titulo = metricas?.titulo || naFila?.titulo || historico.findLast((e) => e.titulo)?.titulo;
-  const link = metricas?.link || naFila?.link || historico.findLast((e) => e.link)?.link;
+  const detalhe = card ? dados.detalhes_cards?.[String(card)] : undefined;
+  const titulo = metricas?.titulo || naFila?.titulo || historico.findLast((e) => e.titulo)?.titulo || detalhe?.titulo;
+  const link = metricas?.link || naFila?.link || historico.findLast((e) => e.link)?.link || detalhe?.link || undefined;
   // Quanto tempo o card ficou em cada coluna: o que o Kanboard não guarda.
   const estadias = permanencias(historico, dados.coleta.momento);
   // O histórico traz o nome completo do Kanboard; a tela usa o nome curto da equipe.
@@ -56,7 +58,7 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
 
       {card === undefined ? (
         <p className="vazio">Digite o número de um card para ver a linha do tempo.</p>
-      ) : historico.length === 0 && !metricas ? (
+      ) : historico.length === 0 && !metricas && !detalhe ? (
         <p className="vazio">Nenhuma movimentação registrada para #{card}.</p>
       ) : (
         <section className="bloco" aria-labelledby="t-card">
@@ -71,9 +73,12 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
             )}
           </header>
           {/* Em tela larga a ficha vira painel lateral e a linha do tempo ganha a largura toda. */}
-          <div className={`card-corpo${metricas ? " card-corpo--com-ficha" : ""}`}>
-          {metricas && (
+          <div className={`card-corpo${metricas || detalhe ? " card-corpo--com-ficha" : ""}`}>
+          {(metricas || detalhe) && (
             <dl className="ficha">
+              {detalhe && <CamposKanboard detalhe={detalhe} responsavel={nomeDe(indicePessoas(dados), detalhe.responsavel_id)} />}
+              {metricas && (
+                <>
               <div><dt>Entradas em QA</dt><dd className="num">{numero(metricas.entradas_qa)}</dd></div>
               <div><dt title={DEFINICAO.retornos}>Retornos para correção</dt><dd className="num">{numero(metricas.retornos)}</dd></div>
               <div>
@@ -83,6 +88,8 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
               <div><dt>Projeto</dt><dd>{nomeCurto(metricas.projeto)}</dd></div>
               <div><dt>Criador</dt><dd>{nome(metricas.criador) || "—"}</dd></div>
               <div><dt>Concluído por</dt><dd>{metricas.concluido_em ? nome(metricas.concluido_por) || "—" : "ainda aberto"}</dd></div>
+                </>
+              )}
               {naFila && naFila.no_painel !== undefined && naFila.no_painel !== null && (
                 <div>
                   <dt>Painel do Kanboard</dt>
@@ -91,6 +98,13 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
               )}
             </dl>
           )}
+          <div className="card-principal">
+          <Descricao detalhe={detalhe} link={link} />
+          <section className="card-secao" aria-labelledby="t-linha-tempo">
+          <h3 id="t-linha-tempo" className="card-secao__titulo">Linha do tempo</h3>
+          {historico.length === 0 ? (
+            <p className="nota card-secao__nota">Nenhuma movimentação registrada desde ago/26.</p>
+          ) : (
           <ol className="linha-tempo">
             {historico.map((e, i) => (
               <li key={i} className={`linha-tempo__item faixa--${TOM_EVENTO[e.evento] ?? "neutro"}`}>
@@ -112,9 +126,80 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
               </li>
             ))}
           </ol>
+          )}
+          </section>
+          </div>
           </div>
         </section>
       )}
     </div>
+  );
+}
+
+/** Nomes das cores do Kanboard: só escritas, nunca pintadas (a cor do quadro é só estado). */
+const COR_KANBOARD: Record<string, string> = {
+  yellow: "amarelo", blue: "azul", green: "verde", purple: "roxo", red: "vermelho", orange: "laranja",
+  grey: "cinza", brown: "marrom", deep_orange: "laranja escuro", dark_grey: "cinza escuro", pink: "rosa",
+  teal: "verde-azulado", cyan: "ciano", lime: "lima", light_green: "verde claro", amber: "âmbar",
+};
+
+function CamposKanboard({ detalhe, responsavel }: { detalhe: DetalheCard; responsavel: string }) {
+  return (
+    <>
+      <div>
+        <dt>Coluna atual</dt>
+        <dd>
+          {detalhe.coluna}
+          {!detalhe.aberto && <span className="marca-fora ficha__marca">fechado no Kanboard</span>}
+        </dd>
+      </div>
+      <div><dt>Responsável</dt><dd>{responsavel}</dd></div>
+      {detalhe.prioridade > 0 && <div><dt>Prioridade</dt><dd className="num">{detalhe.prioridade}</dd></div>}
+      {detalhe.criado_em && <div><dt>Criado em</dt><dd className="num">{dataCurta(detalhe.criado_em)}</dd></div>}
+      {detalhe.inicio && <div><dt>Início</dt><dd className="num">{dataCurta(detalhe.inicio)}</dd></div>}
+      {detalhe.prazo && <div><dt>Prazo</dt><dd className="num">{dataCurta(detalhe.prazo)}</dd></div>}
+      {detalhe.tempo_estimado && <div><dt>Tempo estimado</dt><dd className="num">{numero(detalhe.tempo_estimado)} h</dd></div>}
+      {detalhe.tempo_gasto && <div><dt>Tempo gasto</dt><dd className="num">{numero(detalhe.tempo_gasto)} h</dd></div>}
+      {detalhe.categoria && <div><dt>Categoria</dt><dd>{detalhe.categoria}</dd></div>}
+      {detalhe.cor && <div><dt>Cor no Kanboard</dt><dd>{COR_KANBOARD[detalhe.cor] ?? detalhe.cor}</dd></div>}
+      {detalhe.referencia && <div><dt>Referência</dt><dd>{detalhe.referencia}</dd></div>}
+    </>
+  );
+}
+
+function Descricao({ detalhe, link }: { detalhe?: DetalheCard; link?: string }) {
+  return (
+    <section className="card-secao descricao" aria-labelledby="t-descricao">
+      <h3 id="t-descricao" className="card-secao__titulo">Descrição</h3>
+      {!detalhe ? (
+        <p className="nota card-secao__nota">
+          Descrição não coletada
+          {link ? (
+            <>
+              {" "}— veja no{" "}
+              <a className="link-externo" href={link} target="_blank" rel="noreferrer">Kanboard</a>.
+            </>
+          ) : "."}
+        </p>
+      ) : detalhe.descricao ? (
+        <div className="descricao__corpo">
+          {/* HTML de descricaoHtml: Markdown sem imagens, HTML cru escapado, links só http/https/mailto (markdown.test.ts). */}
+          <div className="descricao__texto" dangerouslySetInnerHTML={{ __html: descricaoHtml(detalhe.descricao) }} />
+          {detalhe.descricao_cortada && (
+            <p className="nota descricao__corte">
+              … continua
+              {link ? (
+                <>
+                  {" "}no{" "}
+                  <a className="link-externo" href={link} target="_blank" rel="noreferrer">Kanboard</a>.
+                </>
+              ) : " no Kanboard."}
+            </p>
+          )}
+        </div>
+      ) : (
+        <p className="nota card-secao__nota">Sem descrição no Kanboard.</p>
+      )}
+    </section>
   );
 }

@@ -9,6 +9,8 @@ import { Fila } from "../componentes/Fila";
 import { Lacunas } from "../componentes/Sinal";
 import { Glossario } from "../componentes/Glossario";
 import { DEFINICAO } from "../data/glossario";
+import type { Consulta, MetricaLista } from "../data/listas";
+import { Icone } from "../componentes/Icone";
 
 interface Props {
   dados: Dashboard;
@@ -19,9 +21,11 @@ interface Props {
   hrefPessoa: (id: number) => string;
   soForaDoPainel: boolean;
   alternarForaDoPainel?: () => void;
+  /** Números viram links para a lista de cards. Ausente no modo TV. */
+  hrefLista?: (c: Consulta) => string;
 }
 
-export function Agora({ dados, filtro, agora, hrefCard, hrefPessoa, soForaDoPainel, alternarForaDoPainel }: Props) {
+export function Agora({ dados, filtro, agora, hrefCard, hrefPessoa, soForaDoPainel, alternarForaDoPainel, hrefLista }: Props) {
   // Os contadores do dia só afirmam o que foi medido: com a coleta de outro
   // dia, contam aquele dia; com a coleta parada, dizem até que horas.
   const estado = estadoAtualizacao(dados, agora);
@@ -33,6 +37,15 @@ export function Agora({ dados, filtro, agora, hrefCard, hrefPessoa, soForaDoPain
   const momentoFila = estado.outroDia ? `em ${diaCurto(diaLocal(referencia))}` : estado.atrasado && estado.momento ? `às ${hora(estado.momento)}` : "agora";
 
   const k = kpisHoje(dados, referencia, filtro);
+  // A lista abre no MESMO dia que os contadores afirmam (hoje, ou o dia da última coleta).
+  const diaLista = { tipo: "dia" as const, dia: diaLocal(referencia) };
+  const lista = (metrica: MetricaLista) => hrefLista?.({ metrica, periodo: diaLista, filtro });
+  // Só aparece quando o quadro empilha (< 1100px): na grade larga a fila já está ao lado.
+  const verFila = () => {
+    const fila = document.getElementById("fila");
+    fila?.scrollIntoView({ behavior: "smooth", block: "start" });
+    fila?.focus({ preventScroll: true });
+  };
   const ontem = diaCurto(k.diaComparacao);
   // Na segunda-feira a comparação é com a sexta: "Ontem" ali seria falso.
   const diaDeOntem = diaLocal(new Date(agora.getFullYear(), agora.getMonth(), agora.getDate() - 1));
@@ -44,14 +57,28 @@ export function Agora({ dados, filtro, agora, hrefCard, hrefPessoa, soForaDoPain
   return (
     <div className="agora">
       <dl className={`kpis${velho ? " kpis--velho" : ""}`} aria-label={`Contadores de ${quando}`}>
-        <Kpi rotulo={`Em QA ${momentoFila}`} valor={k.emQaAgora} tom="entrada" sub={novos > 0 ? `${novos} novo${novos > 1 ? "s" : ""} nesta coleta` : "na coluna Teste/QA"} />
-        <Kpi rotulo={`Entraram ${quando}`} valor={k.hoje.entraram} tom="entrada" anterior={k.comparacao.entraram} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
-        <Kpi rotulo={`Aprovados ${quando}`} valor={k.hoje.aprovados} tom="aprovado" anterior={k.comparacao.aprovados} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
-        <Kpi rotulo={`Reprovados ${quando}`} valor={k.hoje.reprovados} tom="reprovado" anterior={k.comparacao.reprovados} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
+        <Kpi
+          rotulo={`Em QA ${momentoFila}`}
+          valor={k.emQaAgora}
+          tom="entrada"
+          href={lista("em_qa")}
+          sub={
+            <>
+              {novos > 0 ? `${novos} novo${novos > 1 ? "s" : ""} nesta coleta` : "na coluna Teste/QA"}
+              <button type="button" className="link-botao" onClick={verFila}>
+                ver fila <Icone nome="baixo" tamanho={12} />
+              </button>
+            </>
+          }
+        />
+        <Kpi rotulo={`Entraram ${quando}`} valor={k.hoje.entraram} tom="entrada" href={lista("entrou_qa")} anterior={k.comparacao.entraram} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
+        <Kpi rotulo={`Aprovados ${quando}`} valor={k.hoje.aprovados} tom="aprovado" href={lista("qa_para_concluida")} anterior={k.comparacao.aprovados} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
+        <Kpi rotulo={`Reprovados ${quando}`} valor={k.hoje.reprovados} tom="reprovado" href={lista("qa_para_correcao")} anterior={k.comparacao.reprovados} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
         <Kpi
           rotulo={`Concluídos sem QA ${quando}`}
           valor={k.hoje.concluidosSemQa}
           tom="sem-qa"
+          href={lista("concluida")}
           anterior={k.comparacao.concluidosSemQa}
           rotuloAnterior={ontem} dicaAnterior={dicaOntem}
           dica={DEFINICAO.semQa}

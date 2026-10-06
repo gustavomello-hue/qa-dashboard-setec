@@ -14,6 +14,7 @@ import { Glossario } from "../componentes/Glossario";
 import { DEFINICAO } from "../data/glossario";
 import { Icone } from "../componentes/Icone";
 import { NotasQa } from "../componentes/NotasQa";
+import type { Consulta, MetricaLista } from "../data/listas";
 
 interface Props {
   dados: Dashboard;
@@ -24,6 +25,8 @@ interface Props {
   periodoAutomatico?: boolean;
   alternarInativos: () => void;
   hrefPessoa: (id: number) => string;
+  /** Números viram links para a lista de cards. */
+  hrefLista?: (c: Consulta) => string;
 }
 
 interface Coluna {
@@ -33,33 +36,35 @@ interface Coluna {
   valor: (r: Resumo, uid: number) => number | null;
   formato?: "pct";
   tom?: string;
+  /** Lista de cards que a célula abre. */
+  lista?: MetricaLista;
 }
 
 const SEMANAS = 8;
 
 function colunasDev(carga: (uid: number) => number): Coluna[] {
   return [
-    { id: "entregues", rotulo: "Entregues", dica: DEFINICAO.entregues, valor: (r) => r.entregues, tom: "entrada" },
-    { id: "aprovados", rotulo: "Aprovados", dica: DEFINICAO.aprovados, valor: (r) => r.aprovados, tom: "aprovado" },
-    { id: "reprovacoes", rotulo: "Reprovações", dica: DEFINICAO.reprovacoes, valor: (r) => r.reprovacoes, tom: "reprovado" },
-    { id: "taxa", rotulo: "% cards reprov.", dica: DEFINICAO.cardsReprovados, valor: (r) => taxaReprovacao(r), formato: "pct" },
-    { id: "devolvidos", rotulo: "Devolvidos", dica: DEFINICAO.devolvidos, valor: (r) => r.devolvidos },
-    { id: "concluidos", rotulo: "Concluídos", dica: DEFINICAO.concluidos, valor: (r) => concluidos(r) },
-    { id: "semqa", rotulo: "Sem QA", dica: DEFINICAO.semQa, valor: (r) => r.concluidosSemQa, tom: "sem-qa" },
-    { id: "criados", rotulo: "Criados", dica: DEFINICAO.criados, valor: (r) => r.criados },
-    { id: "carga", rotulo: "Abertos", dica: DEFINICAO.abertos, valor: (_, uid) => carga(uid) },
+    { id: "entregues", lista: "entregue_qa", rotulo: "Entregues", dica: DEFINICAO.entregues, valor: (r) => r.entregues, tom: "entrada" },
+    { id: "aprovados", lista: "aprovado", rotulo: "Aprovados", dica: DEFINICAO.aprovados, valor: (r) => r.aprovados, tom: "aprovado" },
+    { id: "reprovacoes", lista: "reprovado", rotulo: "Reprovações", dica: DEFINICAO.reprovacoes, valor: (r) => r.reprovacoes, tom: "reprovado" },
+    { id: "taxa", lista: "cards_reprovados", rotulo: "% cards reprov.", dica: DEFINICAO.cardsReprovados, valor: (r) => taxaReprovacao(r), formato: "pct" },
+    { id: "devolvidos", lista: "devolvido", rotulo: "Devolvidos", dica: DEFINICAO.devolvidos, valor: (r) => r.devolvidos },
+    { id: "concluidos", lista: "concluidos", rotulo: "Concluídos", dica: DEFINICAO.concluidos, valor: (r) => concluidos(r) },
+    { id: "semqa", lista: "concluido_sem_qa", rotulo: "Sem QA", dica: DEFINICAO.semQa, valor: (r) => r.concluidosSemQa, tom: "sem-qa" },
+    { id: "criados", lista: "criado", rotulo: "Criados", dica: DEFINICAO.criados, valor: (r) => r.criados },
+    { id: "carga", lista: "abertos", rotulo: "Abertos", dica: DEFINICAO.abertos, valor: (_, uid) => carga(uid) },
   ];
 }
 
 function colunasQa(carga: (uid: number) => number): Coluna[] {
   return [
-    { id: "testados", rotulo: "Testados", dica: DEFINICAO.testados, valor: (r) => testados(r), tom: "entrada" },
-    { id: "aprovou", rotulo: "Aprovou", dica: DEFINICAO.aprovou, valor: (r) => r.testouAprovado, tom: "aprovado" },
-    { id: "reprovou", rotulo: "Reprovou", dica: DEFINICAO.reprovou, valor: (r) => r.testouReprovado, tom: "reprovado" },
-    { id: "taxa", rotulo: "% cards reprov.", dica: DEFINICAO.cardsReprovouQa, valor: (r) => taxaReprovacaoQa(r), formato: "pct" },
-    { id: "devolveu", rotulo: "Devolveu", dica: DEFINICAO.devolveu, valor: (r) => r.testouDevolvido },
-    { id: "criados", rotulo: "Criados", dica: DEFINICAO.criados, valor: (r) => r.criados },
-    { id: "carga", rotulo: "Abertos", dica: DEFINICAO.abertos, valor: (_, uid) => carga(uid) },
+    { id: "testados", lista: "testados", rotulo: "Testados", dica: DEFINICAO.testados, valor: (r) => testados(r), tom: "entrada" },
+    { id: "aprovou", lista: "testou_aprovado", rotulo: "Aprovou", dica: DEFINICAO.aprovou, valor: (r) => r.testouAprovado, tom: "aprovado" },
+    { id: "reprovou", lista: "testou_reprovado", rotulo: "Reprovou", dica: DEFINICAO.reprovou, valor: (r) => r.testouReprovado, tom: "reprovado" },
+    { id: "taxa", lista: "cards_reprovou", rotulo: "% cards reprov.", dica: DEFINICAO.cardsReprovouQa, valor: (r) => taxaReprovacaoQa(r), formato: "pct" },
+    { id: "devolveu", lista: "testou_devolvido", rotulo: "Devolveu", dica: DEFINICAO.devolveu, valor: (r) => r.testouDevolvido },
+    { id: "criados", lista: "criado", rotulo: "Criados", dica: DEFINICAO.criados, valor: (r) => r.criados },
+    { id: "carga", lista: "abertos", rotulo: "Abertos", dica: DEFINICAO.abertos, valor: (_, uid) => carga(uid) },
   ];
 }
 
@@ -68,7 +73,8 @@ const SPARK: Record<"dev" | "qa", { metricas: Metrica[]; rotulo: string }> = {
   qa: { metricas: ["testou_aprovado", "testou_reprovado"], rotulo: "testados" },
 };
 
-export function Equipe({ dados, filtro, periodo, inativos, periodoAutomatico, alternarInativos, hrefPessoa }: Props) {
+export function Equipe({ dados, filtro, periodo, inativos, periodoAutomatico, alternarInativos, hrefPessoa, hrefLista }: Props) {
+  const hrefCelula = hrefLista && ((metrica: MetricaLista, uid: number) => hrefLista({ metrica, periodo, pessoa: uid, filtro }));
   const agora = new Date();
   const atual = intervalo(periodo, agora);
   const atribs = atribuicoesDe(dados, atual, filtro);
@@ -99,6 +105,7 @@ export function Equipe({ dados, filtro, periodo, inativos, periodoAutomatico, al
           {baseParcial
             ? <>A base {rotuloAnterior(periodo, agora)} foi medida só em parte: sem variação.</>
             : <>Sob cada número, a diferença para {rotuloAnterior(periodo, agora)}.</>}
+          {hrefLista && <> Clique num número para ver os cards.</>}
         </p>
         <NotasQa dados={dados} filtro={filtro} meses={[periodo.tipo === "mes" ? periodo.mes : mesLocal(agora)]} />
         <Glossario />
@@ -123,6 +130,7 @@ export function Equipe({ dados, filtro, periodo, inativos, periodoAutomatico, al
             rotuloAnterior={rotuloAnterior(periodo, agora) + (baseParcial ? " (parcial)" : "")}
             semDelta={baseParcial}
             hrefPessoa={hrefPessoa}
+            hrefCelula={hrefCelula}
             rodape={
               g === "qa" ? (
                 <p className="nota">
@@ -154,16 +162,17 @@ export function Equipe({ dados, filtro, periodo, inativos, periodoAutomatico, al
           semTitulo
           pessoas={pessoasFora(dados, comAtividade)}
           colunas={[
-            { id: "criados", rotulo: "Criados", dica: DEFINICAO.criados, valor: (r) => r.criados },
-            { id: "entregues", rotulo: "Entregues", dica: DEFINICAO.entregues, valor: (r) => r.entregues, tom: "entrada" },
-            { id: "semqa", rotulo: "Sem QA", dica: DEFINICAO.semQa, valor: (r) => r.concluidosSemQa, tom: "sem-qa" },
-            { id: "naoqa", rotulo: "Saídas de QA", dica: DEFINICAO.naoQa, valor: (r) => r.saidasNaoQa },
+            { id: "criados", lista: "criado", rotulo: "Criados", dica: DEFINICAO.criados, valor: (r) => r.criados },
+            { id: "entregues", lista: "entregue_qa", rotulo: "Entregues", dica: DEFINICAO.entregues, valor: (r) => r.entregues, tom: "entrada" },
+            { id: "semqa", lista: "concluido_sem_qa", rotulo: "Sem QA", dica: DEFINICAO.semQa, valor: (r) => r.concluidosSemQa, tom: "sem-qa" },
+            { id: "naoqa", lista: "saida_qa_nao_qa", rotulo: "Saídas de QA", dica: DEFINICAO.naoQa, valor: (r) => r.saidasNaoQa },
           ]}
           resumo={(uid) => porPessoa.get(uid) ?? resumoVazio()}
           anterior={(uid) => antes.get(uid) ?? resumoVazio()}
           rotuloAnterior={rotuloAnterior(periodo, agora) + (baseParcial ? " (parcial)" : "")}
           semDelta={baseParcial}
           hrefPessoa={hrefPessoa}
+          hrefCelula={hrefCelula}
           mostrarGrupo
         />
       </details>
@@ -186,6 +195,8 @@ interface TabelaProps {
   /** Base parcial: sem diferença sob os números. */
   semDelta?: boolean;
   hrefPessoa: (id: number) => string;
+  /** Link da célula para a lista de cards (ausente no modo TV). */
+  hrefCelula?: (metrica: MetricaLista, uid: number) => string;
   rodape?: React.ReactNode;
   semTitulo?: boolean;
   mostrarGrupo?: boolean;
@@ -214,7 +225,7 @@ function formatar(v: number | null, c: Coluna): string {
 }
 
 function TabelaGrupo({
-  grupo, pessoas, colunas, resumo, anterior, tendencia, rotuloTendencia, parcial = false, rotuloAnterior, semDelta = false, hrefPessoa, rodape, semTitulo, mostrarGrupo,
+  grupo, pessoas, colunas, resumo, anterior, tendencia, rotuloTendencia, parcial = false, rotuloAnterior, semDelta = false, hrefPessoa, hrefCelula, rodape, semTitulo, mostrarGrupo,
 }: TabelaProps) {
   // Abre em ordem alfabética (sem ranking); clicar no cabeçalho ordena.
   const [ordem, setOrdem] = useState<{ id: string; desc: boolean } | null>(null);
@@ -280,13 +291,14 @@ function TabelaGrupo({
                     {colunas.map((c) => {
                       const v = c.valor(r, p.user_id);
                       const va = c.id === "carga" ? null : c.valor(a, p.user_id);
+                      const href = c.lista && v !== null && v > 0 ? hrefCelula?.(c.lista, p.user_id) : undefined;
                       return (
                         <td
                           key={c.id}
                           className={`num${!v ? " zero" : ""}`}
                           title={va === null ? undefined : `${rotuloAnterior}: ${formatar(va, c)}`}
                         >
-                          {formatar(v, c)}
+                          {href ? <a className="link-numero" href={href}>{formatar(v, c)}</a> : formatar(v, c)}
                           {!semDelta && <Delta atual={v} anterior={va} pct={c.formato === "pct"} />}
                         </td>
                       );

@@ -19,8 +19,10 @@ import { Mensal } from "./telas/Mensal";
 import { Card } from "./telas/Card";
 import { Reuniao } from "./telas/Reuniao";
 import { Projetos } from "./telas/Projetos";
+import { Lista } from "./telas/Lista";
+import { rotaDaConsulta, type Consulta } from "./data/listas";
 
-const NOMES: Record<Tela, string> = { agora: "Agora", equipe: "Equipe", pessoa: "Pessoa", mensal: "Mensal", card: "Card", reuniao: "Reunião", projetos: "Projetos" };
+const NOMES: Record<Tela, string> = { agora: "Agora", equipe: "Equipe", pessoa: "Pessoa", mensal: "Mensal", card: "Card", reuniao: "Reunião", projetos: "Projetos", cards: "Lista de cards" };
 const PREFIXOS: Prefixo[] = ["DEV", "WEB", "MOB", "Demandas"];
 
 export function App() {
@@ -129,6 +131,8 @@ function Painel({ dados, erro, recarregar, protegido }: { dados: Dashboard; erro
   const hrefCard = (card: number) => escreverRota({ tela: "card", filtro: {}, card });
   const hrefPessoa = (pessoa: number) => escreverRota({ ...rota, tela: "pessoa", pessoa, tv: false });
   const hrefTela = (t: Tela) => escreverRota(rotaDaTela(rota, t));
+  // Números viram links para a lista de cards (fora do modo TV, que não se clica).
+  const hrefLista = rota.tv ? undefined : (c: Consulta) => escreverRota(rotaDaConsulta(c));
 
   // Título da aba: a tela e, se a coleta parou, há quanto tempo.
   const estado = estadoAtualizacao(dados, agora);
@@ -152,7 +156,7 @@ function Painel({ dados, erro, recarregar, protegido }: { dados: Dashboard; erro
     .filter((p) => !filtro.prefixo || p.prefixo === filtro.prefixo)
     .sort((a, b) => nomeCurto(a.nome).localeCompare(nomeCurto(b.nome)));
   const usaPeriodo = tela === "equipe" || tela === "pessoa";
-  const usaFiltro = tela !== "card" && tela !== "reuniao" && tela !== "projetos";
+  const usaFiltro = tela !== "card" && tela !== "reuniao" && tela !== "projetos" && tela !== "cards";
   const meses = mesesDisponiveis(dados.equipe?.desde ?? dados.regras.qa_confiavel_desde, new Date());
 
   // Apresentação da reunião: a tela inteira é da lâmina, sem barra nem filtros.
@@ -173,7 +177,7 @@ function Painel({ dados, erro, recarregar, protegido }: { dados: Dashboard; erro
                   <a
                     className="aba"
                     href={hrefTela(t)}
-                    aria-current={tela === t || (t === "equipe" && tela === "pessoa") ? "page" : undefined}
+                    aria-current={tela === t || (t === "equipe" && (tela === "pessoa" || (tela === "cards" && rota.pessoa !== undefined))) ? "page" : undefined}
                     aria-keyshortcuts={String(i + 1)}
                   >
                     <kbd className="tecla" aria-hidden="true">{i + 1}</kbd>
@@ -261,7 +265,7 @@ function Painel({ dados, erro, recarregar, protegido }: { dados: Dashboard; erro
       <AvisoColeta dados={dados} agora={agora} />
       {versaoNova && !rota.tv && <AvisoVersao />}
 
-      <main className="tela" key={`${tela}|${rota.pessoa ?? ""}|${rota.card ?? ""}|${rota.detalhe ?? ""}`} ref={principal} tabIndex={-1}>
+      <main className="tela" key={`${tela}|${rota.pessoa ?? ""}|${rota.card ?? ""}|${rota.detalhe ?? ""}|${rota.metrica ?? ""}`} ref={principal} tabIndex={-1}>
         {tela !== "pessoa" && <h1 className="sr">{NOMES[tela]}</h1>}
         {tela === "agora" && (
           <Agora
@@ -270,6 +274,7 @@ function Painel({ dados, erro, recarregar, protegido }: { dados: Dashboard; erro
             agora={agora}
             hrefCard={hrefCard}
             hrefPessoa={hrefPessoa}
+            hrefLista={hrefLista}
             soForaDoPainel={!rota.tv && !!rota.fora}
             alternarForaDoPainel={rota.tv ? undefined : () => ir({ fora: !rota.fora })}
           />
@@ -283,6 +288,7 @@ function Painel({ dados, erro, recarregar, protegido }: { dados: Dashboard; erro
             periodoAutomatico={!rota.periodo && inicioDeMes(agora)}
             alternarInativos={() => ir({ inativos: !rota.inativos })}
             hrefPessoa={hrefPessoa}
+            hrefLista={hrefLista}
           />
         )}
         {tela === "pessoa" && (
@@ -292,12 +298,16 @@ function Painel({ dados, erro, recarregar, protegido }: { dados: Dashboard; erro
             periodo={periodo}
             uid={rota.pessoa}
             hrefCard={hrefCard}
+            hrefLista={hrefLista}
             hrefVoltar={escreverRota({ ...rota, tela: "equipe", pessoa: undefined })}
           />
         )}
         {tela === "mensal" && <Mensal dados={dados} filtro={filtro} />}
         {tela === "card" && <Card dados={dados} card={rota.card} abrir={abrirCard} />}
         {tela === "reuniao" && <Reuniao dados={dados} rota={rota} ir={ir} aviso={null} />}
+        {tela === "cards" && (
+          <Lista dados={dados} rota={rota} agora={agora} ir={irPara} hrefCard={hrefCard} hrefPessoa={hrefPessoa} />
+        )}
         {tela === "projetos" && (
           <Projetos
             dados={dados}

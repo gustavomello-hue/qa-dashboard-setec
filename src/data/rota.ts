@@ -2,18 +2,20 @@ import { useEffect, useState } from "react";
 import type { Prefixo } from "./contrato";
 import type { Filtro } from "./seletores";
 import { escreverPeriodo, lerPeriodo, type Periodo } from "./periodo";
+import { METRICAS_LISTA, lerPeriodoLista, type MetricaLista } from "./listas";
 
 // Tela e filtros moram no hash da URL (#/equipe?prefixo=DEV&periodo=2026-09)
 // para qualquer visão poder ser compartilhada por link. Hash, e não caminho,
 // porque o GitHub Pages não sabe redirecionar /equipe para o index.html.
 
-export type Tela = "agora" | "equipe" | "pessoa" | "mensal" | "card" | "reuniao" | "projetos";
+export type Tela = "agora" | "equipe" | "pessoa" | "mensal" | "card" | "reuniao" | "projetos" | "cards";
 /** Telas do menu. "pessoa" abre clicando num nome. */
 export const TELAS: Tela[] = ["agora", "equipe", "mensal", "card", "reuniao", "projetos"];
 
 /** Modo reunião: mensal da equipe ou conversa individual. */
 export type TipoReuniao = "mensal" | "individual";
-const TODAS: Tela[] = [...TELAS, "pessoa"];
+/** "pessoa" e "cards" abrem por clique, fora do menu. */
+const TODAS: Tela[] = [...TELAS, "pessoa", "cards"];
 
 export interface Rota {
   tela: Tela;
@@ -36,6 +38,12 @@ export interface Rota {
   slide?: number;
   /** Projetos: project_id aberto no detalhe. */
   detalhe?: number;
+  /** Lista de cards: qual número foi aberto. */
+  metrica?: MetricaLista;
+  /** Lista de cards: período de um dia (AAAA-MM-DD). Só nesta tela. */
+  dia?: string;
+  /** Lista de cards: a URL trazia um período que não se lê (link editado à mão). */
+  periodoInvalido?: boolean;
 }
 
 const PREFIXOS: Prefixo[] = ["DEV", "WEB", "MOB", "Demandas", "Outros"];
@@ -63,6 +71,17 @@ export function lerRota(hash: string): Rota {
   const slide = inteiro(p.get("slide"));
   const rota: Rota = { tela, filtro };
   if (periodo) rota.periodo = periodo;
+  if (tela === "cards") {
+    const bruto = p.get("periodo");
+    const lido = lerPeriodoLista(bruto);
+    if (lido?.tipo === "dia") rota.dia = lido.dia;
+    if (bruto !== null && !lido) {
+      rota.periodoInvalido = true;
+      delete rota.periodo;
+    }
+    const metrica = p.get("metrica");
+    if (metrica && (METRICAS_LISTA as readonly string[]).includes(metrica)) rota.metrica = metrica as MetricaLista;
+  }
   if (card !== undefined) rota.card = card;
   if (pessoa !== undefined) rota.pessoa = pessoa;
   if (reuniao === "mensal" || reuniao === "individual") rota.reuniao = reuniao;
@@ -77,12 +96,14 @@ export function escreverRota(r: Rota): string {
   const p = new URLSearchParams();
   if (r.filtro.prefixo) p.set("prefixo", r.filtro.prefixo);
   if (r.filtro.projeto !== undefined) p.set("projeto", String(r.filtro.projeto));
-  if (r.periodo) p.set("periodo", escreverPeriodo(r.periodo));
+  if (r.dia) p.set("periodo", r.dia);
+  else if (r.periodo) p.set("periodo", escreverPeriodo(r.periodo));
   if (r.card !== undefined) p.set("card", String(r.card));
   if (r.pessoa !== undefined) p.set("pessoa", String(r.pessoa));
   if (r.reuniao) p.set("reuniao", r.reuniao);
   if (r.slide !== undefined) p.set("slide", String(r.slide));
   if (r.detalhe !== undefined) p.set("detalhe", String(r.detalhe));
+  if (r.metrica) p.set("metrica", r.metrica);
   for (const f of FLAGS) if (r[f]) p.set(f, "");
   // Flags sem valor ficam "?tv", não "?tv=".
   const busca = p.toString().replace(/\b(tv|fora|inativos)=(&|$)/g, "$1$2");
@@ -91,7 +112,7 @@ export function escreverRota(r: Rota): string {
 
 /** Rota ao trocar de aba: a tela nova começa limpa (sem pessoa, card de outra tela ou detalhe de projeto). */
 export function rotaDaTela(r: Rota, tela: Tela): Rota {
-  return { ...r, tela, tv: false, pessoa: undefined, card: tela === "card" ? r.card : undefined, detalhe: undefined };
+  return { ...r, tela, tv: false, pessoa: undefined, card: tela === "card" ? r.card : undefined, detalhe: undefined, metrica: undefined, dia: undefined, periodoInvalido: undefined };
 }
 
 export function useRota(): [Rota, (r: Rota) => void] {

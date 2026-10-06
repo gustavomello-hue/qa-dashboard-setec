@@ -289,6 +289,36 @@ Trilho rebaixado de 10px com segmentos de no mínimo 3px separados por 1px: A in
 ### Feed de movimentações e linha do tempo
 Faixas agrupadas por dia (Label-sm), com horário em mono tinta 3 à esquerda, rótulo do evento com marcador quadrado, #card e título, e "pessoa · por quem moveu" em meta. A faixa que chegou na última coleta leva a marca "novo" (quadrado Azul Entrada + texto) e, na primeira vez que aquela coleta aparece na aba, entra deslizando 10px da esquerda a partir de faixa realce (560ms, cubic-bezier(0.16, 1, 0.3, 1)); voltar à tela não repete o gesto, e dado de coleta parada não é "novo". Com movimento reduzido, nada anima. Na linha do tempo do Card, os campos (quando · evento · de→para · tempo na coluna) ficam em caixas de filete, e o tempo em Teste/QA vem em tinta 1.
 
+### Número clicável
+Os números principais abrem a lista dos cards que eles contam: os KPIs da Agora e da Pessoa e as células da Equipe.
+- **Em repouso:** sublinhado discreto, sempre visível, de 1px em --filete, afastado do número 0,2em. O peso e a cor do número não mudam.
+- **Hover e foco:** o sublinhado escurece para tinta 3, e o KPI vai para faixa realce.
+- **Não viram link:** zero, "—", linha de total e números do modo TV e da Reunião.
+- **"ver fila":** texto pequeno sublinhado no rodapé do KPI "Em QA", com a seta desenhada. Só aparece abaixo de 1100px, quando a fila sai da tela.
+
+### Lista de cards (#/cards)
+- **Chips de filtro:** ficam no trilho, com rótulo em Label-sm tinta 3, o valor e um × de 20px.
+  - A métrica e o período se trocam por select embutido no chip.
+  - O período aceita um dia (campo de data em mono).
+- **Baia:** a placa leva o quadrado de 7px da cor do estado contado e a frase "N eventos em M cards" (só "M cards" quando N = M).
+- **Ações:** busca, ordenação e "Copiar números", que confirma em tinta 3.
+- **Linhas:** pilha de faixas como a Fila de QA.
+  - O porta-faixa tem a cor do estado contado; em "Concluídos" e "Testados", a do desfecho de cada card, com o nome escrito.
+  - Projeto e coluna cortam em 18ch, para o título ficar com a largura.
+  - A coluna "Vezes" só aparece quando algum card repete.
+- **Celular:** projeto, pessoa, data e coluna descem para a linha de apoio, que quebra em vez de cortar.
+
+### Descrição do card
+- **Posição:** seção "Descrição" sobre a linha do tempo, na coluna principal da tela Card.
+- **Texto:** Public Sans 14px com entrelinha 1,6 e medida de 75ch, para ler.
+  - Títulos do Markdown em 16px/600 (h1 e h2) e 14px/600 (h3 em diante).
+  - `code` e `pre` em mono 12px sobre o trilho, com 2px de canto; tabelas com filetes e rolagem lateral.
+  - Links sublinhados em n5.
+- **Rolagem:** a partir de 1300px a descrição rola por dentro, até 55vh.
+- **O que não entra:** imagens somem e HTML cru vira texto.
+- **Estados:** "Descrição não coletada", "Sem descrição no Kanboard" e "… continua no Kanboard", como nota.
+- **Ficha:** ganha os campos do Kanboard antes dos de QA (coluna atual, responsável, datas, tempos, categoria, referência). A cor do Kanboard só aparece escrita ("vermelho"), nunca pintada: cor no quadro é só estado.
+
 ### Gráficos
 ECharts em canvas, lendo as cores dos tokens em tempo de execução e redesenhando quando o tema do sistema muda. Sem animação, legenda de quadrados 10×10 no topo, eixos e grade em filete, rótulos de eixo em mono 11px tinta 3, tooltip de faixa com filete e 2px de canto, ponteiro de eixo em sombra leve. Barras com no máximo 28px. Desenhados sobre uma faixa larga dentro da baia. Linha de tendência só com 4 meses ou mais; antes disso, % e tempo médio aparecem como mini-barras neutras (4px, n6 sobre o trilho) dentro do Resumo. O mês corrente leva "*" no eixo e na tabela.
 
