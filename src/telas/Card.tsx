@@ -113,7 +113,8 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
                   {NOME_EVENTO[e.evento] ?? e.evento}
                 </span>
                 <span className="linha-tempo__de-para">
-                  {e.de_coluna ?? "?"} <Icone nome="seta" tamanho={12} /> {e.para_coluna ?? "?"}
+                  {/* Entrada derivada de card criado direto em Teste/QA: não veio de coluna nenhuma, nasceu ali. */}
+                  {e.de_coluna ?? (e.evento === "entrou_qa" ? "criado" : "?")} <Icone nome="seta" tamanho={12} /> {e.para_coluna ?? "?"}
                   {e.movido_por && <span className="meta"> · por {nome(e.movido_por)}</span>}
                   {e.origem === "atividade" && <span className="meta"> · amostra do Kanboard</span>}
                 </span>

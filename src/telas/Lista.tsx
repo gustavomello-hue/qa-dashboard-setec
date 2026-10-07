@@ -30,6 +30,8 @@ const TOM_LISTA: Record<MetricaLista, Tom> = {
   qa_para_concluida: "aprovado",
   qa_para_correcao: "reprovado",
   concluida: "sem-qa",
+  criada: "neutro",
+  movimentacao: "neutro",
   entregue_qa: "entrada",
   aprovado: "aprovado",
   reprovado: "reprovado",
@@ -44,6 +46,7 @@ const TOM_LISTA: Record<MetricaLista, Tom> = {
   cards_reprovou: "reprovado",
   testou_devolvido: "devolvido",
   saida_qa_nao_qa: "neutro",
+  movimentado: "neutro",
   abertos: "neutro",
 };
 

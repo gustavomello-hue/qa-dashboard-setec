@@ -17,3 +17,12 @@ describe("glossário (cards clicáveis)", () => {
     expect(verbete?.definicao).toContain("N×");
   });
 });
+
+describe("glossário (criados e movimentados)", () => {
+  it("explica Criados, Movimentados e a entrada de card criado em QA", () => {
+    const termos = GLOSSARIO.map((g) => g.termo);
+    expect(termos).toEqual(expect.arrayContaining(["Criados", "Movimentados"]));
+    expect(DEFINICAO.entregues).toContain("criados direto em Teste/QA");
+    expect(DEFINICAO.movimentou).toContain("Interrompidas");
+  });
+});

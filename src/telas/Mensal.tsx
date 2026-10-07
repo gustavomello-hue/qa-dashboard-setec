@@ -176,6 +176,7 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
         <header className="bloco__cabeca">
           <h2 id="t-volume" className="bloco__titulo">Volume de QA por mês</h2>
           <p className="nota">Desde {desde}: antes disso só há amostra incompleta. * mês em andamento.</p>
+          <p className="nota">Desde 07/10/2026 os cards criados direto em Teste/QA contam como entrada; ago/26 +65, set/26 +42.</p>
           <NotasQa dados={dados} filtro={filtro} meses={linhas.map((l) => l.ano_mes)} />
         </header>
         <Grafico opcoes={volume} altura={220} rotulo={`Entradas, aprovados e reprovados por mês desde ${desde}`} />

@@ -2523,3 +2523,23 @@ a.botao--primario {
     overflow: auto;
   }
 }
+
+/* ---------- Agora: sete contadores ---------- */
+/* auto-fit deixava 6+1 entre 700 e 1160px, com 5 células vazias pintadas de filete,
+   e na grade de altura fixa (>= 1100px) a faixa dobrava de altura. */
+@media (min-width: 1100px) {
+  .agora .kpis {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 701px) and (max-width: 1099px) {
+  .agora .kpis {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  /* 4 + 3: o sétimo ocupa duas células, sem vão no fim da faixa. */
+  .agora .kpis > .kpi:nth-child(7):last-child {
+    grid-column: span 2;
+  }
+}

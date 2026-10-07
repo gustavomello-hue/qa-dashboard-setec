@@ -54,16 +54,22 @@ export interface ContagemDia {
   reprovados: number;
   /** Foram para Concluídas vindos de outra coluna, sem passar por Teste/QA (evento 'concluida'). */
   concluidosSemQa: number;
+  /** Cards criados no dia, em qualquer coluna (evento 'criada'). */
+  criados: number;
+  /** Mudanças de coluna fora do fluxo de QA (evento 'movimentacao'; 'movimentacao_perdida' não conta). */
+  movimentados: number;
 }
 
 export function contarDia(eventos: Evento[], dia: string, passa: (pid: number) => boolean): ContagemDia {
-  const c: ContagemDia = { entraram: 0, aprovados: 0, reprovados: 0, concluidosSemQa: 0 };
+  const c: ContagemDia = { entraram: 0, aprovados: 0, reprovados: 0, concluidosSemQa: 0, criados: 0, movimentados: 0 };
   for (const e of eventos) {
     if (e.dia !== dia || !passa(e.project_id)) continue;
     if (e.evento === "entrou_qa") c.entraram++;
     else if (e.evento === "qa_para_concluida") c.aprovados++;
     else if (e.evento === "qa_para_correcao") c.reprovados++;
     else if (e.evento === "concluida") c.concluidosSemQa++;
+    else if (e.evento === "criada") c.criados++;
+    else if (e.evento === "movimentacao") c.movimentados++;
   }
   return c;
 }

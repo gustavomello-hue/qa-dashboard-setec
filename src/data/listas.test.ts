@@ -48,9 +48,12 @@ const d = dashboard({
     at("concluido_sem_qa", 10, 5), at("concluido_sem_qa", 10, 6, "2026-08-30"),  // agosto: fora de setembro
     at("testou_aprovado", 5, 1), at("testou_reprovado", 5, 1), at("testou_reprovado", 5, 2),
     at("testou_devolvido", 5, 7), at("criado", 10, 8),
+    at("movimentado", 10, 12), at("movimentado", 10, 12), at("movimentado", 0, 13),
   ],
   eventos: [ev("entrou_qa", 1), ev("entrou_qa", 1), ev("qa_para_concluida", 2), ev("concluida", 3),
-            ev("concluida", 4, "2026-10-06", 2), ev("concluida", 5, "2026-10-05")],
+            ev("concluida", 4, "2026-10-06", 2), ev("concluida", 5, "2026-10-05"),
+            { ...ev("criada", 14), creator_nome: "Pessoa 5" }, ev("movimentacao", 12), ev("movimentacao", 12),
+            ev("movimentacao_perdida", 12)],
   fila_qa: [
     { task_id: 1, titulo: "T1", projeto: "DEV: A", project_id: 1, coluna: "Teste/QA", designado: "Pessoa 10", criador: "",
       prioridade: 0, entrou_em: 1_790_000_100, dias_em_qa: 1, retornos: 0, link: "" },
@@ -81,6 +84,15 @@ describe("paridade: a lista soma exatamente o número clicado", () => {
     const c = contarDia(d.eventos, "2026-10-06", passaNoFiltro(d, { prefixo: "WEB" }));
     expect(lista({ metrica: "concluida", periodo: hoje, filtro: { prefixo: "WEB" } }).total).toBe(c.concluidosSemQa);
   });
+  it("Agora: Criados e Movimentados", () => {
+    const c = contarDia(d.eventos, "2026-10-06", passaNoFiltro(d, {}));
+    expect(lista({ metrica: "criada", periodo: hoje }).total).toBe(c.criados);
+    expect(lista({ metrica: "movimentacao", periodo: hoje }).total).toBe(c.movimentados);
+    expect(c.movimentados).toBe(2);
+  });
+  it("Criados: a pessoa da linha é quem criou", () => {
+    expect(lista({ metrica: "criada", periodo: hoje }).linhas[0].pessoa).toBe("P5");
+  });
   it("Agora: Em QA agora", () => {
     expect(lista({ metrica: "em_qa" }).total).toBe(kpisHoje(d, AGORA, {}).emQaAgora);
   });
@@ -91,6 +103,10 @@ describe("paridade: a lista soma exatamente o número clicado", () => {
     expect(lista({ metrica: "concluidos", pessoa: 10 }).total).toBe(concluidos(dev));
     expect(lista({ metrica: "concluido_sem_qa", pessoa: 10 }).total).toBe(dev.concluidosSemQa);
     expect(lista({ metrica: "criado", pessoa: 10 }).total).toBe(dev.criados);
+  });
+  it("Pessoa/Equipe: Movimentou (inclui card sem responsável no uid 0)", () => {
+    expect(lista({ metrica: "movimentado", pessoa: 10 }).total).toBe(dev.movimentados);
+    expect(lista({ metrica: "movimentado", pessoa: 0 }).total).toBe(1);
   });
   it("Pessoa/Equipe QA: Testados não inclui devolvido", () => {
     expect(lista({ metrica: "testados", pessoa: 5 }).total).toBe(testados(qa));

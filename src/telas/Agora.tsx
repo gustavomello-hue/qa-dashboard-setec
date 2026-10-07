@@ -83,6 +83,22 @@ export function Agora({ dados, filtro, agora, hrefCard, hrefPessoa, soForaDoPain
           rotuloAnterior={ontem} dicaAnterior={dicaOntem}
           dica={DEFINICAO.semQa}
         />
+        <Kpi
+          rotulo={`Criados ${quando}`}
+          valor={k.hoje.criados}
+          href={lista("criada")}
+          anterior={k.comparacao.criados}
+          rotuloAnterior={ontem} dicaAnterior={dicaOntem}
+          dica={DEFINICAO.criadosDia}
+        />
+        <Kpi
+          rotulo={`Movimentados ${quando}`}
+          valor={k.hoje.movimentados}
+          href={lista("movimentacao")}
+          anterior={k.comparacao.movimentados}
+          rotuloAnterior={ontem} dicaAnterior={dicaOntem}
+          dica={DEFINICAO.movimentados}
+        />
       </dl>
 
       {/* A fila vem antes da carga na ordem de leitura (celular, Tab, leitor de tela):

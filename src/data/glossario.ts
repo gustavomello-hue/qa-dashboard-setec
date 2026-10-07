@@ -4,7 +4,7 @@
 
 export const DEFINICAO = {
   credito: "Cada número vai para quem era o responsável pelo card no momento do evento, não para o responsável de hoje.",
-  entregues: "Cards que entraram em Teste/QA com a pessoa como responsável.",
+  entregues: "Cards que entraram em Teste/QA com a pessoa como responsável. Inclui cards criados direto em Teste/QA.",
   aprovados: "Cards que saíram de Teste/QA para Concluídas.",
   reprovacoes: "Voltas de Teste/QA para Correções. Um card reprovado 2 vezes conta 2.",
   cardsReprovados:
@@ -13,6 +13,11 @@ export const DEFINICAO = {
   concluidos: "Aprovados em Teste/QA mais concluídos sem QA.",
   semQa: "Cards que foram para Concluídas vindos de outra coluna, sem passar por Teste/QA.",
   criados: "Cards criados pela pessoa no Kanboard.",
+  criadosDia: "Cards criados no dia, em qualquer coluna. Um card criado direto em Teste/QA conta também em Entraram.",
+  movimentou:
+    "Cards da pessoa que mudaram de coluna para Backlog, A iniciar, Em andamento, Interrompidas ou outra coluna fora do fluxo de QA.",
+  movimentados:
+    "Cards que mudaram de coluna para Backlog, A iniciar, Em andamento, Interrompidas ou outra coluna fora do fluxo de QA. Correções, Teste/QA e Concluídas têm contadores próprios.",
   abertos: "Cards com a pessoa agora em A iniciar, Em andamento, Teste/QA ou Correções.",
   testados: "Saídas de Teste/QA feitas pela pessoa: aprovou mais reprovou.",
   aprovou: "Moveu o card de Teste/QA para Concluídas.",
@@ -35,6 +40,8 @@ export const GLOSSARIO: { termo: string; definicao: string }[] = [
   { termo: "% cards reprovados", definicao: DEFINICAO.cardsReprovados },
   { termo: "Devolvidos", definicao: DEFINICAO.devolvidos },
   { termo: "Concluídos sem QA", definicao: DEFINICAO.semQa },
+  { termo: "Criados", definicao: DEFINICAO.criadosDia },
+  { termo: "Movimentados", definicao: DEFINICAO.movimentados },
   { termo: "Testados (QA)", definicao: DEFINICAO.testados },
   { termo: "Abertos", definicao: DEFINICAO.abertos },
   { termo: "Dias em QA", definicao: DEFINICAO.diasEmQa },

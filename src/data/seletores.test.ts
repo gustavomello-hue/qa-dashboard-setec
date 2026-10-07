@@ -67,16 +67,20 @@ describe("KPIs de hoje", () => {
     evento("qa_para_correcao", "2026-09-28T14:30:00", 2),
     evento("entrou_qa", "2026-09-25T13:00:00"),
     evento("entrou_qa", "2026-09-27T13:00:00"), // domingo: fica fora das duas contagens
+    evento("criada", "2026-09-28T09:00:00"),
+    evento("criada", "2026-09-28T09:30:00", 2),
+    evento("movimentacao", "2026-09-28T10:00:00"),
+    evento("movimentacao_perdida", "2026-09-28T10:30:00"), // não é movimentação medida
   ];
 
   it("conta só o dia pedido", () => {
-    expect(contarDia(eventos, "2026-09-28", () => true)).toEqual({ entraram: 1, aprovados: 1, reprovados: 1, concluidosSemQa: 0 });
+    expect(contarDia(eventos, "2026-09-28", () => true)).toEqual({ entraram: 1, aprovados: 1, reprovados: 1, concluidosSemQa: 0, criados: 2, movimentados: 1 });
   });
 
   it("na segunda compara com a sexta e respeita o filtro", () => {
     const d = dashboard({ eventos });
     const k = kpisHoje(d, new Date("2026-09-28T16:00:00"), { prefixo: "DEV" });
-    expect(k.hoje).toEqual({ entraram: 1, aprovados: 1, reprovados: 0, concluidosSemQa: 0 });
+    expect(k.hoje).toEqual({ entraram: 1, aprovados: 1, reprovados: 0, concluidosSemQa: 0, criados: 1, movimentados: 1 });
     expect(k.diaComparacao).toBe("2026-09-25");
     expect(k.comparacao.entraram).toBe(1);
   });

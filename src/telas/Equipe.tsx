@@ -52,6 +52,7 @@ function colunasDev(carga: (uid: number) => number): Coluna[] {
     { id: "concluidos", lista: "concluidos", rotulo: "Concluídos", dica: DEFINICAO.concluidos, valor: (r) => concluidos(r) },
     { id: "semqa", lista: "concluido_sem_qa", rotulo: "Sem QA", dica: DEFINICAO.semQa, valor: (r) => r.concluidosSemQa, tom: "sem-qa" },
     { id: "criados", lista: "criado", rotulo: "Criados", dica: DEFINICAO.criados, valor: (r) => r.criados },
+    { id: "movimentou", lista: "movimentado", rotulo: "Movimentou", dica: DEFINICAO.movimentou, valor: (r) => r.movimentados },
     { id: "carga", lista: "abertos", rotulo: "Abertos", dica: DEFINICAO.abertos, valor: (_, uid) => carga(uid) },
   ];
 }
@@ -64,6 +65,7 @@ function colunasQa(carga: (uid: number) => number): Coluna[] {
     { id: "taxa", lista: "cards_reprovou", rotulo: "% cards reprov.", dica: DEFINICAO.cardsReprovouQa, valor: (r) => taxaReprovacaoQa(r), formato: "pct" },
     { id: "devolveu", lista: "testou_devolvido", rotulo: "Devolveu", dica: DEFINICAO.devolveu, valor: (r) => r.testouDevolvido },
     { id: "criados", lista: "criado", rotulo: "Criados", dica: DEFINICAO.criados, valor: (r) => r.criados },
+    { id: "movimentou", lista: "movimentado", rotulo: "Movimentou", dica: DEFINICAO.movimentou, valor: (r) => r.movimentados },
     { id: "carga", lista: "abertos", rotulo: "Abertos", dica: DEFINICAO.abertos, valor: (_, uid) => carga(uid) },
   ];
 }

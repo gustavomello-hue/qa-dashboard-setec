@@ -150,6 +150,7 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar, href
             <Kpi menor rotulo="Concluídos sem QA" href={lista("concluido_sem_qa")} valor={r.concluidosSemQa} anterior={a.concluidosSemQa} rotuloAnterior={antes} tom="sem-qa" dica={DEFINICAO.semQa} />
             <Kpi menor rotulo="Devolvidos" href={lista("devolvido")} valor={r.devolvidos} anterior={a.devolvidos} rotuloAnterior={antes} tom="devolvido" dica={DEFINICAO.devolvidos} />
             <Kpi menor rotulo="Criados" href={lista("criado")} valor={r.criados} anterior={a.criados} rotuloAnterior={antes} dica={DEFINICAO.criados} />
+            <Kpi menor rotulo="Movimentou" href={lista("movimentado")} valor={r.movimentados} anterior={a.movimentados} rotuloAnterior={antes} dica={DEFINICAO.movimentou} />
           </dl>
         </section>
       )}
@@ -181,6 +182,7 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar, href
           <dl className="kpis kpis--outros" aria-label="Outros números como QA">
             <Kpi menor rotulo="Devolveu" href={lista("testou_devolvido")} valor={r.testouDevolvido} anterior={a.testouDevolvido} rotuloAnterior={antes} tom="devolvido" dica={DEFINICAO.devolveu} />
             {!dev && <Kpi menor rotulo="Criados" href={lista("criado")} valor={r.criados} anterior={a.criados} rotuloAnterior={antes} dica={DEFINICAO.criados} />}
+            {!dev && <Kpi menor rotulo="Movimentou" href={lista("movimentado")} valor={r.movimentados} anterior={a.movimentados} rotuloAnterior={antes} dica={DEFINICAO.movimentou} />}
           </dl>
         </section>
       )}

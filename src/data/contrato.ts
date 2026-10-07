@@ -171,6 +171,8 @@ export type Metrica =
   | "devolvido"
   | "concluido_sem_qa"
   | "criado"
+  /** Mudou de coluna fora do fluxo de QA (Backlog, A iniciar, Em andamento, Interrompidas, outra). */
+  | "movimentado"
   | "testou_aprovado"
   | "testou_reprovado"
   | "testou_devolvido"

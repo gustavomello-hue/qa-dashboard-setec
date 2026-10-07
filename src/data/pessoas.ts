@@ -65,6 +65,8 @@ export interface Resumo {
   testouAprovado: number;
   testouReprovado: number;
   testouDevolvido: number;
+  /** Mudanças de coluna fora do fluxo de QA com a pessoa como responsável. */
+  movimentados: number;
   cardsTestados: number;
   cardsTestadosReprovados: number;
   saidasNaoQa: number;
@@ -73,7 +75,7 @@ export interface Resumo {
 export function resumoVazio(): Resumo {
   return {
     entregues: 0, aprovados: 0, reprovacoes: 0, cardsReprovados: 0, cardsJulgados: 0,
-    devolvidos: 0, concluidosSemQa: 0, criados: 0, testouAprovado: 0, testouReprovado: 0,
+    devolvidos: 0, concluidosSemQa: 0, criados: 0, testouAprovado: 0, testouReprovado: 0, movimentados: 0,
     testouDevolvido: 0, cardsTestados: 0, cardsTestadosReprovados: 0, saidasNaoQa: 0,
   };
 }
@@ -98,6 +100,7 @@ const CAMPO: Partial<Record<Metrica, keyof Resumo>> = {
   devolvido: "devolvidos",
   concluido_sem_qa: "concluidosSemQa",
   criado: "criados",
+  movimentado: "movimentados",
   testou_aprovado: "testouAprovado",
   testou_reprovado: "testouReprovado",
   testou_devolvido: "testouDevolvido",

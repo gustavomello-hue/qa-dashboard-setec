@@ -14,11 +14,11 @@ import { passaNoFiltro, semReprovacao, type Filtro } from "./seletores";
 import { PAPEIS_CARGA, atribuicoesDe, indicePessoas, nomeDe } from "./pessoas";
 
 /** Números da tela Agora: contam eventos (e a fila) da equipe toda. */
-export const METRICAS_EVENTO = ["em_qa", "entrou_qa", "qa_para_concluida", "qa_para_correcao", "concluida"] as const;
+export const METRICAS_EVENTO = ["em_qa", "entrou_qa", "qa_para_concluida", "qa_para_correcao", "concluida", "criada", "movimentacao"] as const;
 /** Números da Equipe e da Pessoa: contam atribuições. */
 export const METRICAS_PESSOA = [
   "entregue_qa", "aprovado", "reprovado", "cards_reprovados", "devolvido", "concluidos", "concluido_sem_qa", "criado",
-  "testados", "testou_aprovado", "testou_reprovado", "cards_reprovou", "testou_devolvido", "saida_qa_nao_qa", "abertos",
+  "testados", "testou_aprovado", "testou_reprovado", "cards_reprovou", "testou_devolvido", "saida_qa_nao_qa", "movimentado", "abertos",
 ] as const;
 export type MetricaLista = (typeof METRICAS_EVENTO)[number] | (typeof METRICAS_PESSOA)[number];
 export const METRICAS_LISTA: readonly MetricaLista[] = [...METRICAS_EVENTO, ...METRICAS_PESSOA];
@@ -29,6 +29,8 @@ export const ROTULO_LISTA: Record<MetricaLista, string> = {
   qa_para_concluida: "Aprovados",
   qa_para_correcao: "Reprovados",
   concluida: "Concluídos sem QA",
+  criada: "Criados",
+  movimentacao: "Movimentados",
   entregue_qa: "Entregues para QA",
   aprovado: "Aprovados",
   reprovado: "Reprovações",
@@ -43,6 +45,7 @@ export const ROTULO_LISTA: Record<MetricaLista, string> = {
   cards_reprovou: "Cards que reprovou (base da %)",
   testou_devolvido: "Devolveu",
   saida_qa_nao_qa: "Saídas de QA",
+  movimentado: "Movimentou",
   abertos: "Abertos agora",
 };
 
@@ -66,6 +69,7 @@ const FONTE: Partial<Record<MetricaLista, Metrica[]>> = {
   cards_reprovou: ["testou_reprovado"],
   testou_devolvido: ["testou_devolvido"],
   saida_qa_nao_qa: ["saida_qa_nao_qa"],
+  movimentado: ["movimentado"],
 };
 
 const ETIQUETA: Partial<Record<Metrica, { texto: string; tom: Tom }>> = {
@@ -194,7 +198,8 @@ export function listarCards(d: Dashboard, c: Consulta, agora: Date): ResultadoLi
     // Mesmo critério de contarDia (seletores.ts): tipo do evento, dia e filtro.
     for (const e of d.eventos) {
       if (e.evento !== c.metrica || !dentro(e.dia, i) || !passa(e.project_id)) continue;
-      somar(e.task_id, e.project_id, e.momento, nomeKb(e.owner_nome));
+      // Criados: o crédito é de quem criou; nos outros eventos, do responsável.
+      somar(e.task_id, e.project_id, e.momento, nomeKb(e.evento === "criada" ? e.creator_nome : e.owner_nome));
     }
     return fim([...grupos.values()]);
   }

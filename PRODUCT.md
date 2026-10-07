@@ -48,7 +48,7 @@ Os dados são coletados a cada 10 minutos, das 7h às 19h.
 ## Capabilities and Constraints
 
 - **Telas:**
-  - **Agora** (inicial): cabe numa tela sem rolar. Tem 5 KPIs do dia comparados com o último dia útil (em QA, entraram, aprovados, reprovados, concluídos sem QA), carga por pessoa em barras empilhadas por coluna, fila de QA e movimentações recentes.
+  - **Agora** (inicial): cabe numa tela sem rolar. Tem 7 KPIs do dia comparados com o último dia útil (em QA, entraram, aprovados, reprovados, concluídos sem QA, criados, movimentados), todos clicáveis, carga por pessoa em barras empilhadas por coluna, fila de QA e movimentações recentes.
   - **Equipe:** uma tabela por grupo, em ordem alfabética, ordenável por clique no cabeçalho, com tendência semanal.
   - **Pessoa:** ficha individual com comparação com o período anterior, gráfico semanal, cards abertos, reprovados e concluídos sem QA.
   - **Mensal:** volume, % de reprovação, tempo médio em QA e entregas por grupo.
@@ -63,7 +63,7 @@ Os dados são coletados a cada 10 minutos, das 7h às 19h.
   - A regra mora no Python (`metricas_pessoa.py`); o site só conta.
 - **"Dias em QA":** dias corridos, sem cores de alerta.
 - **Stack:** React 19, Vite, TypeScript, Apache ECharts. Contrato em `src/data/contrato.ts`.
-- **Vocabulário:** Teste/QA, Correções, Concluídas, entregue para QA, aprovado (QA → Concluídas), reprovado (QA → Correções), devolvido (QA → outra coluna), concluído sem QA, testou, carga, lacuna de coleta, prefixo.
+- **Vocabulário:** Teste/QA, Correções, Concluídas, entregue para QA, aprovado (QA → Concluídas), reprovado (QA → Correções), devolvido (QA → outra coluna), concluído sem QA, criado (card novo, em qualquer coluna; criado direto em Teste/QA também conta como entrada), movimentado (mudou para Backlog, A iniciar, Em andamento, Interrompidas ou coluna fora do padrão), testou, carga, lacuna de coleta, prefixo.
 - **Depois:** visão anual das métricas.
 
 ## Brand Commitments
