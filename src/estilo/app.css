@@ -194,7 +194,7 @@
 
 .campo {
   height: 28px;
-  border: 1px solid var(--filete);
+  border: 1px solid var(--borda-campo);
   border-radius: 2px;
   background: var(--faixa);
   padding: 0 8px;
@@ -203,7 +203,7 @@
 }
 
 .campo:hover {
-  border-color: var(--n5);
+  border-color: var(--tinta-3);
 }
 
 .botao {
@@ -2542,4 +2542,32 @@ a.botao--primario {
   .agora .kpis > .kpi:nth-child(7):last-child {
     grid-column: span 2;
   }
+}
+
+/* ---------- Auditoria 07/10/2026 ---------- */
+/* Chip de filtro é um campo: contorno com o mesmo contraste da caixa de busca. */
+.chip--campo {
+  border-color: var(--borda-campo);
+}
+
+/* Número de um dígito virava um alvo de 14px no toque: a área clicável cobre a
+   célula do número sem mudar o desenho (o sublinhado continua só sob o texto). */
+.kpi__link {
+  position: relative;
+}
+
+.kpi__link::after {
+  content: "";
+  position: absolute;
+  inset: -8px -24px -8px -8px;
+}
+
+/* Medida de leitura: ~75 caracteres por linha (65ch em Public Sans rende isso). */
+.descricao__texto > * {
+  max-width: 65ch;
+}
+
+/* Notas soltas sobre o trilho; as que são caixa de faixa (card-secao__nota) ocupam a largura toda. */
+.nota:not(.card-secao__nota) {
+  max-width: 64ch;
 }

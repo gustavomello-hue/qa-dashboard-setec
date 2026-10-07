@@ -23,7 +23,8 @@
   --n4: #d3d8de;
   --n5: #b6bdc6;
   --n6: #8f98a3;
-  --n7: #69727e;
+  /* #5f6874 (era #69727e): tinta 3 passa de 4,5:1 também sobre trilho e baia (auditoria 07/10/2026). */
+  --n7: #5f6874;
   --n8: #4b535e;
   --n9: #313740;
   --n10: #1b1f25;
@@ -34,6 +35,9 @@
   --faixa: var(--n0);
   --faixa-realce: var(--n1);
   --filete: var(--n4);
+  /* Contorno de campo (busca, select, chip de filtro): precisa se distinguir do fundo (WCAG 1.4.11).
+     Definido uma vez: no escuro, --n6 é redefinido no mesmo :root e o papel acompanha. */
+  --borda-campo: var(--n6);
   --tinta-1: var(--n10);
   --tinta-2: var(--n8);
   --tinta-3: var(--n7);

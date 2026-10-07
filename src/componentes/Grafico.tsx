@@ -1,94 +1,18 @@
-import { useEffect, useRef, useState } from "react";
-import * as echarts from "echarts/core";
-import { BarChart, LineChart } from "echarts/charts";
-import { GridComponent, LegendComponent, TooltipComponent } from "echarts/components";
-import { CanvasRenderer } from "echarts/renderers";
-import type { ComposeOption } from "echarts/core";
-import type { BarSeriesOption, LineSeriesOption } from "echarts/charts";
-import type { GridComponentOption, LegendComponentOption, TooltipComponentOption } from "echarts/components";
+import { Suspense, lazy } from "react";
+import type { OpcoesGrafico } from "./grafico-tema";
 
-// Só o que o painel usa: barras, linha, grade, legenda e tooltip. Importar o
-// ECharts inteiro triplicava o tamanho do site.
-echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TooltipComponent, CanvasRenderer]);
+export { base, cor, useTema, type OpcoesGrafico } from "./grafico-tema";
 
-export type OpcoesGrafico = ComposeOption<
-  BarSeriesOption | LineSeriesOption | GridComponentOption | LegendComponentOption | TooltipComponentOption
->;
+// O ECharts (~1/3 do site) só vem quando um gráfico aparece: Pessoa, Mensal,
+// Projetos e Reunião. A Agora, tela inicial e do modo TV, abre sem ele.
+const GraficoCanvas = lazy(() => import("./GraficoCanvas").then((m) => ({ default: m.GraficoCanvas })));
 
-/** Lê os tokens de cor do CSS (mudam com o tema claro/escuro). */
-export function cor(token: string): string {
-  return getComputedStyle(document.documentElement).getPropertyValue(token).trim() || "#888";
-}
-
-/** Muda quando o sistema troca de tema: os gráficos em canvas precisam redesenhar. */
-export function useTema(): string {
-  const consulta = "(prefers-color-scheme: dark)";
-  const [tema, setTema] = useState(() => (matchMedia(consulta).matches ? "escuro" : "claro"));
-  useEffect(() => {
-    const m = matchMedia(consulta);
-    const aoMudar = () => setTema(m.matches ? "escuro" : "claro");
-    m.addEventListener("change", aoMudar);
-    return () => m.removeEventListener("change", aoMudar);
-  }, []);
-  return tema;
-}
-
-/** Eixos, grade e tooltip no estilo do painel. */
-export function base(): OpcoesGrafico {
-  const texto = cor("--tinta-3");
-  const linha = cor("--filete");
-  const dado = getComputedStyle(document.documentElement).getPropertyValue("--face-dado").trim();
-  return {
-    animation: false,
-    textStyle: { fontFamily: getComputedStyle(document.body).fontFamily },
-    grid: { left: 8, right: 8, top: 36, bottom: 4, containLabel: true },
-    legend: { top: 0, left: 0, icon: "rect", itemWidth: 10, itemHeight: 10, textStyle: { color: cor("--tinta-2") } },
-    tooltip: {
-      trigger: "axis",
-      backgroundColor: cor("--faixa"),
-      borderColor: linha,
-      borderRadius: 2,
-      textStyle: { color: cor("--tinta-1") },
-      axisPointer: { type: "shadow", shadowStyle: { color: cor("--sombra-eixo") } },
-    },
-    xAxis: {
-      type: "category",
-      axisLine: { lineStyle: { color: linha } },
-      axisTick: { show: false },
-      axisLabel: { color: texto, fontFamily: dado, fontSize: 11 },
-    },
-    yAxis: {
-      type: "value",
-      splitLine: { lineStyle: { color: linha } },
-      axisLabel: { color: texto, fontFamily: dado, fontSize: 11 },
-      minInterval: 1,
-    },
-  };
-}
-
-/** Invólucro mínimo: cria uma vez, troca as opções, acompanha o tamanho. */
-export function Grafico({ opcoes, altura = 280, rotulo }: { opcoes: OpcoesGrafico; altura?: number; rotulo: string }) {
-  const elemento = useRef<HTMLDivElement>(null);
-  const grafico = useRef<echarts.ECharts | null>(null);
-
-  useEffect(() => {
-    if (!elemento.current) return;
-    const g = echarts.init(elemento.current, undefined, { renderer: "canvas" });
-    grafico.current = g;
-    const observador = new ResizeObserver(() => g.resize());
-    observador.observe(elemento.current);
-    return () => {
-      observador.disconnect();
-      g.dispose();
-      grafico.current = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    grafico.current?.setOption(opcoes, { notMerge: true });
-    // O canvas só desenha na fonte do quadro depois que ela carregou.
-    document.fonts?.ready.then(() => grafico.current?.setOption(opcoes, { notMerge: true }));
-  }, [opcoes]);
-
-  return <div ref={elemento} role="img" aria-label={rotulo} style={{ width: "100%", height: altura }} />;
+/** Enquanto o motor carrega, o espaço do gráfico já fica reservado: nada pula. */
+export function Grafico(props: { opcoes: OpcoesGrafico; altura?: number; rotulo: string }) {
+  const altura = props.altura ?? 280;
+  return (
+    <Suspense fallback={<div role="img" aria-label={props.rotulo} aria-busy="true" style={{ width: "100%", height: altura }} />}>
+      <GraficoCanvas {...props} />
+    </Suspense>
+  );
 }

@@ -9,7 +9,7 @@ colors:
   n4: "#d3d8de"
   n5: "#b6bdc6"
   n6: "#8f98a3"
-  n7: "#69727e"
+  n7: "#5f6874"
   n8: "#4b535e"
   n9: "#313740"
   n10: "#1b1f25"
@@ -187,6 +187,7 @@ A escala --n0..--n10 é a única fonte de cinza. No tema escuro os mesmos degrau
 - **Faixa realce** (--faixa-realce → n1; no escuro n4): hover de faixa e de botão, fundo inicial da faixa recém-inserida.
 - **Filete** (--filete → n4): toda linha de 1px, porta-faixa neutro, grade e eixo dos gráficos.
 - **Tinta 1 / 2 / 3** (n10 / n8 / n7): texto principal; rótulos e texto secundário; meta, horários, zeros e inativos. Nunca mais que três tintas numa faixa.
+- **Borda de campo** (--borda-campo → n6): contorno de busca, select e chip de filtro, para o campo se distinguir do fundo (WCAG 1.4.11). A tinta 3 (n7 #5f6874 no claro) passa 4,5:1 sobre faixa, trilho e baia.
 - **Grupos** (DEV n9, estagiários DEV n6, QA n8, estagiários QA n5, gestão n7, outros n4): séries dos gráficos por grupo, alternando claro e escuro, sempre com legenda escrita.
 - **Papéis de carga**: A iniciar n5 (escuro n6), Em andamento n8.
 
@@ -268,8 +269,8 @@ Controles quietos, de borda fina, que afundam quando ligados.
 - **Ficha** (detalhe do card): campos sobre fundo de faixa separados por filetes de 1px, rótulo em Label 11px e valor numérico em mono 16px. A partir de 1300px vira painel lateral de 320px (um campo por linha) e a linha do tempo ocupa o resto da largura; abaixo disso, grade auto-fit de 140px acima da linha do tempo. A tela do Card não tem largura máxima.
 
 ### Inputs / Fields
-- **Style:** 28px de altura, borda de 1px em filete, 2px de canto, fundo de faixa, 13px; select nativo com o mesmo tratamento; cursor de texto em Azul Entrada.
-- **Focus:** contorno global de 2px em Azul Entrada. Hover escurece a borda para n5.
+- **Style:** 28px de altura, borda de 1px em --borda-campo (n6), 2px de canto, fundo de faixa, 13px; select nativo e chip de filtro com o mesmo contorno; cursor de texto em Azul Entrada.
+- **Focus:** contorno global de 2px em Azul Entrada. Hover escurece a borda para tinta 3.
 - **Checkbox:** accent-color em tinta 1.
 
 ### Navigation
