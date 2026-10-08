@@ -5,6 +5,7 @@
 // só entra o que depende do "agora" do navegador (o que é "hoje", há quanto
 // tempo o dado foi coletado) ou de somar projetos por filtro.
 
+import { tituloConhecido } from "./formato";
 import type { Dashboard, Evento, Lacuna, Prefixo, Projeto, ResumoMensal } from "./contrato";
 
 export interface Filtro {
@@ -203,13 +204,23 @@ export function paginar<T>(itens: T[], porPagina: number, pagina: number): { ite
   return { itens: itens.slice(p * porPagina, (p + 1) * porPagina), total };
 }
 
-/** {task_id: título} juntando cards, fila, carga e eventos (o mais recente vence). */
+/**
+ * {task_id: título} juntando detalhes, eventos, carga, cards e fila (o mais
+ * recente vence). Os detalhes entram primeiro, como base: cobrem o card aberto
+ * sem evento nem título na carga, que aparecia como "Título não registrado". O
+ * placeholder do coletor nunca apaga um título real (crítica 08/10/2026).
+ */
 export function indiceTitulos(d: Dashboard): Map<number, string> {
   const m = new Map<number, string>();
-  for (const e of d.eventos) if (e.titulo) m.set(e.task_id, e.titulo);
-  for (const c of d.carga ?? []) if (c.titulo) m.set(c.task_id, c.titulo);
-  for (const c of d.cards) if (c.titulo) m.set(c.task_id, c.titulo);
-  for (const c of d.fila_qa) if (c.titulo) m.set(c.task_id, c.titulo);
+  const por = (id: number, t: string | null | undefined) => {
+    const real = tituloConhecido(t);
+    if (real) m.set(id, real);
+  };
+  for (const [id, det] of Object.entries(d.detalhes_cards ?? {})) por(Number(id), det.titulo);
+  for (const e of d.eventos) por(e.task_id, e.titulo);
+  for (const c of d.carga ?? []) por(c.task_id, c.titulo);
+  for (const c of d.cards) por(c.task_id, c.titulo);
+  for (const c of d.fila_qa) por(c.task_id, c.titulo);
   return m;
 }
 

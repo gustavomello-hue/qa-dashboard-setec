@@ -285,10 +285,10 @@ Faixa de sete contadores separados por fio de 1px em filete: uma linha de 7 a pa
 Linhas separadas por 1px (border-spacing), cada linha é uma faixa com porta-faixa na primeira célula, hover em faixa realce. Na fila de QA, os campos da faixa (#card · título · dias · retornos) ficam em caixas separadas por filete vertical de 1px, como a faixa de controle de voo. Na Equipe, sob cada número, a diferença para o período anterior em 11px tinta 3, sem cor; zero contra zero fica em branco. Cabeçalho fixo no fundo da baia, em Label 11px sans. Colunas de estado levam o quadradinho de 7px da cor no cabeçalho; os números da coluna ficam em tinta. Zeros e pessoas inativas em tinta 3. Rodapé de total em 600 sobre fundo transparente.
 
 ### Fila de QA: cards fora do painel
-Os cards que o painel do Kanboard não mostra (muitas vezes sem título e sem responsável) ficam num grupo recolhido no fim da fila, "N fora do painel do Kanboard", aberto por um botão em Label sobre a baia. O topo da fila é sempre de cards em que alguém age. Título e responsável ausentes usam um texto único: "Título não registrado" e "Sem responsável".
+Abaixo de 700px, dias em QA e retornos descem para a linha de apoio da faixa, e o título fica com a largura. O chip do cabeçalho é um filtro ("Só fora do painel (N)"). Os cards que o painel do Kanboard não mostra ficam num grupo recolhido no fim da fila, "N fora do painel do Kanboard", aberto por um botão em Label sobre a baia. O topo da fila é sempre de cards em que alguém age. Título e responsável ausentes usam um texto único: "Título não registrado" e "Sem responsável".
 
 ### Tabelas largas no celular
-Na Equipe, a coluna com o nome da pessoa fica fixa (sticky) quando a tabela rola para o lado. As abas do topo rolam na horizontal com a borda direita esmaecida, e o seletor de frente tem 40px de altura abaixo de 700px.
+Títulos vêm de um índice único que também lê os detalhes dos cards: nenhuma tela mostra "Título não registrado" para um card que tem título no Kanboard. Na Equipe, a coluna com o nome da pessoa fica fixa (sticky) quando a tabela rola para o lado. As abas do topo rolam na horizontal com a borda direita esmaecida, e o seletor de frente tem 40px de altura abaixo de 700px.
 
 ### Barra de carga
 Trilho rebaixado de 10px com segmentos de no mínimo 3px separados por 1px: A iniciar, Em andamento (neutros), Teste/QA (Azul Entrada), Correções (Vermelho Correção). Largura proporcional ao teto da escala (o maior total, ou 1,2× o segundo maior quando o maior passa de 1,5× o segundo); a barra que passa do teto enche e ganha um corte de 3px perto do fim, com o número inteiro ao lado. Legenda escrita acima. Linha de carga em campos com filete: nome · barra · total em mono. QA vem primeiro na lista.
@@ -298,7 +298,7 @@ Faixas agrupadas por dia (Label-sm), com horário em mono tinta 3 à esquerda, r
 
 ### Número clicável
 Os números principais abrem a lista dos cards que eles contam: os KPIs da Agora e da Pessoa e as células da Equipe.
-- **Em repouso:** sublinhado pontilhado de 1px em n6 (~2,9:1), afastado do número 0,2em: discreto, mas perceptível. O peso e a cor do número não mudam. Nome acessível: "77 Em QA agora: ver os cards".
+- **Em repouso:** sublinhado pontilhado de 1px em --sublinhado-numero (n6 no claro, ~2,9:1; 70% n6 + 30% n7 no escuro, ~3,2:1), afastado do número 0,2em: discreto, mas perceptível. O peso e a cor do número não mudam. Nome acessível: "77 Em QA agora: ver os cards".
 - **Área de toque:** cobre a célula do número (pseudo-elemento), sem mudar o desenho.
 - **Hover e foco:** o sublinhado fica contínuo em tinta 3, e o KPI vai para faixa realce.
 - **Não viram link:** zero, "—", linha de total e números do modo TV e da Reunião.
@@ -337,6 +337,8 @@ ECharts em canvas, lendo as cores dos tokens em tempo de execução e redesenhan
 
 ### Modo reunião (aba Reunião)
 Preparo dentro do quadro (tipo de reunião, mês, pessoa, frente) e apresentação em tela inteira, sem barra nem filtros: cabeça com o contexto em Label ("Reunião mensal · set/26") e o título da lâmina, corpo de uma ideia por lâmina, rodapé com "Esc · sair", dica de teclas e contador "3/7". A escala é a de projeção (`--r-*`, em vh: numeral 48–96px, título 26–44px, subtítulo 17–26px, dado 16–24px, rótulo 13–18px), lida a ~3 m. Números grandes são faixas com porta-faixa e o valor anterior embaixo; unidade ("h") em 0,45em. Tabelas por pessoa se dividem em lâminas de tamanho parecido pela altura da tela. Avança com → / espaço / PageDown / clique na metade direita; volta com ← / clique na esquerda; Home/End; F tela cheia; Esc volta ao preparo. A conversa individual nunca mostra outra pessoa nem média da equipe. Durante a apresentação os atalhos globais (1–5, /, #) ficam desligados, e o leitor de tela anuncia só "Lâmina N de M: título". Lâminas de números grandes centralizam o bloco na altura; cada número traz a comparação com sinal ("ago/26: 364 (−35)"). Nas tabelas projetadas a variação fica ao lado do número, uma linha por pessoa. Barras levam o valor escrito (ninguém passa o mouse num projetor). Listas cortadas dizem "e mais N"; títulos usam até duas linhas. Para quem desenvolve, "abertos há mais tempo" exclui cards parados em Teste/QA (espera do QA, não do dev).
+
+Nas lâminas projetadas a tabela não reage ao mouse (sem realce de linha: o cursor parado destacaria uma pessoa). No gráfico de grupos, cada faixa traz o valor escrito no tamanho de dado da projeção, na tinta de maior contraste com o cinza do grupo; faixas abaixo de 8% da maior pilha ficam sem número.
 
 **Base parcial.** Um mês com medição parcial (reconstruído) nunca é base de comparação cheia: em toda tela o rótulo vira "ago/26 (parcial)", o sinal de variação some e uma nota diz "serve de referência, não de comparação"; nos gráficos o mês aparece como "ago/26 (parcial)". Nos 5 primeiros dias do mês, Equipe e Pessoa abrem no último mês fechado e dizem isso.
 

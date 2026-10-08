@@ -2285,8 +2285,8 @@ a.botao--primario {
   color: inherit;
   text-decoration: underline dotted;
   text-decoration-thickness: 1px;
-  /* n6 pontilhado (~2,9:1): ainda discreto, mas dá para ver que o número abre os cards (crítica 08/10/2026). */
-  text-decoration-color: var(--n6);
+  /* Pontilhado (~2,9:1 no claro, ~3,2:1 no escuro): discreto, mas dá para ver que o número abre os cards. */
+  text-decoration-color: var(--sublinhado-numero);
   text-underline-offset: 0.2em;
 }
 
@@ -2673,5 +2673,33 @@ a.botao--primario {
   /* Seletor de frente: alvo de toque de 40px (era 25px). */
   .segmentado__opcao {
     min-height: 40px;
+  }
+}
+
+/* ---------- 2ª rodada da crítica (08/10/2026) ---------- */
+/* Na apresentação a tabela não reage ao mouse: o cursor parado sobre uma linha
+   destacava uma pessoa diante da equipe. */
+.apresentacao .tabela tbody tr:hover > * {
+  background: var(--faixa);
+}
+
+@media (max-width: 700px) {
+  /* Fila: dias e retornos descem para a linha de apoio, que quebra em vez de cortar. */
+  .fila .so-largo {
+    display: none;
+  }
+
+  .fila .so-estreito {
+    display: inline;
+  }
+
+  .fila .celula-titulo .meta {
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+
+  .fila .celula-titulo .meta > span {
+    flex: none;
+    max-width: 100%;
   }
 }

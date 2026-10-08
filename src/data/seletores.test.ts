@@ -303,3 +303,22 @@ describe("textos de ausência unificados (crítica 08/10)", () => {
     expect(responsavelLegivel("Hanry")).toBe("Hanry");
   });
 });
+
+describe("índice de títulos usa os detalhes dos cards (crítica 08/10)", () => {
+  it("card sem evento e sem título na carga ganha o título do detalhes_cards", async () => {
+    const { indiceTitulos } = await import("./seletores");
+    const d = dashboard({
+      carga: [{ task_id: 7, titulo: null, project_id: 1, user_id: 10, coluna: "A", papel: "andamento", desde: 1, prioridade: 0 }],
+      detalhes_cards: { "7": { titulo: "Título do Kanboard", link: null, descricao: null, descricao_cortada: false, coluna: "A", papel: "andamento", responsavel_id: 10, prioridade: 0, criado_em: null, aberto: true } },
+    });
+    expect(indiceTitulos(d).get(7)).toBe("Título do Kanboard");
+  });
+  it("placeholder do coletor não vence o título real dos detalhes", async () => {
+    const { indiceTitulos } = await import("./seletores");
+    const d = dashboard({
+      fila_qa: [{ task_id: 8, titulo: "(titulo fora do historico)", projeto: "P", project_id: 1, coluna: "Teste/QA", designado: "(nao atribuido)", criador: "", prioridade: 0, entrou_em: null, dias_em_qa: 3, retornos: 0, link: "" }],
+      detalhes_cards: { "8": { titulo: "Card de verdade", link: null, descricao: null, descricao_cortada: false, coluna: "Teste/QA", papel: "qa", responsavel_id: 0, prioridade: 0, criado_em: null, aberto: true } },
+    });
+    expect(indiceTitulos(d).get(8)).toBe("Card de verdade");
+  });
+});

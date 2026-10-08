@@ -38,6 +38,8 @@
   /* Contorno de campo (busca, select, chip de filtro): precisa se distinguir do fundo (WCAG 1.4.11).
      Definido uma vez: no escuro, --n6 é redefinido no mesmo :root e o papel acompanha. */
   --borda-campo: var(--n6);
+  /* Sublinhado pontilhado dos números clicáveis: ~2,9:1 no claro. */
+  --sublinhado-numero: var(--n6);
   --tinta-1: var(--n10);
   --tinta-2: var(--n8);
   --tinta-3: var(--n7);
@@ -129,6 +131,8 @@
     --papel-a_iniciar: var(--n6);
     --papel-andamento: var(--n8);
     --papel-correcao: color-mix(in srgb, var(--reprovado) 78%, var(--n0));
+    /* n6 puro dava 2,53:1 sobre a faixa escura; com 30% de n7 fica 3,17:1 (crítica 08/10/2026). */
+    --sublinhado-numero: color-mix(in srgb, var(--n6) 70%, var(--n7));
 
     color-scheme: dark;
   }
@@ -219,6 +223,10 @@ p {
 
 .sr {
   position: absolute;
+  /* Ancorado no canto: solto no fim de um título longo, alargava a área de rolagem
+     da Fila (barra horizontal fantasma, crítica 08/10/2026). */
+  top: 0;
+  left: 0;
   width: 1px;
   height: 1px;
   overflow: hidden;

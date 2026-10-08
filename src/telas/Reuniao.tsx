@@ -454,7 +454,8 @@ function VolumeEGrupos({ d, filtro, ate }: { d: Dashboard; filtro: Filtro; ate: 
     const b = base();
     const ordem: Grupo[] = ["dev", "estagiario_dev", "qa", "estagiario_qa", "gestao", "outros"];
     const maiorPilha = Math.max(1, ...composicao.map((c) => Object.values(c.entregues).reduce((x, y) => x + y, 0)));
-    const limiarRotulo = Math.max(3, Math.round(maiorPilha * 0.06));
+    const limiarRotulo = Math.max(3, Math.round(maiorPilha * 0.08));
+    const tamanhoDado = Math.round(Math.min(24, Math.max(16, window.innerHeight * 0.022)));
     const tokens: Record<Grupo, string> = {
       dev: "--grupo-dev", estagiario_dev: "--grupo-est-dev", qa: "--grupo-qa", estagiario_qa: "--grupo-est-qa", gestao: "--grupo-gestao", outros: "--grupo-outros",
     };
@@ -464,18 +465,18 @@ function VolumeEGrupos({ d, filtro, ate }: { d: Dashboard; filtro: Filtro; ate: 
       series: ordem
         .filter((g) => composicao.some((c) => c.entregues[g] > 0))
         .map((g) => ({
-          name: ROTULO_GRUPO[g], type: "bar" as const, stack: "t", barMaxWidth: 40,
+          name: ROTULO_GRUPO[g], type: "bar" as const, stack: "t", barMaxWidth: 96,
           data: composicao.map((c) => c.entregues[g]), itemStyle: { color: cor(tokens[g]) },
-          // Valor escrito em cada faixa: num projetor ninguém passa o mouse, e os cinzas
-          // dos grupos são próximos (crítica 08/10/2026). Faixa pequena demais fica sem rótulo.
+          // Valor escrito em cada faixa, no tamanho de dado da projeção e sem contorno
+          // (13px com halo virava borrão; 2ª crítica, 08/10/2026). A tinta é a de maior
+          // contraste com o cinza do grupo; faixa baixa demais para o número fica sem rótulo.
           label: {
             show: true,
             position: "inside" as const,
-            color: cor("--tinta-1"),
-            textBorderColor: cor("--faixa"),
-            textBorderWidth: 3,
+            color: tintaSobre(cor(tokens[g])),
             fontFamily: getComputedStyle(document.documentElement).getPropertyValue("--face-dado").trim(),
-            fontSize: 13,
+            fontSize: tamanhoDado,
+            fontWeight: 500,
             formatter: (p: { value: unknown }) => (Number(p.value) >= limiarRotulo ? String(p.value) : ""),
           },
         })),
@@ -705,3 +706,25 @@ function ListaConversa({
 }
 
 const umaCasa = (h: number) => Math.round(h * 10) / 10;
+
+/** Luminância relativa de uma cor #rrggbb (WCAG); cor em outro formato conta como cinza médio. */
+function luminancia(hex: string): number {
+  const m = hex.trim().match(/^#([0-9a-f]{6})$/i);
+  if (!m) return 0.2;
+  const canal = (i: number) => {
+    const v = parseInt(m[1].slice(i, i + 2), 16) / 255;
+    return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+  };
+  return 0.2126 * canal(0) + 0.7152 * canal(2) + 0.0722 * canal(4);
+}
+
+/** Entre a tinta 1 e a cor da faixa, a que mais contrasta com o fundo (os grupos vão do n4 ao n9). */
+function tintaSobre(fundo: string): string {
+  const lf = luminancia(fundo);
+  const contraste = (c: string) => {
+    const l = luminancia(c);
+    return (Math.max(l, lf) + 0.05) / (Math.min(l, lf) + 0.05);
+  };
+  const [a, b] = [cor("--tinta-1"), cor("--faixa")];
+  return contraste(a) >= contraste(b) ? a : b;
+}

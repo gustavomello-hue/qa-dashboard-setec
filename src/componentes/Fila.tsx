@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { CardNaFila, Dashboard } from "../data/contrato";
 import { TEXTO_SEM_TITULO, dataHora, nomeCurto, responsavelLegivel, separarEtiquetas, tituloConhecido } from "../data/formato";
 import { Icone } from "./Icone";
-import { inicioDaUltimaColeta, passaNoFiltro, type Filtro } from "../data/seletores";
+import { indiceTitulos, inicioDaUltimaColeta, passaNoFiltro, type Filtro } from "../data/seletores";
 import { indicePessoas } from "../data/pessoas";
 import { DEFINICAO } from "../data/glossario";
 
@@ -30,12 +30,14 @@ export function Fila({ dados, filtro, hrefCard, soForaDoPainel = false, alternar
   // Cards que o painel do Kanboard não mostra (muitas vezes sem título nem responsável)
   // não ocupam o topo da fila: vão para um grupo recolhido no fim (crítica 08/10/2026).
   const [verFora, setVerFora] = useState(false);
+  // Título pelo índice: o coletor às vezes não o tem, mas os detalhes do card têm.
+  const titulos = indiceTitulos(dados);
   const principais = soForaDoPainel ? fila : fila.filter((c) => c.no_painel !== false);
   const fora = soForaDoPainel ? [] : fila.filter((c) => c.no_painel === false);
 
   const linha = (c: CardNaFila) => {
     const novo = desde !== null && (c.entrou_em ?? 0) > desde;
-    const { etiquetas, resto } = separarEtiquetas(tituloConhecido(c.titulo));
+    const { etiquetas, resto } = separarEtiquetas(titulos.get(c.task_id) ?? tituloConhecido(c.titulo));
     const pessoa = responsavelLegivel(curto.get(c.designado) ?? c.designado);
     return (
       <tr key={c.task_id}>
@@ -56,12 +58,15 @@ export function Fila({ dados, filtro, hrefCard, soForaDoPainel = false, alternar
             {c.no_painel === false && <span className="marca-fora" title="Não aparece no painel Teste de QA do Kanboard">fora do painel</span>}
             {etiquetas && <span>{etiquetas}</span>}
             <span>{nomeCurto(c.projeto)}</span>
+            {/* No celular, dias e retornos descem para cá: o título fica com a largura. */}
+            <span className="so-estreito num">{c.dias_em_qa ?? "—"} d em QA</span>
+            {c.retornos > 0 && <span className="so-estreito num">{c.retornos} retorno{c.retornos > 1 ? "s" : ""}</span>}
           </span>
         </td>
-        <td className="num" title={c.entrou_em ? `Entrou em QA em ${dataHora(c.entrou_em)}` : undefined}>
+        <td className="num so-largo" title={c.entrou_em ? `Entrou em QA em ${dataHora(c.entrou_em)}` : undefined}>
           {c.dias_em_qa ?? "—"}
         </td>
-        <td className={`num${c.retornos === 0 ? " zero" : ""}`}>{c.retornos}</td>
+        <td className={`num so-largo${c.retornos === 0 ? " zero" : ""}`}>{c.retornos}</td>
       </tr>
     );
   };
@@ -80,7 +85,8 @@ export function Fila({ dados, filtro, hrefCard, soForaDoPainel = false, alternar
             disabled={!alternarForaDoPainel}
             title="Cards em Teste/QA que o painel do Kanboard não mostra (projeto fora da lista do painel)"
           >
-            {soForaDoPainel ? "Mostrar todos" : `${foraDoPainel} fora do painel`}
+            {/* Filtro (vai para a URL); o grupo no fim da fila só recolhe e expande. */}
+            {soForaDoPainel ? "Mostrar todos" : `Só fora do painel (${foraDoPainel})`}
           </button>
         )}
       </header>
@@ -94,8 +100,8 @@ export function Fila({ dados, filtro, hrefCard, soForaDoPainel = false, alternar
               <tr>
                 <th scope="col">Card</th>
                 <th scope="col">Título</th>
-                <th scope="col" className="num" title={DEFINICAO.diasEmQa}>Dias em QA</th>
-                <th scope="col" className="num" title={DEFINICAO.retornos}>Retornos</th>
+                <th scope="col" className="num so-largo" title={DEFINICAO.diasEmQa}>Dias em QA</th>
+                <th scope="col" className="num so-largo" title={DEFINICAO.retornos}>Retornos</th>
               </tr>
             </thead>
             <tbody>{principais.map(linha)}</tbody>
