@@ -1,5 +1,7 @@
-import type { Dashboard } from "../data/contrato";
-import { dataHora, nomeCurto, separarEtiquetas } from "../data/formato";
+import { useState } from "react";
+import type { CardNaFila, Dashboard } from "../data/contrato";
+import { TEXTO_SEM_TITULO, dataHora, nomeCurto, responsavelLegivel, separarEtiquetas, tituloConhecido } from "../data/formato";
+import { Icone } from "./Icone";
 import { inicioDaUltimaColeta, passaNoFiltro, type Filtro } from "../data/seletores";
 import { indicePessoas } from "../data/pessoas";
 import { DEFINICAO } from "../data/glossario";
@@ -25,6 +27,44 @@ export function Fila({ dados, filtro, hrefCard, soForaDoPainel = false, alternar
   const desde = inicioDaUltimaColeta(dados);
   // A fila traz o nome completo do Kanboard; a tela usa o nome curto da equipe.
   const curto = new Map([...indicePessoas(dados).values()].map((p) => [p.nome_kanboard, p.nome]));
+  // Cards que o painel do Kanboard não mostra (muitas vezes sem título nem responsável)
+  // não ocupam o topo da fila: vão para um grupo recolhido no fim (crítica 08/10/2026).
+  const [verFora, setVerFora] = useState(false);
+  const principais = soForaDoPainel ? fila : fila.filter((c) => c.no_painel !== false);
+  const fora = soForaDoPainel ? [] : fila.filter((c) => c.no_painel === false);
+
+  const linha = (c: CardNaFila) => {
+    const novo = desde !== null && (c.entrou_em ?? 0) > desde;
+    const { etiquetas, resto } = separarEtiquetas(tituloConhecido(c.titulo));
+    const pessoa = responsavelLegivel(curto.get(c.designado) ?? c.designado);
+    return (
+      <tr key={c.task_id}>
+        <td className="celula-card">
+          <a className="link-card" href={hrefCard(c.task_id)} title="Ver a linha do tempo do card">
+            #{c.task_id}
+          </a>
+        </td>
+        <td className="celula-titulo">
+          <a href={c.link} target="_blank" rel="noreferrer" title={`${resto || TEXTO_SEM_TITULO} (abre no Kanboard)`}>
+            {resto || <span className="meta">{TEXTO_SEM_TITULO}</span>}
+            <span className="sr"> (abre no Kanboard, em nova aba)</span>
+          </a>
+          {/* Designado e "novo" vão na linha de apoio: a coluna do título fica com a largura. */}
+          <span className="meta">
+            {novo && <span className="marca-novo" title="Novo desde a coleta anterior">novo</span>}
+            <span className="meta__pessoa" title={pessoa}>{pessoa}</span>
+            {c.no_painel === false && <span className="marca-fora" title="Não aparece no painel Teste de QA do Kanboard">fora do painel</span>}
+            {etiquetas && <span>{etiquetas}</span>}
+            <span>{nomeCurto(c.projeto)}</span>
+          </span>
+        </td>
+        <td className="num" title={c.entrou_em ? `Entrou em QA em ${dataHora(c.entrou_em)}` : undefined}>
+          {c.dias_em_qa ?? "—"}
+        </td>
+        <td className={`num${c.retornos === 0 ? " zero" : ""}`}>{c.retornos}</td>
+      </tr>
+    );
+  };
 
   return (
     <section className="bloco fila" id="fila" tabIndex={-1} aria-labelledby="t-fila">
@@ -58,39 +98,20 @@ export function Fila({ dados, filtro, hrefCard, soForaDoPainel = false, alternar
                 <th scope="col" className="num" title={DEFINICAO.retornos}>Retornos</th>
               </tr>
             </thead>
-            <tbody>
-              {fila.map((c) => {
-                const novo = desde !== null && (c.entrou_em ?? 0) > desde;
-                const { etiquetas, resto } = separarEtiquetas(c.titulo);
-                return (
-                  <tr key={c.task_id}>
-                    <td className="celula-card">
-                      <a className="link-card" href={hrefCard(c.task_id)} title="Ver a linha do tempo do card">
-                        #{c.task_id}
-                      </a>
-                    </td>
-                    <td className="celula-titulo">
-                      <a href={c.link} target="_blank" rel="noreferrer" title={`${c.titulo} (abre no Kanboard)`}>
-                        {resto}
-                        <span className="sr"> (abre no Kanboard, em nova aba)</span>
-                      </a>
-                      {/* Designado e "novo" vão na linha de apoio: a coluna do título fica com a largura. */}
-                      <span className="meta">
-                        {novo && <span className="marca-novo" title="Novo desde a coleta anterior">novo</span>}
-                        <span className="meta__pessoa" title={c.designado}>{curto.get(c.designado) ?? c.designado}</span>
-                        {c.no_painel === false && <span className="marca-fora" title="Não aparece no painel Teste de QA do Kanboard">fora do painel</span>}
-                        {etiquetas && <span>{etiquetas}</span>}
-                        <span>{nomeCurto(c.projeto)}</span>
-                      </span>
-                    </td>
-                    <td className="num" title={c.entrou_em ? `Entrou em QA em ${dataHora(c.entrou_em)}` : undefined}>
-                      {c.dias_em_qa ?? "—"}
-                    </td>
-                    <td className={`num${c.retornos === 0 ? " zero" : ""}`}>{c.retornos}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
+            <tbody>{principais.map(linha)}</tbody>
+            {fora.length > 0 && (
+              <tbody className="fila__fora">
+                <tr className="fila__grupo">
+                  <th scope="rowgroup" colSpan={4}>
+                    <button type="button" className="fila__alternar" aria-expanded={verFora} onClick={() => setVerFora(!verFora)}>
+                      <Icone nome={verFora ? "cima" : "baixo"} tamanho={12} />
+                      {fora.length} fora do painel do Kanboard
+                    </button>
+                  </th>
+                </tr>
+                {verFora && fora.map(linha)}
+              </tbody>
+            )}
           </table>
         </div>
       )}

@@ -300,7 +300,7 @@ function TabelaGrupo({
                           className={`num${!v ? " zero" : ""}`}
                           title={va === null ? undefined : `${rotuloAnterior}: ${formatar(va, c)}`}
                         >
-                          {href ? <a className="link-numero" href={href}>{formatar(v, c)}</a> : formatar(v, c)}
+                          {href ? <a className="link-numero" href={href} aria-label={`${formatar(v, c)} ${c.rotulo} de ${p.nome}: ver os cards`}>{formatar(v, c)}</a> : formatar(v, c)}
                           {!semDelta && <Delta atual={v} anterior={va} pct={c.formato === "pct"} />}
                         </td>
                       );

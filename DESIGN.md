@@ -162,7 +162,7 @@ O mundo substituiu o "Fliperama CRT", que foi descartado por inteiro: nenhum bri
 - Cor de estado só no porta-faixa de 4px e nos marcadores quadrados de 7px, sempre com rótulo escrito.
 - Interface em Public Sans; todo número, código de card e horário em JetBrains Mono tabular.
 - Filtro ou aba ativa afunda no trilho em vez de ganhar cor.
-- Teclado de primeira classe: 1–5 trocam de tela (a 5ª é Reunião), # ou / vai para a busca de card; na apresentação, setas, espaço, Home/End, F e Esc.
+- Teclado de primeira classe: 1–6 trocam de tela (a 5ª é Reunião, a 6ª Projetos), # ou / vai para a busca de card; na apresentação, setas, espaço, Home/End, F e Esc.
 
 ## Colors
 
@@ -284,6 +284,12 @@ Faixa de sete contadores separados por fio de 1px em filete: uma linha de 7 a pa
 ### Tabela como pilha de faixas
 Linhas separadas por 1px (border-spacing), cada linha é uma faixa com porta-faixa na primeira célula, hover em faixa realce. Na fila de QA, os campos da faixa (#card · título · dias · retornos) ficam em caixas separadas por filete vertical de 1px, como a faixa de controle de voo. Na Equipe, sob cada número, a diferença para o período anterior em 11px tinta 3, sem cor; zero contra zero fica em branco. Cabeçalho fixo no fundo da baia, em Label 11px sans. Colunas de estado levam o quadradinho de 7px da cor no cabeçalho; os números da coluna ficam em tinta. Zeros e pessoas inativas em tinta 3. Rodapé de total em 600 sobre fundo transparente.
 
+### Fila de QA: cards fora do painel
+Os cards que o painel do Kanboard não mostra (muitas vezes sem título e sem responsável) ficam num grupo recolhido no fim da fila, "N fora do painel do Kanboard", aberto por um botão em Label sobre a baia. O topo da fila é sempre de cards em que alguém age. Título e responsável ausentes usam um texto único: "Título não registrado" e "Sem responsável".
+
+### Tabelas largas no celular
+Na Equipe, a coluna com o nome da pessoa fica fixa (sticky) quando a tabela rola para o lado. As abas do topo rolam na horizontal com a borda direita esmaecida, e o seletor de frente tem 40px de altura abaixo de 700px.
+
 ### Barra de carga
 Trilho rebaixado de 10px com segmentos de no mínimo 3px separados por 1px: A iniciar, Em andamento (neutros), Teste/QA (Azul Entrada), Correções (Vermelho Correção). Largura proporcional ao teto da escala (o maior total, ou 1,2× o segundo maior quando o maior passa de 1,5× o segundo); a barra que passa do teto enche e ganha um corte de 3px perto do fim, com o número inteiro ao lado. Legenda escrita acima. Linha de carga em campos com filete: nome · barra · total em mono. QA vem primeiro na lista.
 
@@ -292,8 +298,9 @@ Faixas agrupadas por dia (Label-sm), com horário em mono tinta 3 à esquerda, r
 
 ### Número clicável
 Os números principais abrem a lista dos cards que eles contam: os KPIs da Agora e da Pessoa e as células da Equipe.
-- **Em repouso:** sublinhado discreto, sempre visível, de 1px em --filete, afastado do número 0,2em. O peso e a cor do número não mudam.
-- **Hover e foco:** o sublinhado escurece para tinta 3, e o KPI vai para faixa realce.
+- **Em repouso:** sublinhado pontilhado de 1px em n6 (~2,9:1), afastado do número 0,2em: discreto, mas perceptível. O peso e a cor do número não mudam. Nome acessível: "77 Em QA agora: ver os cards".
+- **Área de toque:** cobre a célula do número (pseudo-elemento), sem mudar o desenho.
+- **Hover e foco:** o sublinhado fica contínuo em tinta 3, e o KPI vai para faixa realce.
 - **Não viram link:** zero, "—", linha de total e números do modo TV e da Reunião.
 - **"ver fila":** texto pequeno sublinhado no rodapé do KPI "Em QA", com a seta desenhada. Só aparece abaixo de 1100px, quando a fila sai da tela.
 
@@ -310,12 +317,11 @@ Os números principais abrem a lista dos cards que eles contam: os KPIs da Agora
 - **Celular:** projeto, pessoa, data e coluna descem para a linha de apoio, que quebra em vez de cortar.
 
 ### Descrição do card
-- **Posição:** seção "Descrição" sobre a linha do tempo, na coluna principal da tela Card.
+- **Posição:** a linha do tempo vem primeiro (é o que o Kanboard não guarda); a seção "Descrição" vem depois, recolhida em ~8 linhas com o botão "Mostrar a descrição inteira" quando o texto passa disso. Os títulos do Markdown descem para h4–h6, abaixo do h3 da seção.
 - **Texto:** Public Sans 14px com entrelinha 1,6 e medida de 75ch, para ler.
   - Títulos do Markdown em 16px/600 (h1 e h2) e 14px/600 (h3 em diante).
   - `code` e `pre` em mono 12px sobre o trilho, com 2px de canto; tabelas com filetes e rolagem lateral.
   - Links sublinhados em n5.
-- **Rolagem:** a partir de 1300px a descrição rola por dentro, até 55vh.
 - **O que não entra:** imagens somem e HTML cru vira texto.
 - **Estados:** "Descrição não coletada", "Sem descrição no Kanboard" e "… continua no Kanboard", como nota.
 - **Ficha:** ganha os campos do Kanboard antes dos de QA (coluna atual, responsável, datas, tempos, categoria, referência). A cor do Kanboard só aparece escrita ("vermelho"), nunca pintada: cor no quadro é só estado.

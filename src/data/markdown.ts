@@ -17,6 +17,11 @@ const renderer: RendererObject = {
   image() {
     return "";
   },
+  // A descrição mora sob o h3 "Descrição" da tela Card: # vira h4, ## h5, o resto h6.
+  heading(token: Tokens.Heading) {
+    const nivel = Math.min(token.depth + 3, 6);
+    return `<h${nivel}>${this.parser.parseInline(token.tokens)}</h${nivel}>\n`;
+  },
   link(token: Tokens.Link) {
     const texto = this.parser.parseInline(token.tokens);
     if (!PROTOCOLO_SEGURO.test(token.href)) return texto;

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Dashboard, Grupo, Pessoa as PessoaT, Prefixo } from "../data/contrato";
 import type { Rota, TipoReuniao } from "../data/rota";
 import { escreverRota } from "../data/rota";
-import { NOME_PAPEL, dataCurta, dataHora, haDias, duracao, mesCurto, nomeCurto, numero, porcento, separarEtiquetas } from "../data/formato";
+import { NOME_PAPEL, dataCurta, dataHora, haDias, duracao, mesCurto, nomeCurto, numero, porcento, separarEtiquetas, TEXTO_SEM_TITULO, tituloConhecido } from "../data/formato";
 import { emAndamento, intervalo, intervaloAnterior, mesAnterior, mesesDisponiveis, rotuloAnterior, type Periodo } from "../data/periodo";
 import { frasesQa, indiceProjetos, indiceTitulos, mesLocal, resumoPorMes, semReprovacao, type Filtro } from "../data/seletores";
 import {
@@ -308,13 +308,14 @@ function laminasMensal(d: Dashboard, periodo: Periodo, filtro: Filtro, altura: n
             />
             <Numero
               rotulo="Tempo médio em QA"
-              valor={n.tempoMedioH === null ? "—" : numero(Math.round(n.tempoMedioH))}
+              // Uma casa decimal, igual à tela Mensal: 62,5 h aqui e lá (crítica 08/10/2026).
+              valor={n.tempoMedioH === null ? "—" : numero(umaCasa(n.tempoMedioH))}
               unidade={n.tempoMedioH === null ? undefined : "h"}
               apoio={n.tempoMedioH === null ? undefined : `cerca de ${duracao(n.tempoMedioH * 3600)} por passagem`}
               anterior={
                 a && a.tempoMedioH !== null
-                  ? comparacao(antes, baseParcial, `${numero(Math.round(a.tempoMedioH))} h`,
-                      n.tempoMedioH === null ? null : Math.round(n.tempoMedioH), Math.round(a.tempoMedioH), " h")
+                  ? comparacao(antes, baseParcial, `${numero(umaCasa(a.tempoMedioH))} h`,
+                      n.tempoMedioH === null ? null : umaCasa(n.tempoMedioH), umaCasa(a.tempoMedioH), " h")
                   : undefined
               }
             />
@@ -343,11 +344,13 @@ function laminasMensal(d: Dashboard, periodo: Periodo, filtro: Filtro, altura: n
   const { porPessoa: porPessoaAntes } = resumirPorPessoa(atribuicoesDe(d, ant, filtro), semReprovacao(d));
   // Altura de uma linha da tabela projetada, pela mesma escala --r-* do CSS:
   // dado = clamp(16px, 2.2vh, 24px) com 1,45 de entrelinha, respiro = clamp(4px, 0.7vh, 10px).
-  // Sobram ~290px para cabeça, cabeçalho da tabela e rodapé.
+  // Cabeça, cabeçalho da tabela e rodapé usam ~30% da altura (escala em vh). A
+  // reserva fixa de 290px deixava 14 DEVs em duas lâminas de 7, com meia tela
+  // vazia; medido em 800px: corpo de 121 a 740, linha de 37px (crítica 08/10/2026).
   const dado = Math.min(24, Math.max(16, altura * 0.022));
   const respiro = Math.min(10, Math.max(4, altura * 0.007));
   const alturaLinha = dado * 1.45 + 2 * respiro + 1;
-  const linhasPorLamina = Math.max(4, Math.floor((altura - 290) / alturaLinha));
+  const linhasPorLamina = Math.max(4, Math.floor((altura * 0.7) / alturaLinha));
   const parcialAnt = periodo.tipo === "mes" && mesParcial(d, mesAnterior(periodo.mes));
   const rotuloAnt = rotuloAnterior(periodo, agora) + (parcialAnt ? " (parcial)" : "");
 
@@ -450,6 +453,8 @@ function VolumeEGrupos({ d, filtro, ate }: { d: Dashboard; filtro: Filtro; ate: 
   const grupos = useMemo<OpcoesGrafico>(() => {
     const b = base();
     const ordem: Grupo[] = ["dev", "estagiario_dev", "qa", "estagiario_qa", "gestao", "outros"];
+    const maiorPilha = Math.max(1, ...composicao.map((c) => Object.values(c.entregues).reduce((x, y) => x + y, 0)));
+    const limiarRotulo = Math.max(3, Math.round(maiorPilha * 0.06));
     const tokens: Record<Grupo, string> = {
       dev: "--grupo-dev", estagiario_dev: "--grupo-est-dev", qa: "--grupo-qa", estagiario_qa: "--grupo-est-qa", gestao: "--grupo-gestao", outros: "--grupo-outros",
     };
@@ -461,6 +466,18 @@ function VolumeEGrupos({ d, filtro, ate }: { d: Dashboard; filtro: Filtro; ate: 
         .map((g) => ({
           name: ROTULO_GRUPO[g], type: "bar" as const, stack: "t", barMaxWidth: 40,
           data: composicao.map((c) => c.entregues[g]), itemStyle: { color: cor(tokens[g]) },
+          // Valor escrito em cada faixa: num projetor ninguém passa o mouse, e os cinzas
+          // dos grupos são próximos (crítica 08/10/2026). Faixa pequena demais fica sem rótulo.
+          label: {
+            show: true,
+            position: "inside" as const,
+            color: cor("--tinta-1"),
+            textBorderColor: cor("--faixa"),
+            textBorderWidth: 3,
+            fontFamily: getComputedStyle(document.documentElement).getPropertyValue("--face-dado").trim(),
+            fontSize: 13,
+            formatter: (p: { value: unknown }) => (Number(p.value) >= limiarRotulo ? String(p.value) : ""),
+          },
         })),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -605,7 +622,7 @@ function laminasIndividual(d: Dashboard, periodo: Periodo, filtro: Filtro, uid: 
   const cards = cardsParaConversar(d, uid, atual, filtro, qa);
   const titulos = indiceTitulos(d);
   const projetos = indiceProjetos(d);
-  const titulo = (task: number) => separarEtiquetas(titulos.get(task) ?? "").resto || "Título não registrado";
+  const titulo = (task: number) => separarEtiquetas(tituloConhecido(titulos.get(task))).resto || TEXTO_SEM_TITULO;
 
   return [
     {
@@ -686,3 +703,5 @@ function ListaConversa({
     </section>
   );
 }
+
+const umaCasa = (h: number) => Math.round(h * 10) / 10;

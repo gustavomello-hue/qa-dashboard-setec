@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import type { Dashboard } from "../data/contrato";
-import { NOME_PAPEL, dataCurta, haDias, nomeCurto, numero, porcento, separarEtiquetas } from "../data/formato";
+import { NOME_PAPEL, TEXTO_SEM_TITULO, dataCurta, haDias, nomeCurto, numero, porcento, separarEtiquetas, tituloConhecido } from "../data/formato";
 import { intervalo, intervaloAnterior, mesAnterior, rotuloAnterior, rotuloPeriodoLongo, ultimoDia, type Periodo } from "../data/periodo";
 import { mesParcial } from "../data/reuniao";
 import { indiceProjetos, indiceTitulos, mesLocal, semReprovacao, type Filtro } from "../data/seletores";
@@ -327,8 +327,8 @@ function ListaAbertos({
 
 /** Cards parados desde antes do ledger não têm título guardado (o snapshot não traz título). */
 function TituloCard({ titulo }: { titulo?: string }) {
-  const resto = titulo ? separarEtiquetas(titulo).resto : "";
-  return resto ? <span title={resto}>{resto}</span> : <span className="meta">Título não registrado (card anterior ao histórico)</span>;
+  const resto = separarEtiquetas(tituloConhecido(titulo)).resto;
+  return resto ? <span title={resto}>{resto}</span> : <span className="meta">{TEXTO_SEM_TITULO}</span>;
 }
 
 /** "3 de 8 cards julgados": vira link para a base da taxa quando há lista. */

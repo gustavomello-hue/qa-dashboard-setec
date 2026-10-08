@@ -28,7 +28,7 @@ export function Kpi({ rotulo, valor, tom = "neutro", anterior, rotuloAnterior, d
   return (
     <div className={`kpi kpi--${tom}${menor ? " kpi--menor" : ""}`} title={dica}>
       <dt className="kpi__rotulo">{rotulo}</dt>
-      <dd className="kpi__valor">{href && valor !== 0 ? <a className="kpi__link" href={href} title="Ver os cards deste número">{texto}</a> : texto}</dd>
+      <dd className="kpi__valor">{href && valor !== 0 ? <a className="kpi__link" href={href} aria-label={`${texto} ${rotulo}: ver os cards`}>{texto}</a> : texto}</dd>
       <dd
         className="kpi__sub"
         title={anterior !== undefined && dicaAnterior ? `${dicaAnterior}: ${typeof anterior === "number" ? numero(anterior) : anterior}` : undefined}

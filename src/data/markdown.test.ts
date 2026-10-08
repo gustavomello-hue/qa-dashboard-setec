@@ -26,4 +26,12 @@ describe("descrição em Markdown", () => {
     expect(ruim).not.toContain("<a");
     expect(ruim).toContain("x");
   });
+  it("títulos ficam abaixo do h3 'Descrição' da tela Card", () => {
+    const html = descricaoHtml("# Um\n\n## Dois\n\n### Três\n\n#### Quatro");
+    expect(html).not.toMatch(/<h[1-3][ >]/);
+    expect(html).toContain("<h4>Um</h4>");
+    expect(html).toContain("<h5>Dois</h5>");
+    expect(html).toContain("<h6>Três</h6>");
+    expect(html).toContain("<h6>Quatro</h6>");
+  });
 });

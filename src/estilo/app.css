@@ -1524,7 +1524,7 @@ a.link-pessoa:hover {
 }
 
 .aviso p {
-  max-width: 110ch;
+  max-width: 72ch;
 }
 
 /* ---------- Pontos do revisor: a gramática da faixa por inteiro ---------- */
@@ -1784,6 +1784,7 @@ a.link-pessoa:hover {
 
 .grande {
   margin: 0;
+  container-type: inline-size;
   background: var(--faixa);
   padding: clamp(14px, 2.4vh, 28px) clamp(16px, 2vw, 28px) clamp(14px, 2.4vh, 28px) calc(var(--porta) + clamp(14px, 2vw, 26px));
   box-shadow: inset calc(var(--porta) + 2px) 0 0 var(--porta-cor, var(--n4));
@@ -1806,7 +1807,8 @@ a.link-pessoa:hover {
 
 .grande__valor {
   text-align: left;
-  font-size: var(--r-numeral);
+  /* Encolhe com o bloco: "34,0%" encostava na borda numa grade de 4 blocos. */
+  font-size: min(var(--r-numeral), 21cqi);
   font-weight: 500;
   line-height: 1;
   letter-spacing: -0.03em;
@@ -1837,7 +1839,9 @@ a.link-pessoa:hover {
 .conversa {
   display: grid;
   gap: clamp(16px, 2vw, 32px);
-  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  /* 300px: as três listas cabem lado a lado num projetor 1280; com 380 a terceira
+     caía para baixo e o rodapé a cortava (crítica 08/10/2026). */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
   align-items: start;
 }
 
@@ -2279,9 +2283,10 @@ a.botao--primario {
 .kpi__link,
 .link-numero {
   color: inherit;
-  text-decoration: underline;
+  text-decoration: underline dotted;
   text-decoration-thickness: 1px;
-  text-decoration-color: var(--filete);
+  /* n6 pontilhado (~2,9:1): ainda discreto, mas dá para ver que o número abre os cards (crítica 08/10/2026). */
+  text-decoration-color: var(--n6);
   text-underline-offset: 0.2em;
 }
 
@@ -2289,6 +2294,7 @@ a.botao--primario {
 .kpi__link:focus-visible,
 .link-numero:hover,
 .link-numero:focus-visible {
+  text-decoration-style: solid;
   text-decoration-color: var(--tinta-3);
 }
 
@@ -2393,17 +2399,14 @@ a.botao--primario {
   margin-bottom: 0;
 }
 
-.descricao__texto h1,
-.descricao__texto h2 {
+.descricao__texto h4,
+.descricao__texto h5 {
   margin: 1.1em 0 0.35em;
   font-size: var(--t-titulo);
   font-weight: 600;
   line-height: 1.3;
 }
 
-.descricao__texto h3,
-.descricao__texto h4,
-.descricao__texto h5,
 .descricao__texto h6 {
   margin: 1em 0 0.3em;
   font-size: var(--t-corpo);
@@ -2517,11 +2520,6 @@ a.botao--primario {
     margin-right: 0;
   }
 
-  /* Descrição longa rola por dentro: a linha do tempo continua à vista. */
-  .card-corpo--com-ficha .descricao__texto {
-    max-height: 55vh;
-    overflow: auto;
-  }
 }
 
 /* ---------- Agora: sete contadores ---------- */
@@ -2570,4 +2568,110 @@ a.botao--primario {
 /* Notas soltas sobre o trilho; as que são caixa de faixa (card-secao__nota) ocupam a largura toda. */
 .nota:not(.card-secao__nota) {
   max-width: 64ch;
+}
+
+/* ---------- Card: linha do tempo primeiro, descrição recolhida (crítica 08/10/2026) ---------- */
+/* Recolhida em ~8 linhas em qualquer largura: o roteiro do Kanboard não empurra a
+   linha do tempo (o que só este painel sabe) para o fim da página. */
+.descricao__texto--recolhida {
+  max-height: calc(8 * 1.6em + 12px);
+  overflow: hidden;
+}
+
+.descricao__alternar {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  gap: 6px;
+  align-items: center;
+  border: 0;
+  border-top: 1px solid var(--filete);
+  background: var(--faixa);
+  color: var(--tinta-2);
+  font: inherit;
+  font-size: var(--t-meta);
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.descricao__alternar:hover {
+  background: var(--faixa-realce);
+  color: var(--tinta-1);
+}
+
+/* Fila: cards fora do painel num grupo recolhido no fim (crítica 08/10/2026). */
+.tabela tbody tr.fila__grupo > th,
+.tabela tbody tr.fila__grupo:hover > th {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.fila__alternar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  border: 0;
+  background: var(--baia);
+  color: var(--tinta-2);
+  font: inherit;
+  font-size: var(--t-meta);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.fila__alternar:hover {
+  color: var(--tinta-1);
+}
+
+/* ---------- Celular e tabelas largas (crítica 08/10/2026) ---------- */
+/* Equipe: o nome da pessoa fica fixo quando a tabela rola para o lado. */
+.tabela-grupo .tabela thead th:first-child,
+.tabela-grupo .tabela tbody th[scope="row"],
+.tabela-grupo .tabela tfoot th[scope="row"] {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+
+.tabela-grupo .tabela tbody th[scope="row"] {
+  background: var(--faixa);
+}
+
+.tabela-grupo .tabela tbody tr:hover > th[scope="row"] {
+  background: var(--faixa-realce);
+}
+
+.tabela-grupo .tabela tfoot th[scope="row"] {
+  background: var(--baia);
+}
+
+@media (max-width: 700px) {
+  /* As abas rolam para o lado; a borda direita esmaece para dizer que há mais. */
+  .topo nav {
+    min-width: 0;
+    flex: 1 1 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-mask: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+    mask: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+  }
+
+  .topo nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .abas {
+    width: max-content;
+    padding-right: 28px;
+  }
+
+  /* Seletor de frente: alvo de toque de 40px (era 25px). */
+  .segmentado__opcao {
+    min-height: 40px;
+  }
 }

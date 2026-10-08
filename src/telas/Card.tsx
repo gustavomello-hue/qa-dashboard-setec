@@ -1,5 +1,6 @@
+import { useLayoutEffect, useRef, useState } from "react";
 import type { Dashboard, DetalheCard, Evento } from "../data/contrato";
-import { NOME_EVENTO, dataCurta, dataHora, duracao, nomeCurto, numero } from "../data/formato";
+import { NOME_EVENTO, TEXTO_SEM_TITULO, dataCurta, dataHora, duracao, nomeCurto, numero, tituloConhecido } from "../data/formato";
 import { historicoDoCard, permanencias } from "../data/seletores";
 import { indicePessoas, nomeDe } from "../data/pessoas";
 import { descricaoHtml } from "../data/markdown";
@@ -20,7 +21,8 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
   const metricas = card ? dados.cards.find((c) => c.task_id === card) : undefined;
   const naFila = card ? dados.fila_qa.find((c) => c.task_id === card) : undefined;
   const detalhe = card ? dados.detalhes_cards?.[String(card)] : undefined;
-  const titulo = metricas?.titulo || naFila?.titulo || historico.findLast((e) => e.titulo)?.titulo || detalhe?.titulo;
+  const titulo =
+    tituloConhecido(metricas?.titulo) || tituloConhecido(naFila?.titulo) || tituloConhecido(historico.findLast((e) => e.titulo)?.titulo) || tituloConhecido(detalhe?.titulo) || TEXTO_SEM_TITULO;
   const link = metricas?.link || naFila?.link || historico.findLast((e) => e.link)?.link || detalhe?.link || undefined;
   // Quanto tempo o card ficou em cada coluna: o que o Kanboard não guarda.
   const estadias = permanencias(historico, dados.coleta.momento);
@@ -99,7 +101,6 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
             </dl>
           )}
           <div className="card-principal">
-          <Descricao detalhe={detalhe} link={link} />
           <section className="card-secao" aria-labelledby="t-linha-tempo">
           <h3 id="t-linha-tempo" className="card-secao__titulo">Linha do tempo</h3>
           {historico.length === 0 ? (
@@ -129,6 +130,8 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
           </ol>
           )}
           </section>
+          {/* A descrição vem depois: a linha do tempo é o que o Kanboard não guarda. */}
+          <Descricao detalhe={detalhe} link={link} />
           </div>
           </div>
         </section>
@@ -185,7 +188,7 @@ function Descricao({ detalhe, link }: { detalhe?: DetalheCard; link?: string }) 
       ) : detalhe.descricao ? (
         <div className="descricao__corpo">
           {/* HTML de descricaoHtml: Markdown sem imagens, HTML cru escapado, links só http/https/mailto (markdown.test.ts). */}
-          <div className="descricao__texto" dangerouslySetInnerHTML={{ __html: descricaoHtml(detalhe.descricao) }} />
+          <TextoRecolhivel html={descricaoHtml(detalhe.descricao)} />
           {detalhe.descricao_cortada && (
             <p className="nota descricao__corte">
               … continua
@@ -202,5 +205,32 @@ function Descricao({ detalhe, link }: { detalhe?: DetalheCard; link?: string }) 
         <p className="nota card-secao__nota">Sem descrição no Kanboard.</p>
       )}
     </section>
+  );
+}
+
+/** Descrição em ~8 linhas; o botão só aparece quando o texto passa disso. */
+function TextoRecolhivel({ html }: { html: string }) {
+  const texto = useRef<HTMLDivElement>(null);
+  const [aberto, setAberto] = useState(false);
+  const [longo, setLongo] = useState(false);
+  useLayoutEffect(() => {
+    const el = texto.current;
+    if (el && !aberto) setLongo(el.scrollHeight > el.clientHeight + 4);
+  }, [html, aberto]);
+  return (
+    <>
+      <div
+        id="descricao-texto"
+        ref={texto}
+        className={`descricao__texto${aberto ? "" : " descricao__texto--recolhida"}`}
+        // HTML de descricaoHtml: Markdown sem imagens, HTML cru escapado, links só http/https/mailto (markdown.test.ts).
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+      {(longo || aberto) && (
+        <button type="button" className="descricao__alternar" aria-expanded={aberto} aria-controls="descricao-texto" onClick={() => setAberto(!aberto)}>
+          <Icone nome={aberto ? "cima" : "baixo"} tamanho={14} /> {aberto ? "Recolher a descrição" : "Mostrar a descrição inteira"}
+        </button>
+      )}
+    </>
   );
 }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { Dashboard } from "../data/contrato";
 import type { Rota } from "../data/rota";
-import { dataCurta, nomeCurto, separarEtiquetas } from "../data/formato";
+import { TEXTO_SEM_TITULO, dataCurta, nomeCurto, separarEtiquetas, tituloConhecido } from "../data/formato";
 import { diaLocal, indiceProjetos, indiceTitulos } from "../data/seletores";
 import { indicePessoas, nomeDe } from "../data/pessoas";
 import { mesesDisponiveis } from "../data/periodo";
@@ -76,7 +76,7 @@ export function Lista({ dados, rota, agora, ir, hrefCard, hrefPessoa }: Props) {
   for (const c of dados.cards) if (c.link) links.set(c.task_id, c.link);
   for (const c of dados.fila_qa) if (c.link) links.set(c.task_id, c.link);
   const detalhe = (id: number) => dados.detalhes_cards?.[String(id)];
-  const tituloDe = (id: number) => separarEtiquetas(titulos.get(id) ?? detalhe(id)?.titulo ?? "").resto;
+  const tituloDe = (id: number) => separarEtiquetas(tituloConhecido(titulos.get(id)) || tituloConhecido(detalhe(id)?.titulo)).resto;
   const termo = busca.trim().toLocaleLowerCase("pt-BR");
   const linhas = resultado.linhas
     .filter((l) => !termo || tituloDe(l.task_id).toLocaleLowerCase("pt-BR").includes(termo) || String(l.task_id).includes(termo.replace(/^#/, "")))
@@ -225,11 +225,11 @@ export function Lista({ dados, rota, agora, ir, hrefCard, hrefPessoa }: Props) {
                       <td className="celula-titulo">
                         {link ? (
                           <a href={link} target="_blank" rel="noreferrer" title={`${titulo} (abre no Kanboard)`}>
-                            {titulo || "Título não registrado"}
+                            {titulo || TEXTO_SEM_TITULO}
                             <span className="sr"> (abre no Kanboard, em nova aba)</span>
                           </a>
                         ) : (
-                          <span className="lista__titulo" title={titulo}>{titulo || <span className="meta">Título não registrado</span>}</span>
+                          <span className="lista__titulo" title={titulo}>{titulo || <span className="meta">{TEXTO_SEM_TITULO}</span>}</span>
                         )}
                         {/* Linha de apoio: no celular ela leva os campos que saem da tabela. */}
                         <span className="meta">

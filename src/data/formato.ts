@@ -111,3 +111,19 @@ export function haDias(ts: number | null, agora = Date.now()): string {
   if (n === null) return "";
   return n <= 0 ? "hoje" : n === 1 ? "há 1 dia" : `há ${n} dias`;
 }
+
+// Textos de ausência: o coletor (Python) escreve placeholders sem acento, e cada
+// tela dizia uma coisa. A tela usa um texto só (crítica 08/10/2026).
+const SEM_TITULO_COLETOR = "(titulo fora do historico)";
+const SEM_RESPONSAVEL_COLETOR = "(nao atribuido)";
+export const TEXTO_SEM_TITULO = "Título não registrado";
+
+/** Título real do card, ou "" quando o coletor não o conhece. */
+export function tituloConhecido(titulo: string | null | undefined): string {
+  return !titulo || titulo === SEM_TITULO_COLETOR ? "" : titulo;
+}
+
+/** Nome do responsável, com "Sem responsável" no lugar do placeholder do coletor. */
+export function responsavelLegivel(nome: string | null | undefined): string {
+  return !nome || nome === SEM_RESPONSAVEL_COLETOR ? "Sem responsável" : nome;
+}

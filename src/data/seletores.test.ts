@@ -290,3 +290,16 @@ describe("revisão final da etapa 4", () => {
     expect(escreverRota(rotaDaTela({ tela: "projetos", filtro: {}, detalhe: 12 }, "projetos"))).toBe("#/projetos");
   });
 });
+
+describe("textos de ausência unificados (crítica 08/10)", () => {
+  it("placeholder do coletor vira o texto único da tela", async () => {
+    const { tituloConhecido, responsavelLegivel, TEXTO_SEM_TITULO } = await import("./formato");
+    expect(tituloConhecido("(titulo fora do historico)")).toBe("");
+    expect(tituloConhecido(null)).toBe("");
+    expect(tituloConhecido("Card real")).toBe("Card real");
+    expect(TEXTO_SEM_TITULO).toBe("Título não registrado");
+    expect(responsavelLegivel("(nao atribuido)")).toBe("Sem responsável");
+    expect(responsavelLegivel("")).toBe("Sem responsável");
+    expect(responsavelLegivel("Hanry")).toBe("Hanry");
+  });
+});
