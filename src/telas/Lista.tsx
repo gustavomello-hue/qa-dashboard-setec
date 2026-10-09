@@ -85,6 +85,8 @@ export function Lista({ dados, rota, agora, ir, hrefCard, hrefPessoa }: Props) {
   const meses = mesesDisponiveis(dados.equipe?.desde ?? dados.regras.qa_confiavel_desde, agora);
   const tom = TOM_LISTA[consulta.metrica];
   const algumRepetido = linhas.some((l) => l.vezes > 1);
+  // Lista já filtrada por uma pessoa: a coluna Pessoa repetiria o mesmo nome em toda linha.
+  const mostrarPessoa = consulta.pessoa === undefined;
 
   const copiar = async () => {
     const texto = textoCopiar(linhas);
@@ -205,7 +207,7 @@ export function Lista({ dados, rota, agora, ir, hrefCard, hrefPessoa }: Props) {
                   <th scope="col">Card</th>
                   <th scope="col">Título</th>
                   <th scope="col" className="so-largo">Projeto</th>
-                  <th scope="col" className="so-largo">Pessoa</th>
+                  {mostrarPessoa && <th scope="col" className="so-largo">Pessoa</th>}
                   <th scope="col" className="num so-largo">Quando</th>
                   <th scope="col" className="so-largo">Coluna atual</th>
                   {algumRepetido && <th scope="col" className="num" title="Quantas vezes o card conta no número">Vezes</th>}
@@ -235,16 +237,16 @@ export function Lista({ dados, rota, agora, ir, hrefCard, hrefPessoa }: Props) {
                         <span className="meta">
                           {l.etiqueta && <span className={`etiqueta etiqueta--${l.etiqueta.tom}`}>{l.etiqueta.texto}</span>}
                           <span className="so-estreito">{projeto}</span>
-                          {l.pessoa && <span className="so-estreito meta__pessoa">{l.pessoa}</span>}
+                          {mostrarPessoa && l.pessoa && <span className="so-estreito meta__pessoa">{l.pessoa}</span>}
                           <span className="so-estreito num">{quando}</span>
                           {l.coluna && <span className="so-estreito">{l.coluna}</span>}
                         </span>
                       </td>
                       <td className="so-largo lista__curta" title={projeto}>{projeto}</td>
-                      <td className="so-largo">{l.pessoa || "—"}</td>
+                      {mostrarPessoa && <td className="so-largo">{l.pessoa || "—"}</td>}
                       <td className="num so-largo">{quando}</td>
                       <td className="so-largo lista__curta" title={l.coluna ?? undefined}>{l.coluna ?? "—"}</td>
-                      {algumRepetido && <td className={`num${l.vezes > 1 ? "" : " zero"}`}>{l.vezes > 1 ? `${l.vezes}×` : "1"}</td>}
+                      {algumRepetido && <td className={`num${l.vezes > 1 ? "" : " zero"}`}>{`${l.vezes}×`}</td>}
                     </tr>
                   );
                 })}

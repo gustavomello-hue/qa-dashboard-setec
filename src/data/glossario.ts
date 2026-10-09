@@ -18,7 +18,7 @@ export const DEFINICAO = {
     "Cards da pessoa que mudaram de coluna para Backlog, A iniciar, Em andamento, Interrompidas ou outra coluna fora do fluxo de QA.",
   movimentados:
     "Cards que mudaram de coluna para Backlog, A iniciar, Em andamento, Interrompidas ou outra coluna fora do fluxo de QA. Correções, Teste/QA e Concluídas têm contadores próprios.",
-  abertos: "Cards com a pessoa agora em A iniciar, Em andamento, Teste/QA ou Correções.",
+  abertos: "Cards com a pessoa agora em A iniciar, Em andamento, Teste/QA, Correções ou Interrompidas. Backlog e colunas fora do padrão não contam.",
   testados: "Saídas de Teste/QA feitas pela pessoa: aprovou mais reprovou.",
   aprovou: "Moveu o card de Teste/QA para Concluídas.",
   reprovou: "Moveu o card de Teste/QA para Correções.",

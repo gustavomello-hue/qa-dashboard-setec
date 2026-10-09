@@ -70,7 +70,7 @@ const COLUNAS: { id: ChaveOrdem; rotulo: string; dica: string; larga?: boolean }
   { id: "parados", rotulo: "Parados", dica: "Sem movimentação há 15 dias ou mais, fora do backlog e de interrompidas" },
   { id: "entradas", rotulo: "Entradas no mês", dica: "Cards criados no mês corrente", larga: true },
   { id: "saidas", rotulo: "Saídas no mês", dica: "Cards que chegaram à coluna concluída ou foram fechados no mês corrente", larga: true },
-  { id: "ciclo", rotulo: "Ciclo 90 d", dica: "Dias corridos da criação à saída, nos últimos 90 dias: mediana e P85", larga: true },
+  { id: "ciclo", rotulo: "Ciclo 90 d", dica: "Dias corridos da criação à saída, nos últimos 90 dias: mediana e P85. — = nenhuma saída nos últimos 90 dias.", larga: true },
 ];
 
 function VisaoGeral({ dados, agora, hrefDetalhe, aviso }: { dados: Dashboard; agora: Date; hrefDetalhe: (id: number) => string; aviso: React.ReactNode }) {
@@ -173,12 +173,14 @@ function LinhaProjeto({ p, agora, href }: { p: ProjetoFluxo; agora: Date; href: 
 function Ciclo({ p }: { p: ProjetoFluxo }) {
   const c = p.ciclo_90d;
   if (!p.mede_saida) return <span className="nao-medido">não medido</span>;
-  if (c.n === 0) return <span className="nao-medido">sem saídas em 90 d</span>;
+  // "—" com a explicação no cabeçalho: o texto repetido em dezenas de linhas virava ruído.
+  if (c.n === 0) return <span className="nao-medido" title="Nenhuma saída nos últimos 90 dias">—</span>;
   if (c.mediana === null) return <span className="nao-medido">poucos dados (n={c.n})</span>;
   return (
     <>
       {dias(c.mediana)}
-      <span className="delta">P85 {dias(c.p85)}</span>
+      {/* P85 na mesma linha: em sub-linha a faixa mudava de altura (34 × 46px). */}
+      <span className="ciclo__p85">P85 {dias(c.p85)}</span>
     </>
   );
 }

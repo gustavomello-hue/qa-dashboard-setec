@@ -34,4 +34,9 @@ describe("descrição em Markdown", () => {
     expect(html).toContain("<h6>Três</h6>");
     expect(html).toContain("<h6>Quatro</h6>");
   });
+  it("descrição que começa em ## também começa em h4 (sem pular nível)", () => {
+    const html = descricaoHtml("## Visão\n\n### Fluxo");
+    expect(html).toContain("<h4>Visão</h4>");
+    expect(html).toContain("<h5>Fluxo</h5>");
+  });
 });

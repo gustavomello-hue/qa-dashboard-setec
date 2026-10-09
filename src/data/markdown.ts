@@ -17,9 +17,10 @@ const renderer: RendererObject = {
   image() {
     return "";
   },
-  // A descrição mora sob o h3 "Descrição" da tela Card: # vira h4, ## h5, o resto h6.
+  // A descrição mora sob o h3 "Descrição" da tela Card: o menor nível usado vira h4
+  // (texto que começa em ## não pula de h3 para h5), os seguintes descem até h6.
   heading(token: Tokens.Heading) {
-    const nivel = Math.min(token.depth + 3, 6);
+    const nivel = Math.min(Math.max(token.depth + deslocamento, 4), 6);
     return `<h${nivel}>${this.parser.parseInline(token.tokens)}</h${nivel}>\n`;
   },
   link(token: Tokens.Link) {
@@ -32,6 +33,12 @@ const renderer: RendererObject = {
 
 const md = new Marked({ gfm: true, breaks: true, renderer });
 
+/** Quanto somar ao nível de cada título; recalculado a cada descrição. */
+let deslocamento = 3;
+
 export function descricaoHtml(texto: string): string {
-  return md.parse(texto, { async: false }) as string;
+  const tokens = md.lexer(texto);
+  const niveis = tokens.filter((t): t is Tokens.Heading => t.type === "heading").map((t) => t.depth);
+  deslocamento = 4 - (niveis.length ? Math.min(...niveis) : 1);
+  return md.parser(tokens);
 }

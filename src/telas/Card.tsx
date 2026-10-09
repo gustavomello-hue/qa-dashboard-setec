@@ -107,26 +107,34 @@ export function Card({ dados, card, abrir }: { dados: Dashboard; card?: number; 
             <p className="nota card-secao__nota">Nenhuma movimentação registrada desde ago/26.</p>
           ) : (
           <ol className="linha-tempo">
-            {historico.map((e, i) => (
-              <li key={i} className={`linha-tempo__item faixa--${TOM_EVENTO[e.evento] ?? "neutro"}`}>
+            {historico.map((e, i) => {
+              // Card criado direto em Teste/QA: "Criado" e a entrada derivada no mesmo minuto
+              // viram uma faixa só, "Criado em Teste/QA" (crítica 09/10/2026).
+              if (entradaDerivada(historico, i)) return null;
+              const junta = entradaDerivada(historico, i + 1);
+              const tom = junta ? "entrada" : TOM_EVENTO[e.evento] ?? "neutro";
+              const estadia = junta ? estadias[i + 1] : estadias[i];
+              return (
+              <li key={i} className={`linha-tempo__item faixa--${tom}`}>
                 <span className="linha-tempo__quando num">{dataHora(e.momento)}</span>
-                <span className={`etiqueta etiqueta--${TOM_EVENTO[e.evento] ?? "neutro"}`}>
-                  {NOME_EVENTO[e.evento] ?? e.evento}
+                <span className={`etiqueta etiqueta--${tom}`}>
+                  {junta ? "Criado em QA" : NOME_EVENTO[e.evento] ?? e.evento}
                 </span>
                 <span className="linha-tempo__de-para">
                   {/* Entrada derivada de card criado direto em Teste/QA: não veio de coluna nenhuma, nasceu ali. */}
-                  {e.de_coluna ?? (e.evento === "entrou_qa" ? "criado" : "?")} <Icone nome="seta" tamanho={12} /> {e.para_coluna ?? "?"}
+                  {e.de_coluna || (e.evento === "entrou_qa" || e.evento === "criada" ? "criado" : "?")} <Icone nome="seta" tamanho={12} /> {e.para_coluna ?? "?"}
                   {e.movido_por && <span className="meta"> · por {nome(e.movido_por)}</span>}
                   {e.origem === "atividade" && <span className="meta"> · amostra do Kanboard</span>}
                 </span>
-                <span className={`linha-tempo__estadia${estadias[i]?.emQa ? " linha-tempo__estadia--qa" : ""}`}>
-                  {estadias[i] &&
-                    (estadias[i]!.atual
-                      ? `há ${duracao(estadias[i]!.segundos)} em ${estadias[i]!.coluna}`
-                      : `${duracao(estadias[i]!.segundos)} em ${estadias[i]!.coluna}`)}
+                <span className={`linha-tempo__estadia${estadia?.emQa ? " linha-tempo__estadia--qa" : ""}`}>
+                  {estadia &&
+                    (estadia.atual
+                      ? `há ${duracao(estadia.segundos)} em ${estadia.coluna}`
+                      : `${duracao(estadia.segundos)} em ${estadia.coluna}`)}
                 </span>
               </li>
-            ))}
+              );
+            })}
           </ol>
           )}
           </section>
@@ -233,4 +241,11 @@ function TextoRecolhivel({ html }: { html: string }) {
       )}
     </>
   );
+}
+
+/** A entrada em QA derivada (card criado direto em Teste/QA), logo depois do "Criado" do mesmo minuto. */
+function entradaDerivada(historico: Evento[], i: number): boolean {
+  const e = historico[i];
+  const antes = historico[i - 1];
+  return !!e && !!antes && e.evento === "entrou_qa" && !e.de_coluna && antes.evento === "criada" && antes.momento === e.momento;
 }

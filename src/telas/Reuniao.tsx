@@ -298,7 +298,7 @@ function laminasMensal(d: Dashboard, periodo: Periodo, filtro: Filtro, altura: n
               anterior={a ? comparacao(antes, baseParcial, numero(a.entradas), n.entradas, a.entradas) : undefined} />
             <Numero rotulo="Aprovados" tom="aprovado" valor={numero(n.aprovados)}
               anterior={a ? comparacao(antes, baseParcial, numero(a.aprovados), n.aprovados, a.aprovados) : undefined} />
-            <Numero rotulo="Reprovados" tom="reprovado" valor={numero(n.reprovados)}
+            <Numero rotulo="Reprovações" tom="reprovado" valor={numero(n.reprovados)}
               anterior={a ? comparacao(antes, baseParcial, numero(a.reprovados), n.reprovados, a.reprovados) : undefined} />
             <Numero
               rotulo="% cards reprovados"
@@ -406,7 +406,7 @@ function laminasMensal(d: Dashboard, periodo: Periodo, filtro: Filtro, altura: n
           {obs.lacunas.length === 0
             ? "Coleta contínua no expediente durante o mês."
             : `${obs.lacunas.length} lacuna${obs.lacunas.length > 1 ? "s" : ""} de coleta no mês: ${obs.lacunas
-                .map((l) => `${dataHora(l.inicio)} a ${dataHora(l.fim)} (${l.horas_expediente.toLocaleString("pt-BR")} h)`)
+                .map((l) => `${dataHora(l.inicio)} a ${dataHora(l.fim)} (${l.horas_expediente.toLocaleString("pt-BR")} h de expediente)`)
                 .join("; ")}.`}
         </li>
         <li>Medição de QA confiável desde {mesCurto(d.regras.qa_confiavel_desde)}: antes disso só há amostra incompleta.</li>
@@ -423,16 +423,19 @@ function VolumeEGrupos({ d, filtro, ate }: { d: Dashboard; filtro: Filtro; ate: 
   const chave = linhas.map((l) => l.ano_mes + l.entradas).join() + composicao.map((c) => JSON.stringify(c.entregues)).join() + tema;
   // Na projeção ninguém passa o mouse: o número vai escrito na barra. Mês parcial vem marcado.
   const rotulo = (m: string) => (mesParcial(d, m) ? `${mesCurto(m)} (parcial)` : mesCurto(m));
-  const valorNaBarra = { show: true, position: "top" as const, fontSize: 16, color: cor("--tinta-1") };
+  // Escala de projeção (como --r-dado no CSS): 16 a 24px pela altura da tela. Legenda,
+  // eixos e valores em 11–16px não se liam a 3 m (crítica 09/10/2026).
+  const escala = Math.round(Math.min(24, Math.max(16, window.innerHeight * 0.022)));
+  const valorNaBarra = { show: true, position: "top" as const, fontSize: escala, color: cor("--tinta-1") };
 
   const grande = (o: OpcoesGrafico): OpcoesGrafico => {
-    const fonte = { fontSize: 16 };
+    const fonte = { fontSize: escala };
     return {
       ...o,
-      legend: { ...(o.legend as object), itemWidth: 14, itemHeight: 14, textStyle: { color: cor("--tinta-1"), ...fonte } },
+      legend: { ...(o.legend as object), itemWidth: escala, itemHeight: escala, itemGap: escala, textStyle: { color: cor("--tinta-1"), ...fonte } },
       xAxis: { ...(o.xAxis as object), axisLabel: { ...((o.xAxis as { axisLabel?: object }).axisLabel ?? {}), ...fonte } },
       yAxis: { ...(o.yAxis as object), axisLabel: { ...((o.yAxis as { axisLabel?: object }).axisLabel ?? {}), ...fonte } },
-      grid: { left: 8, right: 8, top: 44, bottom: 4, containLabel: true },
+      grid: { left: 8, right: 8, top: escala * 3, bottom: 4, containLabel: true },
     };
   };
 
@@ -444,7 +447,7 @@ function VolumeEGrupos({ d, filtro, ate }: { d: Dashboard; filtro: Filtro; ate: 
       series: [
         { name: "Entraram", type: "bar", barMaxWidth: 40, label: valorNaBarra, data: linhas.map((l) => l.entradas), itemStyle: { color: cor("--entrada") } },
         { name: "Aprovados", type: "bar", barMaxWidth: 40, label: valorNaBarra, data: linhas.map((l) => l.aprovados), itemStyle: { color: cor("--aprovado") } },
-        { name: "Reprovados", type: "bar", barMaxWidth: 40, label: valorNaBarra, data: linhas.map((l) => l.reprovados), itemStyle: { color: cor("--reprovado") } },
+        { name: "Reprovações", type: "bar", barMaxWidth: 40, label: valorNaBarra, data: linhas.map((l) => l.reprovados), itemStyle: { color: cor("--reprovado") } },
       ],
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -455,7 +458,7 @@ function VolumeEGrupos({ d, filtro, ate }: { d: Dashboard; filtro: Filtro; ate: 
     const ordem: Grupo[] = ["dev", "estagiario_dev", "qa", "estagiario_qa", "gestao", "outros"];
     const maiorPilha = Math.max(1, ...composicao.map((c) => Object.values(c.entregues).reduce((x, y) => x + y, 0)));
     const limiarRotulo = Math.max(3, Math.round(maiorPilha * 0.08));
-    const tamanhoDado = Math.round(Math.min(24, Math.max(16, window.innerHeight * 0.022)));
+    const tamanhoDado = escala;
     const tokens: Record<Grupo, string> = {
       dev: "--grupo-dev", estagiario_dev: "--grupo-est-dev", qa: "--grupo-qa", estagiario_qa: "--grupo-est-qa", gestao: "--grupo-gestao", outros: "--grupo-outros",
     };
@@ -643,34 +646,43 @@ function laminasIndividual(d: Dashboard, periodo: Periodo, filtro: Filtro, uid: 
     },
     {
       titulo: "Cards para conversar",
-      corpo: (
-        <div className="conversa">
-          <ListaConversa
-            titulo={qa ? "Reprovou mais de uma vez" : "Reprovados mais de uma vez"}
-            vazio="Nenhum card reprovado mais de uma vez no mês."
-            itens={cards.reprovadosVariasVezes.map((c) => ({ id: c.task_id, titulo: titulo(c.task_id), meta: `${nomeCurto(projetos.get(c.project_id) ?? "")} · reprovado ${c.vezes}×` }))}
-            total={cards.totais.reprovados}
-          />
-          {!qa && (
-            <ListaConversa
-              titulo="Concluídos sem QA"
-              vazio="Nenhum card concluído sem passar pelo QA no mês."
-              itens={cards.semQa.map((c) => ({ id: c.task_id, titulo: titulo(c.task_id), meta: `${nomeCurto(projetos.get(c.project_id) ?? "")} · ${dataCurta(c.ultimo)}` }))}
-              total={cards.totais.semQa}
-            />
-          )}
-          <ListaConversa
-            titulo={qa ? "Abertos há mais tempo" : "Abertos há mais tempo (fora de Teste/QA)"}
-            vazio="Nenhum card aberto agora."
-            total={cards.totais.abertos}
-            itens={cards.abertosMaisAntigos.map((c) => ({
-              id: c.task_id,
-              titulo: titulo(c.task_id),
-              meta: `${NOME_PAPEL[c.papel] ?? c.coluna} · ${haDias(c.desde)}`,
-            }))}
-          />
-        </div>
-      ),
+      corpo: (() => {
+        // Lista vazia não ocupa uma coluna inteira da lâmina: vira uma frase embaixo.
+        const listas = [
+          {
+            titulo: qa ? "Reprovou mais de uma vez" : "Reprovados mais de uma vez",
+            vazio: "Nenhum card reprovado mais de uma vez no mês.",
+            itens: cards.reprovadosVariasVezes.map((c) => ({ id: c.task_id, titulo: titulo(c.task_id), meta: `${nomeCurto(projetos.get(c.project_id) ?? "")} · reprovado ${c.vezes}×` })),
+            total: cards.totais.reprovados,
+          },
+          ...(!qa
+            ? [{
+                titulo: "Concluídos sem QA",
+                vazio: "Nenhum card concluído sem passar pelo QA no mês.",
+                itens: cards.semQa.map((c) => ({ id: c.task_id, titulo: titulo(c.task_id), meta: `${nomeCurto(projetos.get(c.project_id) ?? "")} · ${dataCurta(c.ultimo)}` })),
+                total: cards.totais.semQa,
+              }]
+            : []),
+          {
+            titulo: qa ? "Abertos há mais tempo" : "Abertos há mais tempo (fora de Teste/QA)",
+            vazio: "Nenhum card aberto agora.",
+            itens: cards.abertosMaisAntigos.map((c) => ({ id: c.task_id, titulo: titulo(c.task_id), meta: `${NOME_PAPEL[c.papel] ?? c.coluna} · ${haDias(c.desde)}` })),
+            total: cards.totais.abertos,
+          },
+        ];
+        const cheias = listas.filter((l) => l.itens.length > 0);
+        const vazias = listas.filter((l) => l.itens.length === 0);
+        return (
+          <>
+            {cheias.length > 0 && (
+              <div className="conversa">
+                {cheias.map((l) => <ListaConversa key={l.titulo} titulo={l.titulo} vazio={l.vazio} itens={l.itens} total={l.total} />)}
+              </div>
+            )}
+            {vazias.map((l) => <p key={l.titulo} className="conversa__nada">{l.vazio}</p>)}
+          </>
+        );
+      })(),
     },
   ];
 }

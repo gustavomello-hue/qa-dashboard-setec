@@ -3,7 +3,7 @@ import type { Dashboard } from "../data/contrato";
 import { NOME_PAPEL, TEXTO_SEM_TITULO, dataCurta, haDias, nomeCurto, numero, porcento, separarEtiquetas, tituloConhecido } from "../data/formato";
 import { intervalo, intervaloAnterior, mesAnterior, rotuloAnterior, rotuloPeriodoLongo, ultimoDia, type Periodo } from "../data/periodo";
 import { mesParcial } from "../data/reuniao";
-import { indiceProjetos, indiceTitulos, mesLocal, semReprovacao, type Filtro } from "../data/seletores";
+import { indiceProjetos, indiceTitulos, mesLocal, semReprovacao, type Filtro, passaNoFiltro } from "../data/seletores";
 import {
   ROTULO_GRUPO, atribuicoesDe, inicioDaSemana, semanaIncompleta, cardsAbertos, cardsDaMetrica, cargaPorPessoa, cargaVazia, concluidos, ehQa,
   indicePessoas, nomeDe, porSemana, projetosTestados, resumirPorPessoa, resumoVazio, semanas, taxaReprovacao,
@@ -90,6 +90,9 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar, href
   const projetos = indiceProjetos(dados);
   const carga = cargaPorPessoa(dados, filtro).get(uid) ?? cargaVazia();
   const abertos = cardsAbertos(dados, uid, filtro);
+  // Fora da carga (backlog e colunas fora do padrão): aparecem só como contagem, não em "Abertos".
+  const passaFiltro = passaNoFiltro(dados, filtro);
+  const foraDaCarga = (dados.carga ?? []).filter((c) => c.user_id === uid && passaFiltro(c.project_id) && !PAPEIS_CARGA.includes(c.papel)).length;
   const reprovados = cardsDaMetrica(atribs, uid, qa ? "testou_reprovado" : "reprovado");
   const semQa = cardsDaMetrica(atribs, uid, "concluido_sem_qa");
   const testadosPorProjeto = qa ? projetosTestados(atribs, uid) : [];
@@ -150,7 +153,7 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar, href
             <Kpi menor rotulo="Concluídos sem QA" href={lista("concluido_sem_qa")} valor={r.concluidosSemQa} anterior={a.concluidosSemQa} rotuloAnterior={antes} tom="sem-qa" dica={DEFINICAO.semQa} />
             <Kpi menor rotulo="Devolvidos" href={lista("devolvido")} valor={r.devolvidos} anterior={a.devolvidos} rotuloAnterior={antes} tom="devolvido" dica={DEFINICAO.devolvidos} />
             <Kpi menor rotulo="Criados" href={lista("criado")} valor={r.criados} anterior={a.criados} rotuloAnterior={antes} dica={DEFINICAO.criados} />
-            <Kpi menor rotulo="Movimentou" href={lista("movimentado")} valor={r.movimentados} anterior={a.movimentados} rotuloAnterior={antes} dica={DEFINICAO.movimentou} />
+            <Kpi menor rotulo="Movimentados" href={lista("movimentado")} valor={r.movimentados} anterior={a.movimentados} rotuloAnterior={antes} dica={DEFINICAO.movimentou} />
           </dl>
         </section>
       )}
@@ -182,7 +185,7 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar, href
           <dl className="kpis kpis--outros" aria-label="Outros números como QA">
             <Kpi menor rotulo="Devolveu" href={lista("testou_devolvido")} valor={r.testouDevolvido} anterior={a.testouDevolvido} rotuloAnterior={antes} tom="devolvido" dica={DEFINICAO.devolveu} />
             {!dev && <Kpi menor rotulo="Criados" href={lista("criado")} valor={r.criados} anterior={a.criados} rotuloAnterior={antes} dica={DEFINICAO.criados} />}
-            {!dev && <Kpi menor rotulo="Movimentou" href={lista("movimentado")} valor={r.movimentados} anterior={a.movimentados} rotuloAnterior={antes} dica={DEFINICAO.movimentou} />}
+            {!dev && <Kpi menor rotulo="Movimentados" href={lista("movimentado")} valor={r.movimentados} anterior={a.movimentados} rotuloAnterior={antes} dica={DEFINICAO.movimentou} />}
           </dl>
         </section>
       )}
@@ -230,12 +233,12 @@ export function Pessoa({ dados, filtro, periodo, uid, hrefCard, hrefVoltar, href
 
         <section className="bloco" aria-labelledby="t-carga-pessoa">
           <header className="bloco__cabeca">
-            <h2 id="t-carga-pessoa" className="bloco__titulo">Abertos agora <span className="contagem">{abertos.filter((c) => c.papel !== "backlog").length}</span></h2>
+            <h2 id="t-carga-pessoa" className="bloco__titulo">Abertos agora <span className="contagem">{abertos.length}</span></h2>
             <p className="nota">Foto de agora: não muda com o período</p>
             <LegendaCarga />
           </header>
           <BarraCarga carga={carga} max={Math.max(1, PAPEIS_CARGA.reduce((s, p) => s + carga[p], 0))} />
-          <ListaAbertos cards={abertos} titulos={titulos} projetos={projetos} hrefCard={hrefCard} />
+          <ListaAbertos cards={abertos} foraDaCarga={foraDaCarga} titulos={titulos} projetos={projetos} hrefCard={hrefCard} />
         </section>
 
         <ListaCards
@@ -294,15 +297,16 @@ function ListaCards({
 }
 
 function ListaAbertos({
-  cards, titulos, projetos, hrefCard,
+  cards, foraDaCarga, titulos, projetos, hrefCard,
 }: {
   cards: ReturnType<typeof cardsAbertos>;
+  /** Cards no backlog ou em colunas fora do padrão: não são carga, só a contagem aparece. */
+  foraDaCarga: number;
   titulos: Map<number, string>;
   projetos: Map<number, string>;
   hrefCard: (id: number) => string;
 }) {
-  const visiveis = cards.filter((c) => c.papel !== "backlog");
-  const backlog = cards.length - visiveis.length;
+  const visiveis = cards;
   return (
     <>
       <ul className="lista-cards rolavel">
@@ -320,7 +324,7 @@ function ListaAbertos({
           </li>
         ))}
       </ul>
-      {backlog > 0 && <p className="nota">+ {backlog} no backlog.</p>}
+      {foraDaCarga > 0 && <p className="nota">+ {foraDaCarga} no backlog ou em colunas fora do padrão (não contam como abertos).</p>}
     </>
   );
 }

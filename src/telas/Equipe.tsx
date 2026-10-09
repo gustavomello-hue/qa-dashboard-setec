@@ -52,7 +52,7 @@ function colunasDev(carga: (uid: number) => number): Coluna[] {
     { id: "concluidos", lista: "concluidos", rotulo: "Concluídos", dica: DEFINICAO.concluidos, valor: (r) => concluidos(r) },
     { id: "semqa", lista: "concluido_sem_qa", rotulo: "Sem QA", dica: DEFINICAO.semQa, valor: (r) => r.concluidosSemQa, tom: "sem-qa" },
     { id: "criados", lista: "criado", rotulo: "Criados", dica: DEFINICAO.criados, valor: (r) => r.criados },
-    { id: "movimentou", lista: "movimentado", rotulo: "Movimentou", dica: DEFINICAO.movimentou, valor: (r) => r.movimentados },
+    { id: "movimentou", lista: "movimentado", rotulo: "Movimentados", dica: DEFINICAO.movimentou, valor: (r) => r.movimentados },
     { id: "carga", lista: "abertos", rotulo: "Abertos", dica: DEFINICAO.abertos, valor: (_, uid) => carga(uid) },
   ];
 }
@@ -65,7 +65,7 @@ function colunasQa(carga: (uid: number) => number): Coluna[] {
     { id: "taxa", lista: "cards_reprovou", rotulo: "% cards reprov.", dica: DEFINICAO.cardsReprovouQa, valor: (r) => taxaReprovacaoQa(r), formato: "pct" },
     { id: "devolveu", lista: "testou_devolvido", rotulo: "Devolveu", dica: DEFINICAO.devolveu, valor: (r) => r.testouDevolvido },
     { id: "criados", lista: "criado", rotulo: "Criados", dica: DEFINICAO.criados, valor: (r) => r.criados },
-    { id: "movimentou", lista: "movimentado", rotulo: "Movimentou", dica: DEFINICAO.movimentou, valor: (r) => r.movimentados },
+    { id: "movimentou", lista: "movimentado", rotulo: "Movimentados", dica: DEFINICAO.movimentou, valor: (r) => r.movimentados },
     { id: "carga", lista: "abertos", rotulo: "Abertos", dica: DEFINICAO.abertos, valor: (_, uid) => carga(uid) },
   ];
 }
@@ -95,7 +95,8 @@ export function Equipe({ dados, filtro, periodo, inativos, periodoAutomatico, al
 
   if (!dados.equipe) return <p className="vazio">Este dashboard.json ainda não traz as métricas por pessoa.</p>;
 
-  const naoQa = [...porPessoa.entries()].filter(([, r]) => r.saidasNaoQa > 0).sort((a, b) => b[1].saidasNaoQa - a[1].saidasNaoQa);
+  // Ordem alfabética: por contagem virava um pódio de quem tira card de QA sem ser do QA.
+  const naoQa = [...porPessoa.entries()].filter(([, r]) => r.saidasNaoQa > 0).sort((a, b) => nomeDe(pessoas, a[0]).localeCompare(nomeDe(pessoas, b[0]), "pt-BR"));
   const comAtividade = new Set([...porPessoa.keys()]);
 
   return (

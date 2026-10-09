@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Atribuicao, Dashboard, Metrica, Pessoa } from "./contrato";
+import type { Atribuicao, CargaCard, Dashboard, Metrica, Pessoa } from "./contrato";
 import {
   atribuicoesDe, cargaPorPessoa, cardsDaMetrica, composicaoPorMes, grupoPrincipal, inicioDaSemana,
   porSemana, resumirPorPessoa, semanaIncompleta, semanas, taxaCardsPorMes, taxaReprovacao, taxaReprovacaoQa,
@@ -186,5 +186,20 @@ describe("etapa 4: quadros sem Correções", () => {
       atribuicoes: atribs,
     });
     expect(taxaCardsPorMes(d, {}).get("2026-10")).toMatchObject({ cardsJulgados: 1, cardsReprovados: 1, taxa: 100 });
+  });
+});
+
+describe("Abertos é o mesmo número em toda tela (crítica 09/10)", () => {
+  it("Interrompidas é carga; backlog e outras colunas ficam fora", async () => {
+    const { cardsAbertos, cargaPorPessoa, PAPEIS_CARGA } = await import("./pessoas");
+    const c = (task_id: number, papel: CargaCard["papel"]) => ({ task_id, titulo: "t", project_id: 1, user_id: 10, coluna: "x", papel, desde: 1, prioridade: 0 });
+    const d = dashboard({
+      carga: [c(1, "a_iniciar"), c(2, "andamento"), c(3, "qa"), c(4, "correcao"), c(5, "interrompida"), c(6, "backlog"), c(7, "outra")],
+    });
+    expect(PAPEIS_CARGA).toContain("interrompida");
+    const carga = cargaPorPessoa(d, {}).get(10)!;
+    const total = PAPEIS_CARGA.reduce((s, p) => s + carga[p], 0);
+    expect(cardsAbertos(d, 10, {}).map((x) => x.task_id).sort()).toEqual([1, 2, 3, 4, 5]);
+    expect(cardsAbertos(d, 10, {}).length).toBe(total);
   });
 });

@@ -50,6 +50,9 @@ export function Agora({ dados, filtro, agora, hrefCard, hrefPessoa, soForaDoPain
   // Na segunda-feira a comparação é com a sexta: "Ontem" ali seria falso.
   const diaDeOntem = diaLocal(new Date(agora.getFullYear(), agora.getMonth(), agora.getDate() - 1));
   const dicaOntem = k.diaComparacao === diaDeOntem ? "Ontem" : `Último dia útil (${ontem})`;
+  // Hoje está pela metade; a comparação é o dia anterior inteiro. Diz isso, para "1 · 31"
+  // ao meio-dia não ser lido como queda (decisão do usuário, 09/10/2026: só avisar).
+  const rotuloComp = estado.outroDia ? ontem : `${ontem} (dia inteiro)`;
   const desde = inicioDaUltimaColeta(dados);
   const passa = passaNoFiltro(dados, filtro);
   const novos = velho || desde === null ? 0 : dados.fila_qa.filter((c) => passa(c.project_id) && (c.entrou_em ?? 0) > desde).length;
@@ -71,16 +74,16 @@ export function Agora({ dados, filtro, agora, hrefCard, hrefPessoa, soForaDoPain
             </>
           }
         />
-        <Kpi rotulo={`Entraram ${quando}`} valor={k.hoje.entraram} tom="entrada" href={lista("entrou_qa")} anterior={k.comparacao.entraram} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
-        <Kpi rotulo={`Aprovados ${quando}`} valor={k.hoje.aprovados} tom="aprovado" href={lista("qa_para_concluida")} anterior={k.comparacao.aprovados} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
-        <Kpi rotulo={`Reprovados ${quando}`} valor={k.hoje.reprovados} tom="reprovado" href={lista("qa_para_correcao")} anterior={k.comparacao.reprovados} rotuloAnterior={ontem} dicaAnterior={dicaOntem} />
+        <Kpi rotulo={`Entraram ${quando}`} valor={k.hoje.entraram} tom="entrada" href={lista("entrou_qa")} anterior={k.comparacao.entraram} rotuloAnterior={rotuloComp} dicaAnterior={dicaOntem} />
+        <Kpi rotulo={`Aprovados ${quando}`} valor={k.hoje.aprovados} tom="aprovado" href={lista("qa_para_concluida")} anterior={k.comparacao.aprovados} rotuloAnterior={rotuloComp} dicaAnterior={dicaOntem} />
+        <Kpi rotulo={`Reprovações ${quando}`} valor={k.hoje.reprovados} tom="reprovado" href={lista("qa_para_correcao")} anterior={k.comparacao.reprovados} rotuloAnterior={rotuloComp} dicaAnterior={dicaOntem} />
         <Kpi
           rotulo={`Concluídos sem QA ${quando}`}
           valor={k.hoje.concluidosSemQa}
           tom="sem-qa"
           href={lista("concluida")}
           anterior={k.comparacao.concluidosSemQa}
-          rotuloAnterior={ontem} dicaAnterior={dicaOntem}
+          rotuloAnterior={rotuloComp} dicaAnterior={dicaOntem}
           dica={DEFINICAO.semQa}
         />
         <Kpi
@@ -88,7 +91,7 @@ export function Agora({ dados, filtro, agora, hrefCard, hrefPessoa, soForaDoPain
           valor={k.hoje.criados}
           href={lista("criada")}
           anterior={k.comparacao.criados}
-          rotuloAnterior={ontem} dicaAnterior={dicaOntem}
+          rotuloAnterior={rotuloComp} dicaAnterior={dicaOntem}
           dica={DEFINICAO.criadosDia}
         />
         <Kpi
@@ -96,7 +99,7 @@ export function Agora({ dados, filtro, agora, hrefCard, hrefPessoa, soForaDoPain
           valor={k.hoje.movimentados}
           href={lista("movimentacao")}
           anterior={k.comparacao.movimentados}
-          rotuloAnterior={ontem} dicaAnterior={dicaOntem}
+          rotuloAnterior={rotuloComp} dicaAnterior={dicaOntem}
           dica={DEFINICAO.movimentados}
         />
       </dl>
@@ -173,6 +176,9 @@ let coletaAnimada: number | null = null;
 
 function Feed({ dados, filtro, hrefCard, velho }: { dados: Dashboard; filtro: Filtro; hrefCard: (id: number) => string; velho: boolean }) {
   const eventos = feedRecente(dados, filtro, 40);
+  // No celular o feed não rola por dentro: as 15 primeiras e um "ver todas".
+  const [verTodas, setVerTodas] = useState(false);
+  const recolhido = !verTodas && eventos.length > 15;
   // O que chegou na última coleta ganha a marca "novo"; na primeira vez que a
   // coleta aparece, a faixa entra deslizando no trilho. Dado velho não é novo.
   const desde = velho ? null : inicioDaUltimaColeta(dados);
@@ -189,7 +195,7 @@ function Feed({ dados, filtro, hrefCard, velho }: { dados: Dashboard; filtro: Fi
   let diaAnterior = "";
 
   return (
-    <section className="bloco feed" aria-labelledby="t-feed">
+    <section className={`bloco feed${recolhido ? " feed--recolhido" : ""}`} aria-labelledby="t-feed">
       <header className="bloco__cabeca">
         <h2 id="t-feed" className="bloco__titulo">Movimentações recentes</h2>
       </header>
@@ -224,6 +230,11 @@ function Feed({ dados, filtro, hrefCard, velho }: { dados: Dashboard; filtro: Fi
             );
           })}
         </ol>
+      )}
+      {recolhido && (
+        <button type="button" className="ver-todos" onClick={() => setVerTodas(true)}>
+          Ver todas as {eventos.length} movimentações
+        </button>
       )}
     </section>
   );

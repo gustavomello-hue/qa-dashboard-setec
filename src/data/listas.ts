@@ -27,7 +27,7 @@ export const ROTULO_LISTA: Record<MetricaLista, string> = {
   em_qa: "Em QA agora",
   entrou_qa: "Entraram em QA",
   qa_para_concluida: "Aprovados",
-  qa_para_correcao: "Reprovados",
+  qa_para_correcao: "Reprovações",
   concluida: "Concluídos sem QA",
   criada: "Criados",
   movimentacao: "Movimentados",
@@ -45,7 +45,7 @@ export const ROTULO_LISTA: Record<MetricaLista, string> = {
   cards_reprovou: "Cards que reprovou (base da %)",
   testou_devolvido: "Devolveu",
   saida_qa_nao_qa: "Saídas de QA",
-  movimentado: "Movimentou",
+  movimentado: "Movimentados",
   abertos: "Abertos agora",
 };
 

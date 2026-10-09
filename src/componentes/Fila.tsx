@@ -20,6 +20,13 @@ interface Props {
   alternarForaDoPainel?: () => void;
 }
 
+const LIMITE_CELULAR = 10;
+
+function principais_tamanho(dados: Dashboard, filtro: Filtro, soFora: boolean): number {
+  const fila = filaFiltrada(dados, filtro, soFora);
+  return soFora ? fila.length : fila.filter((c) => c.no_painel !== false).length;
+}
+
 /** A fila de QA, do card mais parado ao mais recente. Rola dentro do bloco. */
 export function Fila({ dados, filtro, hrefCard, soForaDoPainel = false, alternarForaDoPainel }: Props) {
   const fila = filaFiltrada(dados, filtro, soForaDoPainel);
@@ -30,6 +37,9 @@ export function Fila({ dados, filtro, hrefCard, soForaDoPainel = false, alternar
   // Cards que o painel do Kanboard não mostra (muitas vezes sem título nem responsável)
   // não ocupam o topo da fila: vão para um grupo recolhido no fim (crítica 08/10/2026).
   const [verFora, setVerFora] = useState(false);
+  // No celular a fila não rola por dentro: mostra os 10 primeiros e um "ver todos".
+  const [verTodos, setVerTodos] = useState(false);
+  const recolhida = !verTodos && principais_tamanho(dados, filtro, soForaDoPainel) > LIMITE_CELULAR;
   // Título pelo índice: o coletor às vezes não o tem, mas os detalhes do card têm.
   const titulos = indiceTitulos(dados);
   const principais = soForaDoPainel ? fila : fila.filter((c) => c.no_painel !== false);
@@ -59,8 +69,9 @@ export function Fila({ dados, filtro, hrefCard, soForaDoPainel = false, alternar
             {etiquetas && <span>{etiquetas}</span>}
             <span>{nomeCurto(c.projeto)}</span>
             {/* No celular, dias e retornos descem para cá: o título fica com a largura. */}
-            <span className="so-estreito num">{c.dias_em_qa ?? "—"} d em QA</span>
-            {c.retornos > 0 && <span className="so-estreito num">{c.retornos} retorno{c.retornos > 1 ? "s" : ""}</span>}
+            {/* Mono só no número (Regra da Impressão); a palavra fica na face de leitura. */}
+            <span className="so-estreito"><span className="num">{c.dias_em_qa ?? "—"}</span> d em QA</span>
+            {c.retornos > 0 && <span className="so-estreito"><span className="num">{c.retornos}</span> retorno{c.retornos > 1 ? "s" : ""}</span>}
           </span>
         </td>
         <td className="num so-largo" title={c.entrou_em ? `Entrou em QA em ${dataHora(c.entrou_em)}` : undefined}>
@@ -72,7 +83,7 @@ export function Fila({ dados, filtro, hrefCard, soForaDoPainel = false, alternar
   };
 
   return (
-    <section className="bloco fila" id="fila" tabIndex={-1} aria-labelledby="t-fila">
+    <section className={`bloco fila${recolhida ? " fila--recolhida" : ""}`} id="fila" tabIndex={-1} aria-labelledby="t-fila">
       <header className="bloco__cabeca">
         <h2 id="t-fila" className="bloco__titulo">
           Fila de QA <span className="contagem">{fila.length}</span>
@@ -119,6 +130,11 @@ export function Fila({ dados, filtro, hrefCard, soForaDoPainel = false, alternar
               </tbody>
             )}
           </table>
+          {recolhida && (
+            <button type="button" className="ver-todos" onClick={() => setVerTodos(true)}>
+              Ver todos os {principais.length} cards
+            </button>
+          )}
         </div>
       )}
     </section>

@@ -52,7 +52,7 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
       series: [
         { name: "Entraram", type: "bar", barMaxWidth: 28, data: linhas.map((l) => l.entradas), itemStyle: { color: cor("--entrada") } },
         { name: "Aprovados", type: "bar", barMaxWidth: 28, data: linhas.map((l) => l.aprovados), itemStyle: { color: cor("--aprovado") } },
-        { name: "Reprovados", type: "bar", barMaxWidth: 28, data: linhas.map((l) => l.reprovados), itemStyle: { color: cor("--reprovado") } },
+        { name: "Reprovações", type: "bar", barMaxWidth: 28, data: linhas.map((l) => l.reprovados), itemStyle: { color: cor("--reprovado") } },
       ],
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -122,7 +122,6 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
       <section className="bloco mensal__largo" aria-labelledby="t-tabela-mes">
         <header className="bloco__cabeca">
           <h2 id="t-tabela-mes" className="bloco__titulo">Resumo</h2>
-          {!comTendencia && <p className="nota">Até 4 meses de dados, % e tempo médio aparecem como barras na tabela.</p>}
           <Glossario />
         </header>
         <div className="rolavel-x">
@@ -132,7 +131,7 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
                 <th scope="col">Mês</th>
                 <th scope="col" className="num"><span className="coluna-tom etiqueta--entrada">Entraram</span></th>
                 <th scope="col" className="num"><span className="coluna-tom etiqueta--aprovado">Aprovados</span></th>
-                <th scope="col" className="num"><span className="coluna-tom etiqueta--reprovado">Reprovados</span></th>
+                <th scope="col" className="num"><span className="coluna-tom etiqueta--reprovado">Reprovações</span></th>
                 <th scope="col" className="num" title={DEFINICAO.cardsReprovados}>% cards reprov.</th>
                 <th scope="col" className="num" title={DEFINICAO.tempoEmQa}>Tempo médio em QA</th>
                 <th scope="col" className="num" title="Cards criados por quem está no grupo Gestão do equipe.json">Criados pela gestão</th>
@@ -140,7 +139,8 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
               </tr>
             </thead>
             <tbody>
-              {linhas.slice().reverse().map((l) => (
+              {/* Do mês mais velho ao mais novo, como os gráficos (crítica 09/10/2026). */}
+              {linhas.map((l) => (
                 <tr key={l.ano_mes}>
                   <th scope="row">{rotuloMes(l.ano_mes)}</th>
                   <td className="num">{numero(l.entradas)}</td>
@@ -175,9 +175,6 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
       <section className="bloco mensal__largo" aria-labelledby="t-volume">
         <header className="bloco__cabeca">
           <h2 id="t-volume" className="bloco__titulo">Volume de QA por mês</h2>
-          <p className="nota">Desde {desde}: antes disso só há amostra incompleta. * mês em andamento.</p>
-          <p className="nota">Desde 07/10/2026 os cards criados direto em Teste/QA contam como entrada; ago/26 +65, set/26 +42.</p>
-          <NotasQa dados={dados} filtro={filtro} meses={linhas.map((l) => l.ano_mes)} />
         </header>
         <Grafico opcoes={volume} altura={220} rotulo={`Entradas, aprovados e reprovados por mês desde ${desde}`} />
       </section>
@@ -201,6 +198,20 @@ export function Mensal({ dados, filtro }: { dados: Dashboard; filtro: Filtro }) 
       </section>
         </>
       )}
+
+      {/* As ressalvas da medição numa baia só, em vez de notas soltas em volta dos gráficos. */}
+      <section className="bloco mensal__largo" aria-labelledby="t-notas-medicao">
+        <header className="bloco__cabeca">
+          <h2 id="t-notas-medicao" className="bloco__titulo">Notas da medição</h2>
+        </header>
+        <ul className="notas-medicao">
+          <li>Desde {desde}: antes disso só há amostra incompleta. <span className="num">*</span> marca o mês em andamento.</li>
+          <li><span className="num">07/10/2026</span>: cards criados direto em Teste/QA passaram a contar como entrada, também para trás (ago/26 <span className="num">+65</span>, set/26 <span className="num">+42</span>).</li>
+          <li>Criados pela gestão: cards abertos por quem está no grupo Gestão do equipe.json; ficam fora das tabelas por pessoa.</li>
+          {!comTendencia && <li>Com até 4 meses de dados, % e tempo médio aparecem como barras na tabela, sem gráfico de tendência.</li>}
+        </ul>
+        <NotasQa dados={dados} filtro={filtro} meses={linhas.map((l) => l.ano_mes)} />
+      </section>
 
       <section className="bloco mensal__largo" aria-labelledby="t-grupos">
         <header className="bloco__cabeca">

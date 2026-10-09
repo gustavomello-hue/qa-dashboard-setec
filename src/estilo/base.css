@@ -55,6 +55,8 @@
 
   --papel-a_iniciar: var(--n5);
   --papel-andamento: var(--n8);
+  /* Interrompidas é carga (09/10/2026): neutro, entre A iniciar e Em andamento. */
+  --papel-interrompida: var(--n6);
   --papel-qa: var(--entrada);
   --papel-correcao: color-mix(in srgb, var(--reprovado) 78%, var(--n0));
 
@@ -130,6 +132,7 @@
 
     --papel-a_iniciar: var(--n6);
     --papel-andamento: var(--n8);
+    --papel-interrompida: var(--n5);
     --papel-correcao: color-mix(in srgb, var(--reprovado) 78%, var(--n0));
     /* n6 puro dava 2,53:1 sobre a faixa escura; com 30% de n7 fica 3,17:1 (crítica 08/10/2026). */
     --sublinhado-numero: color-mix(in srgb, var(--n6) 70%, var(--n7));

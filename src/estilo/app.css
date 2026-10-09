@@ -702,6 +702,7 @@ details.bloco > summary {
 .carga__seg--andamento { background: var(--papel-andamento); }
 .carga__seg--qa { background: var(--papel-qa); }
 .carga__seg--correcao { background: var(--papel-correcao); }
+.carga__seg--interrompida { background: var(--papel-interrompida); }
 
 .legenda {
   display: flex;
@@ -2000,7 +2001,8 @@ a.botao--primario {
   display: block;
   box-shadow: none;
   background: transparent;
-  font-size: var(--r-rotulo);
+  /* Escala de dado da projeção: em --r-rotulo o "e mais N" sumia a 3 m. */
+  font-size: var(--r-dado);
   color: var(--tinta-2);
   padding: 8px 0 0;
 }
@@ -2701,5 +2703,72 @@ a.botao--primario {
   .fila .celula-titulo .meta > span {
     flex: none;
     max-width: 100%;
+  }
+}
+
+/* 1:1: lista sem card vira frase na escala de projeção (não ocupa uma coluna vazia). */
+.conversa__nada {
+  margin: clamp(10px, 1.6vh, 20px) 0 0;
+  font-size: var(--r-dado);
+  color: var(--tinta-2);
+}
+
+/* Mensal: ressalvas da medição numa baia só (crítica 09/10/2026). */
+.notas-medicao {
+  margin: 0 6px;
+  padding: 10px 14px 10px 28px;
+  background: var(--faixa);
+  color: var(--tinta-2);
+  font-size: var(--t-meta);
+  display: grid;
+  gap: 6px;
+}
+
+.notas-medicao li {
+  max-width: 72ch;
+}
+
+.notas-medicao + .notas-qa {
+  margin: 6px 6px 0;
+}
+
+/* Projetos: P85 ao lado da mediana, faixa de altura fixa (crítica 09/10/2026). */
+.ciclo__p85 {
+  margin-left: 8px;
+  font-size: var(--t-rotulo);
+  color: var(--tinta-3);
+  white-space: nowrap;
+}
+
+/* ---------- Celular: sem rolagem dentro de rolagem (crítica 09/10/2026) ---------- */
+.ver-todos {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  /* As baias crescem com a página; a fila e o feed mostram os primeiros itens. */
+  .agora .bloco .rolavel {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .fila--recolhida tbody:not(.fila__fora) tr:nth-child(n + 11),
+  .feed--recolhido .feed__lista > li:nth-child(n + 16) {
+    display: none;
+  }
+
+  .fila--recolhida .ver-todos,
+  .feed--recolhido .ver-todos {
+    display: block;
+    width: calc(100% - 12px);
+    margin: 6px 6px 0;
+    border: 1px solid var(--filete);
+    border-radius: 2px;
+    background: var(--faixa);
+    color: var(--tinta-2);
+    font: inherit;
+    font-size: var(--t-dado);
+    min-height: 40px;
+    cursor: pointer;
   }
 }

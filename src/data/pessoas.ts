@@ -20,8 +20,11 @@ export const ROTULO_GRUPO: Record<Grupo, string> = {
   outros: "Outros",
 };
 
-/** Colunas que aparecem na carga, na ordem do fluxo. */
-export const PAPEIS_CARGA: Papel[] = ["a_iniciar", "andamento", "qa", "correcao"];
+/**
+ * Colunas que contam como carga ("Abertos"), na ordem do fluxo. Interrompidas é
+ * carga da pessoa (decisão do usuário, 09/10/2026): a mesma conta em toda tela.
+ */
+export const PAPEIS_CARGA: Papel[] = ["a_iniciar", "andamento", "qa", "correcao", "interrompida"];
 
 export function ehQa(p: Pessoa): boolean {
   return p.grupos.includes("qa") || p.grupos.includes("estagiario_qa");
@@ -221,7 +224,7 @@ export function cardsAbertos(d: Dashboard, uid: number, filtro: Filtro): CargaCa
   const passa = passaNoFiltro(d, filtro);
   const ordem = new Map(PAPEIS_CARGA.map((p, i) => [p, i]));
   return (d.carga ?? [])
-    .filter((c) => c.user_id === uid && passa(c.project_id))
+    .filter((c) => c.user_id === uid && passa(c.project_id) && PAPEIS_CARGA.includes(c.papel))
     .sort((a, b) => (ordem.get(a.papel) ?? 9) - (ordem.get(b.papel) ?? 9) || (a.desde ?? 0) - (b.desde ?? 0));
 }
 
